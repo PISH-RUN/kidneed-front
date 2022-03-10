@@ -1,0 +1,26 @@
+.questionsWrapper {
+    padding: 0 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+.questionsWrapper::-webkit-scrollbar {
+    width: 4px;
+    border-radius: 5px;
+}
+
+.questionsWrapper::-webkit-scrollbar-track {
+    border-radius: 5px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.25);
+}
+
+.questionsWrapper::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #adadad;
+}
+
+.questionsWrapper:root {
+    scrollbar-color: rgba(0, 0, 0, 0.25) inherit;
+}

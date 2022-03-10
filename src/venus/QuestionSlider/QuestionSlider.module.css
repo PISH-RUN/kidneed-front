@@ -1,0 +1,15 @@
+.questionSliderContainer {
+    width: 460px;
+    display: flex;
+    flex-direction: column;
+}
+.questionSlider {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 40px 380px 40px;
+}
+.questionSliderMarks {
+    display: grid;
+    justify-items: end;
+    grid-template-columns: 15px 162px 140px 170px;
+}

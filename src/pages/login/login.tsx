@@ -6,18 +6,15 @@ import Logo from "core-team/components/logo/logo";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useSendOtp } from "core-team/api";
-import { loginGuard } from "./index";
 
 const Login = () => {
-  const [state, setState] = useState();
-  const { login } = useApp();
   const { mutateAsync: requestOtp, isLoading } = useSendOtp();
   const router = useRouter();
 
   const handleMobileSubmit = ({ mobile }: any) => {
     requestOtp({ mobile }).then(() => {
-      router.push(`/login/verify?mobile=${mobile}`)
-    })
+      router.push(`/login/verify?mobile=${mobile}`);
+    });
   };
 
   return (
@@ -33,6 +30,16 @@ const Login = () => {
       </div>
     </div>
   );
+};
+
+export const loginGuard: Guard = (matcher, _, router) => {
+  if (matcher("guest")) {
+    return true;
+  }
+
+  router.push("/parent");
+
+  return false;
 };
 
 Login.guard = loginGuard;
