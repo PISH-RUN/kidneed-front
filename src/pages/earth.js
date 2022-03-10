@@ -58,12 +58,17 @@ const Earth = () => {
   const [value, setValue] = useState(false);
   const [dataApproach, setDataApproach] = useState([]);
   const [questionData, setQuestionData] = useState([]);
+  const [dataRoot, setDataRoot] = useState([]);
 
 
-  const submitAnswer = (id, e) => {
-    console.log(id, e)
-    const hi = questionData.find((question) => question.id === id)?.answer = e.target.value
-    setQuestionData(hi)
+
+  const submitAnswer = (e, id) => {
+    const data = [...questionData]
+    const questionChanged = questionData.find((question) => question.id === id)
+    questionChanged.answer = e.target.value
+    const index = data.findIndex((hel) => hel.id === questionChanged.id)
+    data[index] = questionChanged
+    setQuestionData(data)
   };
   useEffect(() => {
     getApproach()
@@ -97,12 +102,16 @@ const Earth = () => {
   const getRoot = async (e) => {
     const yes = questionData.filter((que) => que.answer === true)
     console.log(yes)
-    // try {
-    //   const data = await strapi.request("get", "/api/earth/root?signId[]=" + yes)
-    //   setDataApproach(data)
-    // } catch (err) {
-    //   console.log(err)
-    // }
+    const string = ""
+    const hi = yes.map((hi, index) => {
+      string += (index === 0 ? "" : "&") + "signId[]=" + hi.id
+    })
+    try {
+      const data = await strapi.request("get", "/earth/root?" + string)
+      setDataRoot(data)
+    } catch (err) {
+      console.log(err)
+    }
 
   }
   return (
@@ -163,15 +172,17 @@ const Earth = () => {
       {step === 1 && <div className={styles.questions}>
         <div className={styles.notif}>لطفا موارد زیر را در مورد فرزندتان مشخص نمایید</div>
         {questionData.length > 0 && questionData.map((ques) =>
-          <Question data={ques} value={ques.answer} onChange={(e) => submitAnswer(e)} />
+          <Question data={ques} value={ques.answer} onChange={(e, id) => submitAnswer(e, id)} />
         )}
         <div className={styles.continueBox}>
-          <button type="button" className={styles.continueBtn}>ادامه</button>
+          <button type="button" onClick={getRoot} className={styles.continueBtn}>ادامه</button>
         </div>
       </div>}
       {step === 2 && <div className={styles.questions}>
         <div className={styles.notif}>لطفا موارد زیر را در مورد فرزندتان مشخص نمایید</div>
-        <Question text="" value={value} onChange={(e) => onChange(e)} />
+        {dataRoot.length > 0 && dataRoot.map((ques) =>
+          <Question data={ques} value={ques.answer} onChange={(e, id) => submitAnswer(e, id)} />
+        )}
         <div className={styles.continueBox}>
           <button type="button" className={styles.continueBtn}>ادامه</button>
         </div>
