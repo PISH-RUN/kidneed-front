@@ -54,3 +54,22 @@ export interface User extends Model {
   lastName?: string;
   email?: string;
 }
+
+export interface Content extends Model {
+  image: string,
+  duration?: number,
+  sourceLink?: string,
+}
+
+export interface Activity extends Model {
+  id: number,
+  content: Content,
+}
+
+export interface ChildDashboard extends Model {
+  book: Array<Activity>,
+  game: Array<Activity>,
+  video: Array<Activity>,
+  audio: Array<Activity>,
+  activity: Array<Activity>,
+}

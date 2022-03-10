@@ -7,14 +7,19 @@ import VideoIcon from 'layouts/icons/video';
 import MusicIcon from 'layouts/icons/music';
 import ActivityIcon from 'layouts/icons/activity';
 import GameIcon from 'layouts/icons/game';
+import { HiOutlineBookOpen } from 'react-icons/hi';
 import LoginIcon from 'layouts/icons/login';
 import LockIcon from 'layouts/icons/lock';
 import {set} from "react-hook-form";
+import { useApp } from "@kidneed/hooks";
+import { strapi } from "@kidneed/services";
+import { ChildDashboard } from "../../core/types/model";
+import Link from 'next/link';
 
 const styles = {
   root: {
 
-    minHeight: '100vh',
+    minHeight: 2000,
     overflow: 'auto',
     '&:before': {
       content: '" "',
@@ -41,37 +46,49 @@ const styles = {
     img: {
       width: 70,
     }
+  },
+  cardImage: {
+    width: 287,
+    height: 380,
+    backgroundSize: 'cover',
+    backgroundColor: '#f0f0f0',
+    borderRadius: 4,
+    overflow: 'hidden',
+    border: 'none',
+    backgroundRepeat: 'no-repeat',
+    cursor: 'pointer'
   }
 }
 
-const data = [{
-  type: 'video',
-  time: '10:00',
-  img0: '/images/childImages/d0.png',
-  img1: '/images/childImages/d1.png',
-}, {
-  type: 'music',
-  time: '10:00',
-  img0: '/images/childImages/d0.png',
-  img1: '/images/childImages/d1.png',
-}, {
-  type: 'activity',
-  time: '10:00',
-  img0: '/images/childImages/d0.png',
-  img1: '/images/childImages/d1.png',
-}, {
-  type: 'game',
-  time: '10:00',
-  img0: '/images/childImages/d0.png',
-  img1: '/images/childImages/d1.png',
-}]
+const data = [];
+// const data = [{
+//   type: 'video',
+//   time: '10:00',
+//   img0: '/images/childImages/d0.png',
+//   img1: '/images/childImages/d1.png',
+// }, {
+//   type: 'music',
+//   time: '10:00',
+//   img0: '/images/childImages/d0.png',
+//   img1: '/images/childImages/d1.png',
+// }, {
+//   type: 'activity',
+//   time: '10:00',
+//   img0: '/images/childImages/d0.png',
+//   img1: '/images/childImages/d1.png',
+// }, {
+//   type: 'game',
+//   time: '10:00',
+//   img0: '/images/childImages/d0.png',
+//   img1: '/images/childImages/d1.png',
+// }]
 
 const typeColors = {
   'video': '#57ABF4',
   'music': '#EF5DA8',
   'activity': '#8BDA92',
   'game': '#FF5C00',
-  'book': '#57ABF4',
+  'book': '#8BDA92',
 }
 
 const typeIcons = {
@@ -79,7 +96,7 @@ const typeIcons = {
   'music': <MusicIcon/>,
   'activity': <ActivityIcon/>,
   'game': <GameIcon/>,
-  'book': <VideoIcon/>,
+  'book': <HiOutlineBookOpen/>,
 }
 
 const DataBox = ({data}: any) => {
@@ -88,6 +105,7 @@ const DataBox = ({data}: any) => {
   const color = typeColors[data.type];
   // @ts-ignore
   const icon = typeIcons[data.type];
+  console.log(data.url0);
 
   return <Box sx={{
     border: `5px solid ${color}`,
@@ -109,15 +127,19 @@ const DataBox = ({data}: any) => {
         <Box sx={{...styles.dataMenu, background: color}}><img src="/images/childImages/coins.png"/></Box>
       </Stack>
       <Grid item xs={6}>
-        <Box textAlign="center">
-          <Box component='img' src="/images/childImages/d0.png"/>
-          <Button variant="contained" color="primary" sx={{width: 220, height: 70, borderRadius: 6, marginTop: -5}}
-                  size="large"><PlayIcon/></Button>
-        </Box>
+        <Link href={data.url0 || '#'}>
+          <Box textAlign="center">
+            {/* @ts-ignore */}
+            <Box sx={{ ...styles.cardImage, backgroundImage: `url("${data.img0}")` }}/>
+            <Button variant="contained" color="primary" sx={{width: 220, height: 70, borderRadius: 6, marginTop: -5}}
+                    size="large"><PlayIcon/></Button>
+          </Box>
+        </Link>
       </Grid>
       <Grid item xs={6}>
         <Box textAlign="center">
-          <Box component='img' src="/images/childImages/d1.png"/>
+          {/* @ts-ignore */}
+          <Box sx={{ ...styles.cardImage, backgroundImage: `url("${data.img1}")` }}/>
           <Button variant="contained" color="primary" sx={{width: 220, height: 70, borderRadius: 6, marginTop: -5}}
                   size="large"><PlayIcon/></Button>
         </Box>
@@ -126,9 +148,51 @@ const DataBox = ({data}: any) => {
   </Box>
 }
 
+const mediaUrlType = {
+  video: 'video',
+  book: 'pdf',
+  audio: 'audio',
+}
 
 const Dashboard = () => {
   const [showUserSelect, setShowUseSelect] = useState(false);
+  const [result, setResult] = useState([]);
+
+  const { ctx, selectChild } = useApp();
+
+  useEffect( () => {
+    if (!ctx.child) {
+      if (ctx.children!.length) {
+        selectChild(ctx.children![0])
+      }
+    }
+    const childId = ctx.child?.id;
+    const dataResult: any = [];
+    strapi.request<ChildDashboard>("get", `children/${childId}/dashboard`).then((data) => {
+      Object.keys(data).map((key, i) => {
+        // @ts-ignore
+        if (data[key]?.length > 0)
+          dataResult.push({
+            type: key,
+            // @ts-ignore
+            url0: `http://players.yekodo.net/${mediaUrlType[key]}?url=${data[key][0]?.content?.sourceLink}${key === 'video' ? `&thumbnail=${data[key][0]?.content?.image}` : ''}}`,
+            // @ts-ignore
+            url1: `http://players.yekodo.net/${mediaUrlType[key]}?url=${data[key][1]?.content?.sourceLink}${key === 'video' ? `&thumbnail=${data[key][1]?.content?.image}` : ''}}`,
+            // @ts-ignore
+            img0: data[key][0]?.content?.image || '/images/childImages/d0.png',
+            // @ts-ignore
+            img1: data[key][1]?.content?.image || '/images/childImages/d1.png',
+            // @ts-ignore
+            time: data[key]?.time || '10:00'
+          })
+      })
+
+      // @ts-ignore
+      setResult(dataResult);
+    });
+
+
+  }, [ctx])
 
   return <BaseLayout>
     <>
@@ -155,7 +219,7 @@ const Dashboard = () => {
 
         <Box sx={{position: 'relative', zIndex: 12}}>
           <Box sx={{maxWidth: 800, m: '300px auto 0'}}>
-            {data.map((d, index) => <DataBox key={index} data={d}/>)}
+            {result?.map((d, index) => <DataBox key={index} data={d}/>)}
           </Box>
         </Box>
       </Box>
