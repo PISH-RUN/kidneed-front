@@ -1,5 +1,4 @@
 import { useUser } from "@kidneed/hooks";
-import { openGuard } from "@kidneed/utils";
 import {
   Typography,
   Box,
@@ -23,6 +22,7 @@ import PsImage3 from "public/images/temp/ps3.png";
 import AddIcon from "layouts/icons/add";
 import AvatarWoman from "public/images/avatar-woman.png";
 import ArrowDown from "layouts/icons/arrow-down";
+import { Guard } from "@kidneed/types";
 
 const styles = {
   card: {
@@ -159,17 +159,17 @@ const SideDashboard = () => {
         sx={{ py: 2, pr: 3, cursor: "pointer" }}
       >
         <Avatar
-          sx={{ width: 90, height: 90, p: 2, background: "#E2F1FD" }}
+          sx={{ width: 80, height: 80, p: 2, background: "#E2F1FD" }}
           src="/images/avatar-woman.png"
         />
         <Box flexGrow={1}>
-          <Typography variant="h5">حسنا خانوم</Typography>
-          <Typography variant="h6" sx={{ color: "#8CA3A5" }}>
+          <Typography variant="h6">حسنا خانوم</Typography>
+          <Typography variant="body2" sx={{ color: "#8CA3A5" }}>
             2500 سکه
           </Typography>
         </Box>
         <Box>
-          <ArrowDown sx={{ color: "#8CA3A5" }} />
+          <ArrowDown sx={{ color: "#8CA3A5", fontSize: 16 }} />
         </Box>
       </Stack>
       <Box>
@@ -190,11 +190,10 @@ export default function Dashboard() {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
-          gridRowGap: 8,
-          gridColumnGap: 8,
+          gridRowGap: 16,
+          gridColumnGap: 16,
         }}
         container
-        spacing={5}
       >
         <Grid item>
           {/* @ts-ignore */}
@@ -204,7 +203,7 @@ export default function Dashboard() {
             </Box>
 
             <Box sx={styles.cardBottom}>
-              <Typography variant="h3">21 ساعت</Typography>
+              <Typography variant="h4">21 ساعت</Typography>
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="body1">مطالعه</Typography>
                 <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
@@ -219,7 +218,7 @@ export default function Dashboard() {
               <Image src={ImageCard2} />
             </Box>
             <Box sx={styles.cardBottom}>
-              <Typography variant="h3">21 ساعت</Typography>
+              <Typography variant="h4">21 ساعت</Typography>
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="body1">مطالعه</Typography>
                 <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
@@ -234,7 +233,7 @@ export default function Dashboard() {
               <Image src={ImageCard3} />
             </Box>
             <Box sx={styles.cardBottom}>
-              <Typography variant="h3">21 ساعت</Typography>
+              <Typography variant="h4">21 ساعت</Typography>
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="body1">مطالعه</Typography>
                 <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
@@ -248,4 +247,12 @@ export default function Dashboard() {
   );
 }
 
-Dashboard.guard = openGuard;
+const guard: Guard = (matcher, ctx, router) => {
+  if (matcher("guest")) {
+    return false;
+  }
+
+  return true;
+};
+
+Dashboard.guard = guard;

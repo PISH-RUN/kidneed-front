@@ -1,0 +1,8 @@
+.addChildPage {
+    height: 100vh;
+    width: 100vw;
+    background-color: #E2F1FD;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

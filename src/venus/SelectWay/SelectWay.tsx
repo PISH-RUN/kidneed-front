@@ -5,14 +5,14 @@ import { Video } from "../Video/Video";
 import { Way } from "../Way/Way";
 import styles from "./SelectWay.module.css";
 
-export const SelectWay: React.FC = () => {
+export const SelectWay: React.FC<{setPage: React.Dispatch<React.SetStateAction<string>>}> = (props) => {
     return (
         <ContentWrapper
             contentStyle={{ padding: "45px 90px" }}
             title="انتخاب حوزه رشدی"
         >
             <div className={styles.selectWayWrapper}>
-                <Video />
+                <Video style={{width: "400px", height: "300px"}} />
                 <Text style={{ fontSize: "16px", alignSelf: "flex-start" }}>
                     لطفا نوع حوزه رشدی را انتخاب نمایید
                 </Text>

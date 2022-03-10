@@ -11,7 +11,7 @@ interface WayProps {
 export const Way: React.FC<WayProps> = (props) => {
     return (
         <div onClick={props.onClick} className={styles.wayCardWrapper}>
-            <Title style={{ fontSize: "24px" }}>{props.title}</Title>
+            <Title style={{ fontSize: "16px" }}>{props.title}</Title>
             <PrimaryButton
                 onClick={(e) => e.stopPropagation()}
                 href="#"

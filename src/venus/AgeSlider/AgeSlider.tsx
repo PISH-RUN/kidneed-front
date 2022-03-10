@@ -4,7 +4,8 @@ import React from "react";
 import styles from "./AgeSlider.module.css";
 
 interface AgeSliderProps {
-    style?: React.CSSProperties
+    name: string;
+    style?: React.CSSProperties;
 }
 
 export const AgeSlider: React.FC<AgeSliderProps> = (props) => {
@@ -15,8 +16,19 @@ export const AgeSlider: React.FC<AgeSliderProps> = (props) => {
                     src="venus-baby-icon.svg"
                     style={{ justifySelf: "center" }}
                 />
-                <Form.Item style={{marginBottom: 0}} name="slider">
-                    <Slider min={1} max={4} dots tooltipVisible={false} />
+                <Form.Item
+                    // rules={[{ required: true, message: "این فیلد الزامی است" }]}
+                    style={{ marginBottom: 0 }}
+                    name={props.name}
+                >
+                    <Slider
+                        defaultValue={3}
+                        min={3}
+                        max={12}
+                        step={3}
+                        dots
+                        tooltipVisible={false}
+                    />  
                 </Form.Item>
                 <img
                     src="venus-adult-icon.svg"

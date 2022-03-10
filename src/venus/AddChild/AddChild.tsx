@@ -1,19 +1,37 @@
-import { Form, Input, Radio, Select } from "antd";
+import { Form, Input, message, Radio, Select } from "antd";
 import Text from "antd/lib/typography/Text";
-import React from "react";
+import React, { useState } from "react";
 import { ContentWrapper } from "../ContentWrapper/ContentWrapper";
 import { UserOutlined } from "@ant-design/icons";
 import styles from "./AddChild.module.css";
 import { AgeSlider } from "../AgeSlider/AgeSlider";
 import { PrimaryButton } from "../PrimaryButton/PrimaryButton";
-import { OutlinedButton } from "../OutlinedButton/OutlinedButton";
+import { strapi } from "@kidneed/services";
+import { set } from "react-hook-form";
 
-export const AddChild: React.FC = () => {
+export const AddChild: React.FC<{
+    setPage: React.Dispatch<React.SetStateAction<string>>;
+}> = (props) => {
     const [form] = Form.useForm();
+    const [loading, setLoading] = useState<boolean>(false);
 
     const onFinish = () => {
-        console.log(form.getFieldsValue())
-    }
+        console.log(form.getFieldsValue());
+        setLoading(true);
+        strapi
+            .request<any>("post", "/children/", {
+                data: {data: form.getFieldsValue()},
+            })
+            .then(() => {
+                props.setPage("selectWay");
+            })
+            .catch(() => {
+                message.error("خطایی رخ داده است");
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
 
     return (
         <ContentWrapper title="اطلاعات ضروری">
@@ -26,30 +44,39 @@ export const AddChild: React.FC = () => {
                 <Text style={{ fontSize: "16px" }}>
                     اطلاعات فرزند خود را وارد نمایید
                 </Text>
-                <Form.Item name="name">
+                <Form.Item
+                    rules={[{ required: true, message: "این فیلد الزامی است" }]}
+                    name="parent_name"
+                >
                     <Input
                         size="large"
                         placeholder="نام شما"
                         prefix={<UserOutlined style={{ color: "#1890FF" }} />}
                     />
                 </Form.Item>
-                <Form.Item name="nesbat">
+                <Form.Item
+                    rules={[{ required: true, message: "این فیلد الزامی است" }]}
+                    name="relation"
+                >
                     <Select
                         size="large"
                         placeholder="نسبت شما"
                         options={[
                             {
                                 label: "پدر",
-                                value: "پدر",
+                                value: "father",
                             },
                             {
                                 label: "مادر",
-                                value: "مادر",
+                                value: "mother",
                             },
                         ]}
                     />
                 </Form.Item>
-                <Form.Item name="childName">
+                <Form.Item
+                    rules={[{ required: true, message: "این فیلد الزامی است" }]}
+                    name="name"
+                >
                     <Input
                         size="large"
                         placeholder="نام فرزند شما"
@@ -58,14 +85,19 @@ export const AddChild: React.FC = () => {
                 </Form.Item>
                 <Form.Item name="gender">
                     <Radio.Group defaultValue={1}>
-                        <Radio value={1}>آقا پسر</Radio>
-                        <Radio value={2}>دختر خانوم</Radio>
+                        <Radio value={"boy"}>آقا پسر</Radio>
+                        <Radio value={"girl"}>دختر خانوم</Radio>
                     </Radio.Group>
                 </Form.Item>
-                <AgeSlider style={{marginBottom: "50px"}} />
+                <AgeSlider name="age" style={{ marginBottom: "50px" }} />
                 <div className={styles.formButtons}>
-                    <OutlinedButton style={{minWidth: "180px"}}>انصراف از ارزیابی</OutlinedButton>
-                    <PrimaryButton style={{minWidth: "180px"}} htmlType="submit">مرحله بعد</PrimaryButton>
+                    <PrimaryButton
+                        style={{ minWidth: "180px" }}
+                        htmlType="submit"
+                        loading={loading}
+                    >
+                        مرحله بعد
+                    </PrimaryButton>
                 </div>
             </Form>
         </ContentWrapper>

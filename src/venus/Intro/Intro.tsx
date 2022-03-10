@@ -5,7 +5,7 @@ import { ContentWrapper } from "../ContentWrapper/ContentWrapper";
 import { Video } from "../Video/Video";
 import styles from "./Intro.module.css";
 
-export const Intro: React.FC = () => {
+export const Intro: React.FC<{setPage: React.Dispatch<React.SetStateAction<string>>}> = (props) => {
     return (
         <ContentWrapper title="خوش آمدید">
             <div className={styles.introContentWrapper}>
@@ -19,7 +19,7 @@ export const Intro: React.FC = () => {
                         فراغت و درسی کودک شما پلنت، تعیین برنامه هوشمند
                         اوقات فراغت و درسی کودک شما
                     </Paragraph>
-                    <PrimaryButton style={{minWidth: "180px"}}>افزودن فرزند</PrimaryButton>
+                    <PrimaryButton onClick={() => props.setPage("addChild")} style={{minWidth: "180px"}}>افزودن فرزند</PrimaryButton>
                 </div>
                 <Video />
             </div>
