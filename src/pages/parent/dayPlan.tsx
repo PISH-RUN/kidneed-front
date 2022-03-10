@@ -1,5 +1,5 @@
 import ParentDashboardLayout from "layouts/parent-dashboard-layout";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
 import ArrowDown from "../../layouts/icons/arrow-down";
@@ -9,6 +9,8 @@ import PsImage2 from "public/images/temp/image-25.png";
 import PsImage3 from "public/images/temp/image-26.png";
 import { Button, Card, Tag } from "antd";
 import ContentModal from "../../core-team/components/contentModal";
+import { useTodayActivity } from "../../core-team/api/activity";
+import { useApp } from "@kidneed/hooks";
 
 const SideDashboard = () => {
   return <>
@@ -27,6 +29,10 @@ const SideDashboard = () => {
     </Box>
   </>;
 };
+
+const typeNames: any = {
+  video: "ویدئو"
+}
 
 const data: any = [
   {
@@ -50,31 +56,39 @@ const data: any = [
 ];
 
 const DayPlan = () => {
+  const { ctx, selectChild } = useApp();
   const [selectPlan, setSelectPlant] = useState(false);
+  const { data: activities } = useTodayActivity(ctx?.child?.id);
+
+  useEffect(() => {
+    if(!ctx.child && ctx.children) {
+      selectChild(ctx.children[0])
+    }
+  }, [ctx])
 
   return (
     <div className="tw-p-5">
-      {data.map((item: any, index: number) => (
+      {activities && activities?.data?.map((item: any, index: number) => (
         <Card key={index} className="tw-w-full tw-mb-4 tw-rounded-3xl">
           <div className="tw-flex">
             <div className="tw-ml-4">
-              <Image src={item.images[0]} />
+              <Image src={PsImage2} />
             </div>
             <div>
-              <Image src={item.images[1]} />
+              <Image src={PsImage1} />
             </div>
             <div>
               <div className="tw-pt-5 tw-pr-4">
                 <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">نوع محتوا:</span>
-                <span className="tw-text-xl tw-font-bold">{item.type}</span>
+                <span className="tw-text-xl tw-font-bold">{typeNames[item.attributes.type]}</span>
               </div>
               <div className="tw-pt-5 tw-pr-4">
                 <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">مدت زمان:</span>
-                <span className="tw-text-xl tw-font-bold">{item.duration}</span>
+                <span className="tw-text-xl tw-font-bold">{item.attributes.duration}</span>
               </div>
               <div className="tw-mt-8 tw-pt-5 tw-pr-4">
                 <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">تگ ها:</span>
-                <span className="tw-text-xl tw-font-bold">{item.tags.map((tag: any) => <Tag
+                <span className="tw-text-xl tw-font-bold">{["صبر", "تیزهوشی", "امید"].map((tag: any) => <Tag
                   key={tag}
                   className="tw-bg-gray-300 tw-text-white tw-px-3 tw-font-normal tw-rounded-full tw-text-base"
                 >{tag}</Tag>)}</span>
@@ -99,7 +113,7 @@ const DayPlan = () => {
 };
 
 DayPlan.getLayout = (children: any) => (
-  <ParentDashboardLayout SideComponent={<SideDashboard />}>{children}</ParentDashboardLayout>
+  <ParentDashboardLayout>{children}</ParentDashboardLayout>
 );
 
 DayPlan.guard = openGuard;
