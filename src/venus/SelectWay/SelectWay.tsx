@@ -14,9 +14,6 @@ export const SelectWay: React.FC<{
     childId?: number;
 }> = (props) => {
     const selectWay = (type?: "a" | "b" | "c" | "d") => {
-        strapi.setToken(
-            "d74834e7df03b4b298df6d5da3df2f3a82f37eba1563ce1bf9cf1c8e6c66caff0e0619843fe6c1eecf6aaae5152f4aa3ea09ba1fa8da715407661516c607f8e8fea5cd22fc124e41335e0fb86f7268e65930903b56c854653d7a4a2f8d237b63cf729da083064ed9eadc0755c6a3c6a6b03fa5c7e7cfb029f73b6e89f4be827e"
-        );
         strapi
             .request<any>("post", "/steps/", {
                 data: {
