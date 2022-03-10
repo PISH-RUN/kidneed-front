@@ -11,7 +11,7 @@ interface QuestionSliderProps {
 export const QuestionSlider: React.FC<QuestionSliderProps> = (props) => {
     return (
         <div className={styles.questionSliderContainer}>
-            <Form.Item label={props.label} style={{marginBottom: 0}} name={props.name}>
+            <Form.Item rules={[{ required: true, message: "این فیلد الزامی است" }]} label={props.label} style={{marginBottom: 0}} name={props.name}>
                 <Slider min={1} max={4} dots tooltipVisible={false} />
             </Form.Item>
             <div className={styles.questionSliderMarks}>
