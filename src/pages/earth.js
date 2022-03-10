@@ -59,7 +59,7 @@ const Earth = () => {
   const [dataApproach, setDataApproach] = useState([]);
   const [questionData, setQuestionData] = useState([]);
   const [dataRoot, setDataRoot] = useState([]);
-
+  const [approachId, setApproachId] = useState(null);
 
 
   const submitAnswer = (e, id) => {
@@ -69,6 +69,14 @@ const Earth = () => {
     const index = data.findIndex((hel) => hel.id === questionChanged.id)
     data[index] = questionChanged
     setQuestionData(data)
+  };
+  const submitRoot = (e, id) => {
+    const data = [...dataRoot]
+    const questionChanged = dataRoot.find((question) => question.id === id)
+    questionChanged.answer = e.target.value
+    const index = data.findIndex((hel) => hel.id === questionChanged.id)
+    data[index] = questionChanged
+    setDataRoot(data)
   };
   useEffect(() => {
     getApproach()
@@ -83,6 +91,7 @@ const Earth = () => {
 
   }
   const gotoQuestion = async (id) => {
+    setApproachId(id)
     try {
       const data = await strapi.request("get", "/earth/sign?approachId[]=" + id)
       const dataModified = data.map((question) => ({
@@ -108,11 +117,38 @@ const Earth = () => {
     })
     try {
       const data = await strapi.request("get", "/earth/root?" + string)
-      setDataRoot(data)
+      const dataModified = data.map((question) => ({
+        createdAt: question.createdAt,
+        id: question.id,
+        publishedAt: question.publishedAt,
+        title: question.title,
+        updatedAt: question.updatedAt,
+        answer: false
+      }))
+      setDataRoot(dataModified)
+      setStep(2)
     } catch (err) {
       console.log(err)
     }
 
+  }
+  const submitFinal = async () => {
+    const yes = questionData.filter((que) => que.answer === true)
+    const string = ""
+    const hi = yes.map((hi, index) => {
+      string += "&" + "signId[]=" + hi.id
+    })
+    const yes2 = questionData.filter((que) => que.answer === true)
+    const string2 = ""
+    const hel = yes2.map((hel, index) => {
+      string2 += "&" + "rootId[]=" + hel.id
+    })
+    try {
+      const data = await strapi.request("get", `/earth/result?approachId[]=${approachId}${string}${string2}`)
+      setStep(3)
+    } catch (err) {
+      console.log(err)
+    }
   }
   return (
     <div className={styles.earth}>
@@ -181,10 +217,10 @@ const Earth = () => {
       {step === 2 && <div className={styles.questions}>
         <div className={styles.notif}>لطفا موارد زیر را در مورد فرزندتان مشخص نمایید</div>
         {dataRoot.length > 0 && dataRoot.map((ques) =>
-          <Question data={ques} value={ques.answer} onChange={(e, id) => submitAnswer(e, id)} />
+          <Question data={ques} value={ques.answer} onChange={(e, id) => submitRoot(e, id)} />
         )}
         <div className={styles.continueBox}>
-          <button type="button" className={styles.continueBtn}>ادامه</button>
+          <button type="button" className={styles.continueBtn} onClick={submitFinal}>ادامه</button>
         </div>
       </div>}
       {step === 3 && <div className={styles.final}>
