@@ -1,0 +1,11 @@
+.mobileInput {
+  text-align: left;
+}
+
+.mobileInput input{
+  direction: ltr;
+}
+
+.ltr {
+  direction: ltr;
+}

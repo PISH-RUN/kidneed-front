@@ -17,7 +17,7 @@ class Document extends BaseDocument {
     return (
       <Html lang="fa" dir="rtl">
         <Head />
-        <body>
+        <body dir="rtl">
           <Main />
           <NextScript />
         </body>

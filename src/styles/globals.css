@@ -1,5 +1,11 @@
 @import "~antd/dist/antd.css";
+@import "../public/fonts/iransans/style.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+* {
+    font-family: IRANSans;
+}
