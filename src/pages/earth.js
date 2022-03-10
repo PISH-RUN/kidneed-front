@@ -8,6 +8,8 @@ import Card from '../earth/components/card';
 const Earth = () => {
   const { Step } = Steps;
   const [step, setStep] = useState(0);
+  const [modal, setModal] = useState(true);
+
   return (
     <div>
       <div>
@@ -27,9 +29,9 @@ const Earth = () => {
         <Modal
           title="راه چه"
           centered
-          visible={true}
-          onOk={() => this.setModal2Visible(false)}
-          onCancel={() => this.setModal2Visible(false)}
+          visible={modal}
+          onOk={() => setModal(false)}
+          onCancel={() => setModal(false)}
           className={styles.preShowModal}
         >
           <p>some contents...</p>
