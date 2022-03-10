@@ -8,12 +8,14 @@ import styles from "./AddChildPage.module.css";
 export const AddChildPage: React.FC = () => {
 
     const [page, setPage] = useState<string>("intro")
+    const [childId, setChildId] = useState<number>()
+    const [way, setWay] = useState<string>()
 
     const pages: {[key: string]: JSX.Element} = {
         "intro": <Intro setPage={setPage} />,
-        "addChild": <AddChild setPage={setPage} />,
-        "selectWay": <SelectWay setPage={setPage} />,
-        "quiz": <Quiz />,
+        "addChild": <AddChild setPage={setPage} setChildId={setChildId} />,
+        "selectWay": <SelectWay setPage={setPage} childId={childId} setWay={setWay} />,
+        "quiz": <Quiz way={way} childId={childId} />,
     }
 
     return (
