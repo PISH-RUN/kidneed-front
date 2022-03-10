@@ -1,4 +1,4 @@
-import { useUser } from "@kidneed/hooks";
+import { useApp, useUser } from "@kidneed/hooks";
 import {
   Typography,
   Box,
@@ -23,6 +23,7 @@ import AddIcon from "layouts/icons/add";
 import AvatarWoman from "public/images/avatar-woman.png";
 import ArrowDown from "layouts/icons/arrow-down";
 import { Guard } from "@kidneed/types";
+import { useEffect } from "react";
 
 const styles = {
   card: {
@@ -83,6 +84,14 @@ const scheduleData = [
 ];
 
 const Schedule = () => {
+  const {ctx, selectChild} = useApp();
+
+  useEffect(() => {
+    if(!ctx.child && ctx.children) {
+      selectChild(ctx.children[0])
+    }
+  }, [ctx])
+
   return (
     <Paper sx={{ mt: 4, p: 3, boxShadow: "none", borderRadius: 8 }}>
       <Stack direction="row" justifyContent="space-between">

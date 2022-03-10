@@ -42,7 +42,7 @@ const menu = [{
   icon: <DashboardIcon/>
 },{
   title: 'از همه رنگ',
-  link: '/parent/dashboard1',
+  link: '/parent/dayPlan',
   icon: <CalendarIcon/>
 },{
   title: 'کارنما',
