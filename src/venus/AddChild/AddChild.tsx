@@ -7,25 +7,28 @@ import styles from "./AddChild.module.css";
 import { AgeSlider } from "../AgeSlider/AgeSlider";
 import { PrimaryButton } from "../PrimaryButton/PrimaryButton";
 import { strapi } from "@kidneed/services";
-import { set } from "react-hook-form";
 
 export const AddChild: React.FC<{
     setPage: React.Dispatch<React.SetStateAction<string>>;
+    setChildId: React.Dispatch<React.SetStateAction<number | undefined>>;
 }> = (props) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState<boolean>(false);
 
+
+
     const onFinish = () => {
-        console.log(form.getFieldsValue());
         setLoading(true);
         strapi
             .request<any>("post", "/children/", {
                 data: {data: form.getFieldsValue()},
             })
-            .then(() => {
+            .then((response) => {
+                props.setChildId(response.data.id)
                 props.setPage("selectWay");
             })
-            .catch(() => {
+            .catch((error) => {
+                console.log(error)
                 message.error("خطایی رخ داده است");
             })
             .finally(() => {

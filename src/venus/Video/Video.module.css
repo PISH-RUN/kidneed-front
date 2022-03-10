@@ -3,7 +3,6 @@
     border-radius: 31px;
     width: 640px;
     height: 480px;
-    background-image: url("https://picsum.photos/640/480");
     position: relative;
 }
 .videoPlayBtn {
@@ -19,4 +18,10 @@
     height: 100%;
     background-color: #00000059;
     position: absolute;
+}
+.secondVideoContainer {
+    cursor: pointer;
+    border-radius: 31px;
+    width: 640px;
+    position: relative;
 }

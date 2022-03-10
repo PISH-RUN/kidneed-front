@@ -5,22 +5,14 @@ import logo from 'landing/media/images/logo.png'
 import Link from "next/link";
 import p1 from 'landing/media/images/p1.png'
 import p2 from 'landing/media/images/p2.png'
-import baghketab from 'landing/media/images/baghketab.png'
 import barkat from 'landing/media/images/barkat.png'
 import digiton from 'landing/media/images/digiton.png'
-import fidibo from 'landing/media/images/fidibo.png'
 import filmgardi from 'landing/media/images/filmgardi.png'
-import taghche from 'landing/media/images/taghche.png'
 import lastActivities from 'landing/media/images/lastActivities.png'
 import bookmarks from 'landing/media/icons/bookmarks.png'
-import calendarClear from 'landing/media/icons/calendar-clear.png'
 import pieChart from 'landing/media/icons/pie-chart.png'
-import telescope from 'landing/media/icons/telescope.png'
 import roadMap from 'landing/media/images/roadMap.png'
 import quote from 'landing/media/icons/quote.png'
-import experts1 from 'landing/media/images/experts1.png'
-import experts2 from 'landing/media/images/experts2.png'
-import experts3 from 'landing/media/images/experts3.png'
 import robot from 'landing/media/images/robot.png'
 import safine from 'landing/media/images/safine.png'
 import rightConnection from 'landing/media/images/rightConnection.png'
@@ -32,6 +24,16 @@ import message from 'landing/media/images/message.png'
 import googleplay from 'landing/media/images/googleplay.png'
 import telescopeBig from 'landing/media/images/telescope.png'
 import facebook from 'landing/media/images/facebook.png'
+import rahcheIcon from 'landing/media/images/rahcheIcon.png'
+import maktabkhane from 'landing/media/images/maktabkhane.png'
+import haery from 'landing/media/images/haery.jpg'
+import jan from 'landing/media/images/jan.jpg'
+import erik from 'landing/media/images/erik.png'
+import chamrani from 'landing/media/images/chamrani.png'
+import pishrun from 'landing/media/images/pishrun.png'
+import khallagh from 'landing/media/images/khallagh.png'
+
+
 
 export default function Home() {
   return <div className={styles.landing}>
@@ -71,11 +73,11 @@ export default function Home() {
     </div>
     <div className={styles.header}>
       <div className={styles.title}>
-        <h1>با برنامه دقیق، راه پیشرفت کودکانمان را خود بسازیم </h1>
+        <h1>حال نو، یکودو</h1>
       </div>
       <div className={styles.desc}>
         <h3>
-          پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما
+          دستیاری کار بلد برای مدیریت هوشمند سرگرمی کودکانمان
         </h3>
       </div>
       <div className={styles.buttons}>
@@ -83,7 +85,7 @@ export default function Home() {
           <button type="button" className={styles.btnStartTrip}>سفر را شروع کنید</button>
         </Link>
         <Link href="">
-          <button type="button" className={styles.knowMoreBtn}>بیشتر بدانید</button>
+          <button type="button" className={styles.knowMoreBtn}>یکودو چیه؟</button>
         </Link>
       </div>
     </div>
@@ -92,9 +94,11 @@ export default function Home() {
         <div className={styles.iframeDiv}><span style={{ display: "block", paddingTop: "57%" }}></span><iframe src="https://www.aparat.com/video/video/embed/videohash/7ZXqM/vt/frame" allowFullScreen={true} ></iframe></div>
       </div>
       <div className={styles.descMovie}>
-        <div className={styles.title}>عنوانی برای توضیح بهتر</div>
+        <div className={styles.title}>زمین بازی اختصاصی کودک شما</div>
         <div className={styles.desc}>
-          پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما
+          کودکان از لابه‌لای سرگرمی‌ها و بازی‌هایشان بیشتر از آن چیزی که ما فکر می‌کنیم می‌آموزند و از آن تأثیر می‌گیرند. این سرگرمی‌ها می‌تواند محتوایِ مخرّب یا سازنده داشته باشد و این یکی از دغدغه‌های مهم اولیاست.
+          یکودو دستیاری پای‌ِ‌کار است که با عینک روان‌شناختی و تربیتی سرگرمی‌هایی را به کودک شما پیشنهاد می‌دهد که متناسب با نیازهای رشدی و مهارتی او باشد. همچنین این امکان برای والدین وجود دارد که سبد سرگرمی‌های کودک را رصد کنند و در صورت نیاز آن را تغییر دهند.
+          یکودو یارکمکیِ خانواده‌ی شماست.
         </div>
       </div>
     </div>
@@ -107,40 +111,40 @@ export default function Home() {
           <Image src={digiton} />
         </div>
         <div className={styles.item}>
-          <Image src={fidibo} />
-        </div>
-        <div className={styles.item}>
-          <Image src={taghche} />
-        </div>
-        <div className={styles.item}>
-          <Image src={baghketab} />
-        </div>
-        <div className={styles.item}>
           <Image src={barkat} />
+        </div>
+        <div className={styles.item}>
+          <Image src={khallagh} />
+        </div>
+        <div className={styles.item}>
+          <Image src={pishrun} />
+        </div>
+        <div className={styles.item}>
+          <Image src={chamrani} />
         </div>
       </div>
     </div>
     <div className={styles.someTotalInformation}>
       <div className={styles.inner}>
         <div className={styles.choicePossible}>
-          <div className={styles.title}>امکان انتخاب محتوای اختصاص یافته</div>
-          <div className={styles.desc}>برای تنظیم برنامه روزانه کودک خودتان می توانید از پایگاه جامه محتوای کودک پلنت استفاده نمایید و به محتواهای مورد استفاده و تعدد استفاده آن را مشاهده نمایید.</div>
+          <div className={styles.title}>امکان انتخاب انواع سرگرمی های مخصوص به کودک خودتان</div>
+          <div className={styles.desc}>برای تنظیم برنامه روزانه فرزندتان، می‌توانید به صفحه‌ی اختصاصی والدین مراجعه کنید و پس از تماشای ویدئوهای معرّفی حیطه‌هایِ رشدی و تکمیل پرسشنامه‌ی نیازهای مهارتی کودک، بسته‌ی پیشنهادی سرگرمی‌های روزانه فرزندتان را دریافت نمایید.</div>
           <div className={styles.countingInfo}>
             <div className={styles.item}>
               <div className={styles.count}>۲۵۰۰+</div>
-              <div className={styles.text}>انیمیشن</div>
+              <div className={styles.text}>ویدئو</div>
             </div>
             <div className={styles.item}>
               <div className={styles.count}>۸۰۰+</div>
-              <div className={styles.text}>داستان</div>
+              <div className={styles.text}>صوت</div>
             </div>
             <div className={styles.item}>
               <div className={styles.count}>۳۴۱+</div>
-              <div className={styles.text}>فعالیت</div>
+              <div className={styles.text}>کتاب</div>
             </div>
             <div className={styles.item}>
               <div className={styles.count}>۱۵+</div>
-              <div className={styles.text}>چالش</div>
+              <div className={styles.text}>فعالیت عملی</div>
             </div>
           </div>
         </div>
@@ -153,33 +157,15 @@ export default function Home() {
     </div>
     <div className={styles.progressPath}>
       <div className={styles.inner}>
-        <div className={styles.titleSection}> رصد مسیر پیشرفت و تعیین مراحل آن</div>
+        <div className={styles.titleSection}>آنچه در زمین بازی «یکودو» خواهید دید...</div>
         <div className={styles.tabs}>
           <div className={styles.tab}>
             <div className={styles.icon}>
               <Image src={pieChart} />
             </div>
             <div className={styles.detail}>
-              <div className={styles.title}>مشاهده آمار</div>
-              <div className={styles.desc}>از تمامی فعالیت ها</div>
-            </div>
-          </div>
-          <div className={styles.tab}>
-            <div className={styles.icon}>
-              <Image src={calendarClear} />
-            </div>
-            <div className={styles.detail}>
-              <div className={styles.title}>تعیین برنامه روزانه</div>
-              <div className={styles.desc}>به کمک متخصصین</div>
-            </div>
-          </div>
-          <div className={styles.tab}>
-            <div className={styles.icon}>
-              <Image src={telescope} />
-            </div>
-            <div className={styles.detail}>
-              <div className={styles.title}>تعیین اهداف</div>
-              <div className={styles.desc}>کوتاه یا بلند مدت</div>
+              <div className={styles.title}>کارنما</div>
+              <div className={styles.desc}>(گزارش اختصاصی از وضعیت کودک))</div>
             </div>
           </div>
           <div className={styles.tab}>
@@ -187,11 +173,32 @@ export default function Home() {
               <Image src={bookmarks} />
             </div>
             <div className={styles.detail}>
-              <div className={styles.title}>پاس گل تربیتی</div>
-              <div className={styles.desc}>به ازای هر فعالیت</div>
+              <div className={styles.title}>پاس گل</div>
+              <div className={styles.desc}>بهانه های تعامل با کودک</div>
+            </div>
+          </div>
+          <div className={styles.tab}>
+            <div className={styles.icon}>
+              <Image width={27}
+                height={27} src={rahcheIcon} />
+            </div>
+            <div className={styles.detail}>
+              <div className={styles.title}>راهچه</div>
+              <div className={styles.desc}>راهکارهای مسئله های رایج</div>
+            </div>
+          </div>
+          <div className={styles.tab}>
+            <div className={styles.icon}>
+              <Image width={27}
+                height={27} src={maktabkhane} />
+            </div>
+            <div className={styles.detail}>
+              <div className={styles.title}>مکتب خونه</div>
+              <div className={styles.desc}>محتوا برای دانش افزایی والدین</div>
             </div>
           </div>
         </div>
+
         <div className={styles.map}>
           <div>
             <Image src={roadMap} alt="roadMap" />
@@ -203,7 +210,7 @@ export default function Home() {
       <div className={styles.inner}>
         <div className={styles.headerSection}>
           <div className={styles.titleSection}>
-            متخصصان در مورد ما چه می گویند؟
+            متخصصان درباره اهمیت سرگرمی در کودکی چه می گویند
           </div>
           <div className={styles.desc}>
             جملاتی از والدین و متخصصان حوزه کودک در مورد پلنت
@@ -216,14 +223,14 @@ export default function Home() {
                 <Image src={quote} />
               </div>
               <div className={styles.avatar}>
-                <Image src={experts1} alt="avatar" />
+                <Image src={erik} alt="avatar" />
               </div>
               <div className={styles.name}>
-                دکتر مشکانی
+                اریک اریکسن
               </div>
               <div className={styles.posistion}>روانشناس کودک</div>
               <div className={styles.desc}>
-                پلنت یک راهکار مناسب در فضای متشنج دنیای مدیا بنظر می رسه.
+                در هر کودکی در هر مرحله از رشد اعجاز جدیدی برای آشکار شدن وجود دارد.
               </div>
             </div>
           </div>
@@ -233,14 +240,14 @@ export default function Home() {
                 <Image src={quote} />
               </div>
               <div className={styles.avatar}>
-                <Image src={experts2} alt="avatar" />
+                <Image src={jan} alt="avatar" />
               </div>
               <div className={styles.name}>
-                دکتر محامدی
+                ژان پیازه
               </div>
               <div className={styles.posistion}>روانشناس کودک</div>
               <div className={styles.desc}>
-                میزان استقبال از این سیستم مشخص کننده میزان اهمیت این موضوع باری خانوادهاست.
+                اگر می خواید خلاق باشید، باید تا حدی کودک باشید با همان میزان خلاقیت و نبوغی که در یک کودک قبل از آنکه توسط جامعه بزرگسالان تغییر شکل داده شود، وجود دارد.
               </div>
             </div>
           </div>
@@ -250,14 +257,14 @@ export default function Home() {
                 <Image src={quote} />
               </div>
               <div className={styles.avatar}>
-                <Image src={experts3} alt="avatar" />
+                <Image src={haery} alt="avatar" />
               </div>
               <div className={styles.name}>
-                دکتر موسی زاده
+                آیت الله حائری شیرازی:
               </div>
               <div className={styles.posistion}>عضویت هیات علمی</div>
               <div className={styles.desc}>
-                علاوه بر جسم کودک روح آن نیز از اهمیت بالایی برخوردار است.
+                پدر باید با بچه اش رفیق باشد، با بچه اش هم بازی بشود. پدر باید رفیق اول فرزندش باشد. وای به حال پدری که رفیق دوم فرزندش باشد.
               </div>
             </div>
           </div>
@@ -272,8 +279,8 @@ export default function Home() {
     </div>
     <div className={styles.knowMoreAboutContentChoice}>
       <div className={styles.inner}>
-        <div className={styles.titleSection}>در مورد انتخاب محتوی بیشتر بدانیم</div>
-        <div className={styles.descSection}>مقالاتی تخصصی مخصوص والدین برای انتخاب صحیح تر محتواهای گوناگون</div>
+        <div className={styles.titleSection}>مکتب خونه، ویژه پدر مادرها</div>
+        <div className={styles.descSection}>محتواهای به درد بخور و کاربردی مخصوص والدین، درباره شیوه های صحیح والدگری و تعامل با کودک</div>
         <div className={styles.cards}>
           <div className={styles.card}>
             <Image src={sync} />
