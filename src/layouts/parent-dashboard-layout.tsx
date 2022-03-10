@@ -54,7 +54,7 @@ const menu = [{
   icon: <GiftIcon/>
 },{
   title: 'راه چه',
-  link: '/parent/dashboard4',
+  link: '/earth',
   icon: <BulbIcon/>
 },{
   title: 'پیام ها',
