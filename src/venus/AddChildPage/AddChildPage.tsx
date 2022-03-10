@@ -7,7 +7,7 @@ import styles from "./AddChildPage.module.css";
 
 export const AddChildPage: React.FC = () => {
 
-    const [page, setPage] = useState<string>("selectWay")
+    const [page, setPage] = useState<string>("intro")
     const [childId, setChildId] = useState<number>()
     const [way, setWay] = useState<string>()
 
