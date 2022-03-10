@@ -1,5 +1,4 @@
 import { useUser } from "@kidneed/hooks";
-import { openGuard } from "@kidneed/utils";
 import {
   Typography,
   Box,
@@ -9,7 +8,6 @@ import {
   Avatar,
   Paper,
   Button,
-  IconButton,
 } from "@mui/material";
 import ParentDashboardLayout from "layouts/parent-dashboard-layout";
 import Image from "next/image";
@@ -22,7 +20,7 @@ import PsImage2 from "public/images/temp/ps2.png";
 import PsImage3 from "public/images/temp/ps3.png";
 import AddIcon from "layouts/icons/add";
 import AvatarWoman from "public/images/avatar-woman.png";
-import ArrowDown from "layouts/icons/arrow-down";
+import { Guard } from "@kidneed/types";
 
 const styles = {
   card: {
@@ -247,4 +245,12 @@ export default function Dashboard() {
   );
 }
 
-Dashboard.guard = openGuard;
+const guard: Guard = (matcher, ctx, router) => {
+  if (matcher("guest")) {
+    return false;
+  }
+
+  return true;
+};
+
+Dashboard.guard = guard;
