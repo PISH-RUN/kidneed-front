@@ -41,6 +41,7 @@ padding:8px 16px;
 display:flex;
 align-items:center;
 width:250px;
+background-color: #fff;
 }
 .searchBox input{
     outline:none;
@@ -61,6 +62,8 @@ line-height: 24px;
     border-radius: 20px;
     height: 130px;
     justify-content: space-between;
+    background-color: #fff;
+
 }
 .card .imageInfo{
     display: flex;
@@ -86,6 +89,8 @@ border-radius: 20px 20px 0 0 !important;
     flex-direction: column;
     justify-content: space-between;
     width: 65%;
+    padding-top: 16px;
+    padding-bottom: 4px;
 }
 
 .card .content .title{
@@ -141,7 +146,15 @@ align-items: center;
 justify-content: center;
 height: 100%;
 }
-
-.preShowModal .ant-modal-header{
-background-color: #F5F9F8;
+.earth .steps{
+    margin: 64px;
+}
+.earth .cards{
+    margin-top: 32px;
+}
+.earth .cardBox{
+    margin: 16px 0;
+}
+.preShowModal {
+    background-color: #F5F9F8;
 }

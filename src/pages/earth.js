@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Modal, Steps } from "antd";
 import styles from 'earth/styles/earth.module.css'
-import UserProfile from 'earth/components/userProfile'
 import Image from 'next/image'
 import SearchBox from 'earth/components/searchBox'
 import Card from '../earth/components/card';
@@ -54,9 +53,9 @@ const Earth = () => {
   const [modal, setModal] = useState(true);
 
   return (
-    <div>
+    <div className={styles.earth}>
       <div>
-        <div>
+        <div className={styles.steps}>
           <Steps current={step}>
             <Step title="موضوع" />
             <Step title="نشانه ها" />
@@ -64,22 +63,50 @@ const Earth = () => {
             <Step title="راهکار" />
           </Steps>
         </div>
-        <UserProfile />
       </div>
       {step === 0 && <div>
         <SearchBox />
-        <Card />
+        <div className={styles.cards}>
+          <div className={styles.cardBox}>
+            <Card />
+          </div>
+          <div className={styles.cardBox}>
+            <Card />
+          </div>
+          <div className={styles.cardBox}>
+            <Card />
+          </div>
+        </div>
         <Modal
-          title="راه چه"
+          footer={false}
+          closable={false}
           centered
           visible={modal}
           onOk={() => setModal(false)}
           onCancel={() => setModal(false)}
-          className={styles.preShowModal}
+          className={styles.preShowModal + " tw-rounded-3xl tw-overflow-hidden"}
         >
-          <p>some contents...</p>
-          <p>some contents...</p>
-          <p>some contents...</p>
+          <div className={styles.header}>
+            راه چه
+          </div>
+          <div className={styles.content}>
+            <div className={styles.plan}>
+              <div className={styles.text}>
+                پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما
+              </div>
+              <div className={styles.buttons}>
+                <div>
+                  <button className={styles.continueBtn} type='button'>ادامه</button>
+                </div>
+                <div>
+                  <button className={styles.backBtn} type='button'>بازگشت</button>
+                </div>
+              </div>
+            </div>
+            <div className={styles.movie}>
+
+            </div>
+          </div>
         </Modal>
       </div>}
     </div>
@@ -87,7 +114,7 @@ const Earth = () => {
 };
 
 Earth.getLayout = (children) => (
-  <ParentDashboardLayout SideComponent={<SideDashboard />}>{children}</ParentDashboardLayout>
+  <ParentDashboardLayout >{children}</ParentDashboardLayout>
 );
 export default Earth;
 Earth.guard = () => true
