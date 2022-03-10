@@ -13,7 +13,7 @@ export const SelectWay: React.FC<{
     setWay: React.Dispatch<React.SetStateAction<string | undefined>>;
     childId?: number;
 }> = (props) => {
-    const selectWay = (type?: "a" | "b" | "c" | "d") => {
+    const selectWay = (type?: "A" | "B" | "C" | "D") => {
         strapi
             .request<any>("post", "/steps/", {
                 data: {
@@ -46,11 +46,11 @@ export const SelectWay: React.FC<{
                     لطفا نوع حوزه رشدی را انتخاب نمایید
                 </Text>
                 <div className={styles.waysWrapper}>
-                    <Way onClick={() => selectWay("a")} title="حرکتی جسمی" />
-                    <Way onClick={() => selectWay("b")} title="شناختی" />
-                    <Way onClick={() => selectWay("c")} title="هیجانی" />
+                    <Way onClick={() => selectWay("A")} title="حرکتی جسمی" />
+                    <Way onClick={() => selectWay("B")} title="شناختی" />
+                    <Way onClick={() => selectWay("C")} title="هیجانی" />
                     <Way
-                        onClick={() => selectWay("d")}
+                        onClick={() => selectWay("D")}
                         title="اخلاقی اجتماعی"
                     />
                 </div>
