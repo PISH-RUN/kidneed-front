@@ -15,6 +15,7 @@ import { useApp } from "@kidneed/hooks";
 import { strapi } from "@kidneed/services";
 import { ChildDashboard } from "../../core/types/model";
 import Link from 'next/link';
+import { Guard } from '@kidneed/types';
 
 const styles = {
   root: {
@@ -419,7 +420,14 @@ const UserSelect = ({open, onSelect}: any) => {
   </Box>;
 }
 
+const guard: Guard = (matcher, ctx, router) => {
+  if (matcher("guest")) {
+    return false;
+  }
 
-Dashboard.guard = openGuard;
+  return true;
+};
+
+Dashboard.guard = guard;
 
 export default Dashboard;
