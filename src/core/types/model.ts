@@ -50,8 +50,7 @@ export interface Step extends Model {
 
 export interface User extends Model {
   mobile: string;
-  firstName?: string;
-  lastName?: string;
+  name?: string;
   email?: string;
 }
 
