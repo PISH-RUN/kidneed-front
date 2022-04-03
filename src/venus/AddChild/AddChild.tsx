@@ -7,102 +7,108 @@ import styles from "./AddChild.module.css";
 import { AgeSlider } from "../AgeSlider/AgeSlider";
 import { PrimaryButton } from "../PrimaryButton/PrimaryButton";
 import { strapi } from "@kidneed/services";
+import { useApp } from "@kidneed/hooks";
 
 export const AddChild: React.FC<{
-    setPage: React.Dispatch<React.SetStateAction<string>>;
-    setChildId: React.Dispatch<React.SetStateAction<number | undefined>>;
+  setPage: React.Dispatch<React.SetStateAction<string>>;
+  setChildId: React.Dispatch<React.SetStateAction<number | undefined>>;
 }> = (props) => {
-    const [form] = Form.useForm();
-    const [loading, setLoading] = useState<boolean>(false);
+  const { ctx } = useApp();
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState<boolean>(false);
 
 
+  const onFinish = () => {
+    setLoading(true);
+    strapi
+      .request<any>("post", "/children/", {
+        data: {
+          data: {
+            ...form.getFieldsValue(),
+            user: ctx?.user?.id
+          }
+        }
+      })
+      .then((response) => {
+        props.setChildId(response.data.id);
+        props.setPage("selectWay");
+      })
+      .catch((error) => {
+        console.log(error);
+        message.error("خطایی رخ داده است");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
-    const onFinish = () => {
-        setLoading(true);
-        strapi
-            .request<any>("post", "/children/", {
-                data: {data: form.getFieldsValue()},
-            })
-            .then((response) => {
-                props.setChildId(response.data.id)
-                props.setPage("selectWay");
-            })
-            .catch((error) => {
-                console.log(error)
-                message.error("خطایی رخ داده است");
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    };
-
-    return (
-        <ContentWrapper title="اطلاعات ضروری">
-            <Form
-                className={styles.addChildForm}
-                style={{ padding: "0 200px" }}
-                form={form}
-                onFinish={onFinish}
-            >
-                <Text style={{ fontSize: "16px" }}>
-                    اطلاعات فرزند خود را وارد نمایید
-                </Text>
-                <Form.Item
-                    rules={[{ required: true, message: "این فیلد الزامی است" }]}
-                    name="parent_name"
-                >
-                    <Input
-                        size="large"
-                        placeholder="نام شما"
-                        prefix={<UserOutlined style={{ color: "#1890FF" }} />}
-                    />
-                </Form.Item>
-                <Form.Item
-                    rules={[{ required: true, message: "این فیلد الزامی است" }]}
-                    name="relation"
-                >
-                    <Select
-                        size="large"
-                        placeholder="نسبت شما"
-                        options={[
-                            {
-                                label: "پدر",
-                                value: "father",
-                            },
-                            {
-                                label: "مادر",
-                                value: "mother",
-                            },
-                        ]}
-                    />
-                </Form.Item>
-                <Form.Item
-                    rules={[{ required: true, message: "این فیلد الزامی است" }]}
-                    name="name"
-                >
-                    <Input
-                        size="large"
-                        placeholder="نام فرزند شما"
-                        prefix={<UserOutlined style={{ color: "#1890FF" }} />}
-                    />
-                </Form.Item>
-                <Form.Item name="gender">
-                    <Radio.Group defaultValue={1}>
-                        <Radio value={"boy"}>آقا پسر</Radio>
-                        <Radio value={"girl"}>دختر خانوم</Radio>
-                    </Radio.Group>
-                </Form.Item>
-                <AgeSlider name="age" style={{ marginBottom: "50px" }} />
-                <div className={styles.formButtons}>
-                    <PrimaryButton
-                        style={{ minWidth: "180px" }}
-                        htmlType="submit"
-                        loading={loading}
-                    >
-                        مرحله بعد
-                    </PrimaryButton>
-                </div>
-            </Form>
-        </ContentWrapper>
-    );
+  return (
+    <ContentWrapper title="اطلاعات ضروری">
+      <Form
+        className={styles.addChildForm}
+        style={{ padding: "0 200px" }}
+        form={form}
+        onFinish={onFinish}
+      >
+        <Text style={{ fontSize: "16px" }}>
+          اطلاعات فرزند خود را وارد نمایید
+        </Text>
+        <Form.Item
+          rules={[{ required: true, message: "این فیلد الزامی است" }]}
+          name="parent_name"
+        >
+          <Input
+            size="large"
+            placeholder="نام شما"
+            prefix={<UserOutlined style={{ color: "#1890FF" }} />}
+          />
+        </Form.Item>
+        <Form.Item
+          rules={[{ required: true, message: "این فیلد الزامی است" }]}
+          name="relation"
+        >
+          <Select
+            size="large"
+            placeholder="نسبت شما"
+            options={[
+              {
+                label: "پدر",
+                value: "father"
+              },
+              {
+                label: "مادر",
+                value: "mother"
+              }
+            ]}
+          />
+        </Form.Item>
+        <Form.Item
+          rules={[{ required: true, message: "این فیلد الزامی است" }]}
+          name="name"
+        >
+          <Input
+            size="large"
+            placeholder="نام فرزند شما"
+            prefix={<UserOutlined style={{ color: "#1890FF" }} />}
+          />
+        </Form.Item>
+        <Form.Item name="gender">
+          <Radio.Group defaultValue={1}>
+            <Radio value={"boy"}>آقا پسر</Radio>
+            <Radio value={"girl"}>دختر خانوم</Radio>
+          </Radio.Group>
+        </Form.Item>
+        <AgeSlider name="age" style={{ marginBottom: "50px" }} />
+        <div className={styles.formButtons}>
+          <PrimaryButton
+            style={{ minWidth: "180px" }}
+            htmlType="submit"
+            loading={loading}
+          >
+            مرحله بعد
+          </PrimaryButton>
+        </div>
+      </Form>
+    </ContentWrapper>
+  );
 };

@@ -20,8 +20,8 @@ export const SelectWay: React.FC<{
                     data: {
                         child: props.childId,
                         category: type,
-                        year: 1400,
-                        month: 12,
+                        year: 1401,
+                        month: 1,
                     },
                 },
             })

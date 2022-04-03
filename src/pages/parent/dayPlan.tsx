@@ -12,26 +12,10 @@ import ContentModal from "../../core-team/components/contentModal";
 import { useTodayActivity } from "../../core-team/api/activity";
 import { useApp } from "@kidneed/hooks";
 
-const SideDashboard = () => {
-  return <>
-    <Stack direction="row" alignItems="center" spacing={2} sx={{ py: 2, pr: 3, cursor: "pointer" }}>
-      <Avatar sx={{ width: 90, height: 90, p: 2, background: "#E2F1FD" }} src="/images/avatar-woman.png" />
-      <Box flexGrow={1}>
-        <Typography variant="h5">حسنا خانوم</Typography>
-        <Typography variant="h6" sx={{ color: "#8CA3A5" }}>2500 سکه</Typography>
-      </Box>
-      <Box>
-        <ArrowDown sx={{ color: "#8CA3A5" }} />
-      </Box>
-    </Stack>
-    <Box>
-      <Box component="img" src="/images/pd-test.png" sx={{ px: 2 }} />
-    </Box>
-  </>;
-};
-
 const typeNames: any = {
-  video: "ویدئو"
+  video: "ویدئو",
+  activity: "فعالیت عملی",
+  book: "کتاب",
 }
 
 const data: any = [
@@ -113,7 +97,7 @@ const DayPlan = () => {
 };
 
 DayPlan.getLayout = (children: any) => (
-  <ParentDashboardLayout>{children}</ParentDashboardLayout>
+  <ParentDashboardLayout showChild>{children}</ParentDashboardLayout>
 );
 
 DayPlan.guard = openGuard;

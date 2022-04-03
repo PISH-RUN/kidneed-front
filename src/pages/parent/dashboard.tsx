@@ -8,7 +8,7 @@ import {
   Avatar,
   Paper,
   Button,
-  IconButton,
+  IconButton
 } from "@mui/material";
 import ParentDashboardLayout from "layouts/parent-dashboard-layout";
 import Image from "next/image";
@@ -23,7 +23,7 @@ import AddIcon from "layouts/icons/add";
 import AvatarWoman from "public/images/avatar-woman.png";
 import ArrowDown from "layouts/icons/arrow-down";
 import { Guard } from "@kidneed/types";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 const styles = {
   card: {
@@ -32,65 +32,65 @@ const styles = {
     borderRadius: 8,
     height: "100%",
     "& *": {
-      color: "#fff",
+      color: "#fff"
     },
     position: "relative",
-    pb: 8,
+    pb: 8
   },
   cardImage: {
     textAlign: "center",
-    mb: 2,
+    mb: 2
   },
   cardBottom: {
     position: "absolute",
     bottom: 16,
     width: "100%",
     right: 0,
-    px: 3,
-  },
+    px: 3
+  }
 };
 
 const scheduleData = [
   {
     image: PsImage1,
     title: "تماشای فیلم",
-    subtitle: "سریال",
+    subtitle: "سریال"
   },
   {
     image: PsImage2,
     title: "تماشای فیلم",
-    subtitle: "سریال",
+    subtitle: "سریال"
   },
   {
     image: PsImage3,
     title: "تماشای فیلم",
-    subtitle: "سریال",
+    subtitle: "سریال"
   },
   {
     image: PsImage1,
     title: "تماشای فیلم",
-    subtitle: "سریال",
+    subtitle: "سریال"
   },
   {
     image: PsImage2,
     title: "تماشای فیلم",
-    subtitle: "سریال",
+    subtitle: "سریال"
   },
   {
     image: PsImage3,
     title: "تماشای فیلم",
-    subtitle: "سریال",
-  },
+    subtitle: "سریال"
+  }
 ];
 
 const Schedule = () => {
-  const {ctx, selectChild} = useApp();
+  const { ctx, selectChild } = useApp();
 
   useEffect(() => {
-    if(!ctx.child && ctx.children) {
-      selectChild(ctx.children[0])
+    if (!ctx.child && ctx.children) {
+      selectChild(ctx.children[0]);
     }
-  }, [ctx])
+  }, [ctx]);
 
   return (
     <Paper sx={{ mt: 4, p: 3, boxShadow: "none", borderRadius: 8 }}>
@@ -110,7 +110,7 @@ const Schedule = () => {
               color: "#8CA3A5",
               borderColor: "#8CA3A5!important",
               borderRadius: 3,
-              height: 55,
+              height: 55
             }}
           >
             ویرایش
@@ -148,7 +148,7 @@ const Schedule = () => {
             color: "#8CA3A5",
             borderColor: "#8CA3A5",
             maxWidth: "60%",
-            margin: "16px auto 0",
+            margin: "16px auto 0"
           }}
         >
           افزودن برنامه ای جدید
@@ -160,47 +160,26 @@ const Schedule = () => {
 
 const SideDashboard = () => {
   return (
-    <>
-      <Stack
-        direction="row"
-        alignItems="center"
-        spacing={2}
-        sx={{ py: 2, pr: 3, cursor: "pointer" }}
-      >
-        <Avatar
-          sx={{ width: 80, height: 80, p: 2, background: "#E2F1FD" }}
-          src="/images/avatar-woman.png"
-        />
-        <Box flexGrow={1}>
-          <Typography variant="h6">حسنا خانوم</Typography>
-          <Typography variant="body2" sx={{ color: "#8CA3A5" }}>
-            2500 سکه
-          </Typography>
-        </Box>
-        <Box>
-          <ArrowDown sx={{ color: "#8CA3A5", fontSize: 16 }} />
-        </Box>
-      </Stack>
-      <Box>
-        <Box component="img" src="/images/pd-test.png" sx={{ px: 2 }} />
-      </Box>
-    </>
+    <Box>
+      <Box component="img" src="/images/pd-test.png" sx={{ px: 2 }} />
+    </Box>
   );
 };
 
-export default function Dashboard() {
-  const user = useUser(1);
+const Dashboard = () => {
+  const { ctx } = useApp();
+
   return (
-    <ParentDashboardLayout SideComponent={<SideDashboard />}>
+    <>
       <Typography sx={{ mb: 2 }} variant="h4">
-        سلام آقا محمد! 👋
+        سلام {ctx?.user?.name}! 👋
       </Typography>
       <Grid
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gridRowGap: 16,
-          gridColumnGap: 16,
+          gridColumnGap: 16
         }}
         container
       >
@@ -252,9 +231,13 @@ export default function Dashboard() {
         </Grid>
       </Grid>
       <Schedule />
-    </ParentDashboardLayout>
+    </>
   );
-}
+};
+
+Dashboard.getLayout = (children: any) => (
+  <ParentDashboardLayout SideComponent={<SideDashboard />} showChild>{children}</ParentDashboardLayout>
+);
 
 const guard: Guard = (matcher, ctx, router) => {
   if (matcher("guest")) {
@@ -265,3 +248,5 @@ const guard: Guard = (matcher, ctx, router) => {
 };
 
 Dashboard.guard = guard;
+
+export default Dashboard;
