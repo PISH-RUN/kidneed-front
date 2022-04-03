@@ -10,6 +10,7 @@ import {
   Button,
   IconButton
 } from "@mui/material";
+import _ from "lodash";
 import ParentDashboardLayout from "layouts/parent-dashboard-layout";
 import Image from "next/image";
 import ImageCard1 from "public/images/parentCard/img1.png";
@@ -23,7 +24,11 @@ import AddIcon from "layouts/icons/add";
 import AvatarWoman from "public/images/avatar-woman.png";
 import ArrowDown from "layouts/icons/arrow-down";
 import { Guard } from "@kidneed/types";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { DateRange } from "@mui/lab";
+import { useActivity } from "../../core-team/api/activity";
+import jMoment from "moment-jalaali";
+import { useDashboard, useStats } from "../../core-team/api/dashboard";
 
 const styles = {
   card: {
@@ -83,7 +88,8 @@ const scheduleData = [
   }
 ];
 
-const Schedule = () => {
+const Schedule = (props: any) => {
+  const { sum, data } = props;
   const { ctx, selectChild } = useApp();
 
   useEffect(() => {
@@ -92,13 +98,17 @@ const Schedule = () => {
     }
   }, [ctx]);
 
+  if(data) {
+    console.log(_.flatten(_.values(data)));
+  }
+
   return (
     <Paper sx={{ mt: 4, p: 3, boxShadow: "none", borderRadius: 8 }}>
       <Stack direction="row" justifyContent="space-between">
         <Box>
           <Typography variant="h4">برنامه امروز</Typography>
           <Typography variant="h5" sx={{ color: "#8CA3A5", mt: 2 }}>
-            شامل مجموعا 2 ساعت برنامه ریزی
+            شامل مجموعا {sum} ساعت برنامه ریزی
           </Typography>
         </Box>
         <Box>
@@ -118,14 +128,14 @@ const Schedule = () => {
         </Box>
       </Stack>
       <Grid container sx={{ mt: 3 }}>
-        {scheduleData.map((item, index) => (
+        {data && _.map(_.flatten(_.values(data)), (item: any, index: number) => (
           <Grid key={index} item xs={6} sx={{ mt: 2 }}>
             <Stack direction="row" alignItems="flex-start" spacing={3}>
               <Box sx={{ width: 150 }}>
-                <Image src={item.image} />
+                {item.payload?.image && <Image src={item.payload?.image} />}
               </Box>
               <Box>
-                <Typography variant="h5">{item.title}</Typography>
+                <Typography variant="h5">{item.type}</Typography>
                 <Typography variant="h6" sx={{ color: "#8CA3A5", mt: 1 }}>
                   {" "}
                   {item.subtitle}
@@ -166,11 +176,18 @@ const SideDashboard = () => {
   );
 };
 
+const today: DateRange<Date> = [new Date(), new Date()];
+
 const Dashboard = () => {
+  const [range, setRange] = useState<DateRange<Date>>(today);
   const { ctx } = useApp();
+  const { data } = useDashboard(ctx.child?.id);
+  const { data: stats } = useStats(ctx.child?.id);
+
+  const sum = _.sumBy(_.flatten(_.values(data)), (i: any) => i.attributes?.duration);
 
   return (
-    <>
+    <ParentDashboardLayout SideComponent={<SideDashboard />} showChild showRange onRangeChange={setRange}>
       <Typography sx={{ mb: 2 }} variant="h4">
         سلام {ctx?.user?.name}! 👋
       </Typography>
@@ -191,7 +208,7 @@ const Dashboard = () => {
             </Box>
 
             <Box sx={styles.cardBottom}>
-              <Typography variant="h4">21 ساعت</Typography>
+              <Typography variant="h4">{stats?.book} ساعت</Typography>
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="body1">مطالعه</Typography>
                 <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
@@ -206,9 +223,9 @@ const Dashboard = () => {
               <Image src={ImageCard2} />
             </Box>
             <Box sx={styles.cardBottom}>
-              <Typography variant="h4">21 ساعت</Typography>
+              <Typography variant="h4">{stats?.game} ساعت</Typography>
               <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body1">مطالعه</Typography>
+                <Typography variant="body1">بازی</Typography>
                 <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
               </Stack>
             </Box>
@@ -221,23 +238,19 @@ const Dashboard = () => {
               <Image src={ImageCard3} />
             </Box>
             <Box sx={styles.cardBottom}>
-              <Typography variant="h4">21 ساعت</Typography>
+              <Typography variant="h4">{stats?.video} ساعت</Typography>
               <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body1">مطالعه</Typography>
+                <Typography variant="body1">فیلم</Typography>
                 <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
               </Stack>
             </Box>
           </Box>
         </Grid>
       </Grid>
-      <Schedule />
-    </>
+      <Schedule sum={sum} data={data} />
+    </ParentDashboardLayout>
   );
 };
-
-Dashboard.getLayout = (children: any) => (
-  <ParentDashboardLayout SideComponent={<SideDashboard />} showChild>{children}</ParentDashboardLayout>
-);
 
 const guard: Guard = (matcher, ctx, router) => {
   if (matcher("guest")) {
