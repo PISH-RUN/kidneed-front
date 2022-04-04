@@ -182,7 +182,7 @@ const Dashboard = () => {
   const [range, setRange] = useState<DateRange<Date>>(today);
   const { ctx } = useApp();
   const { data } = useDashboard(ctx.child?.id);
-  const { data: stats } = useStats(ctx.child?.id);
+  const { data: stats, isLoading } = useStats(range, ctx.child?.id);
 
   const sum = _.sumBy(_.flatten(_.values(data)), (i: any) => i.attributes?.duration);
 
@@ -208,7 +208,7 @@ const Dashboard = () => {
             </Box>
 
             <Box sx={styles.cardBottom}>
-              <Typography variant="h4">{stats?.book} ساعت</Typography>
+              <Typography variant="h4">{isLoading ? '-' : stats?.book} ساعت</Typography>
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="body1">مطالعه</Typography>
                 <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
@@ -223,7 +223,7 @@ const Dashboard = () => {
               <Image src={ImageCard2} />
             </Box>
             <Box sx={styles.cardBottom}>
-              <Typography variant="h4">{stats?.game} ساعت</Typography>
+              <Typography variant="h4">{isLoading ? '-' : stats?.game} ساعت</Typography>
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="body1">بازی</Typography>
                 <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
@@ -238,7 +238,7 @@ const Dashboard = () => {
               <Image src={ImageCard3} />
             </Box>
             <Box sx={styles.cardBottom}>
-              <Typography variant="h4">{stats?.video} ساعت</Typography>
+              <Typography variant="h4">{isLoading ? '-' : stats?.video} ساعت</Typography>
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="body1">فیلم</Typography>
                 <Rating name="half-rating" defaultValue={2.5} precision={0.5} />

@@ -45,6 +45,7 @@ export type ParentDashboardLayoutProps = {
 const today: DateRange<Date> = [new Date(), new Date()];
 
 const DATE_SIZE = 28;
+const DATE_SIZE2 = 36;
 
 const styles = {
   navButton: {
@@ -88,7 +89,7 @@ const menu = [
     icon: <BulbIcon />
   }, {
     title: "پیام ها",
-    link: "/parent/dashboard5",
+    link: "/parent/message",
     icon: <ChatBubbleIcon />
   }, {
     title: "تنظیمات",
@@ -247,14 +248,14 @@ export default function ParentDashboardLayout(props: ParentDashboardLayoutProps)
                   minWidth: 250
                 },
                 "& > div > div, & > div > div > div, & .MuiCalendarPicker-root": {
-                  width: 250
+                  width: { xl: 300, xs: 250 }
                 },
                 "& .MuiTypography-caption": {
-                  width: 32,
+                  width: 40,
                   margin: 0
                 },
                 "& .PrivatePickersSlideTransition-root": {
-                  minHeight: DATE_SIZE * 7,
+                  minHeight: { xl: DATE_SIZE2 * 7, xs: DATE_SIZE * 7 },
                   minWidth: 250
                 },
                 "& .PrivatePickersSlideTransition-root [role=\"row\"]": {
@@ -264,8 +265,8 @@ export default function ParentDashboardLayout(props: ParentDashboardLayoutProps)
                   margin: 0
                 },
                 "& .MuiPickersDay-root": {
-                  width: DATE_SIZE,
-                  height: DATE_SIZE
+                  width: { xl: DATE_SIZE2, xs: DATE_SIZE },
+                  height: { xl: DATE_SIZE2, xs: DATE_SIZE }
                 },
                 "& .MuiDateRangePickerDay-rangeIntervalDayHighlight + .MuiDateRangePickerDay-rangeIntervalDayHighlightEnd": {
                   background: "#aed6fa"

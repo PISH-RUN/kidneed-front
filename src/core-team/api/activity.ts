@@ -19,7 +19,7 @@ export const useTodayActivity = (child?: number, date = moment()) =>
 
 export const useActivity = (date: [Date | Moment | null, Date | Moment | null], child?: number) => {
   const start = jMoment(date[0]).startOf("day").format('YYYY-MM-DD');
-  const end = jMoment(date[1]).startOf("day").format('YYYY-MM-DD');
+  const end = jMoment(date[1]).endOf("day").format('YYYY-MM-DD');
 
   return useQuery(["activity", child, start, end], () =>
       strapi.request<any>("get", `/children/${child}/activities`, {
