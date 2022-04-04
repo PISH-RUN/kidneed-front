@@ -24,7 +24,7 @@ const Message = () => {
             </Select>
           </Col>
         </Row>
-        <Row className="tw-mt-5" gutter={[0, 20]}>
+        <Row className="tw-mt-8" gutter={[0, 20]}>
           <Col span={24}>
             <div className="tw-bg-white tw-flex tw-rounded-xl tw-overflow-hidden">
               <div className="tw-p-5 tw-self-center">
