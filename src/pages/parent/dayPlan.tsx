@@ -56,8 +56,20 @@ const SideComponent = (props: any) => {
 
   const getDayActivities = (day: Moment) => {
     return _.filter(activities?.data, (item) => {
-      return jMoment(item.attributes?.date, "YYYY-MM-DD").jDate() === day.jDate() && jMoment(item.attributes?.date, "YYYY-MM-DD").jMonth() === month.jMonth();
+      const activityDate = jMoment(item.attributes?.date, "YYYY-MM-DD");
+      return activityDate.jDate() === day.jDate() && activityDate.jMonth() === day.jMonth();
     });
+  };
+
+  const monthDays = () => {
+    const days = [];
+    let day = jMoment(month).startOf("jMonth");
+    while (day.jMonth() === month.jMonth()) {
+      days.push(jMoment(day));
+      day = day.add("day", 1);
+    }
+
+    return days;
   };
 
   return (
@@ -79,9 +91,12 @@ const SideComponent = (props: any) => {
         </div>
       </div>
       <Box className="tw-overflow-y-auto">
-        {_.map(new Array(month.daysInMonth()), (_value, day) => {
-          const date = jMoment(month).startOf('jMonth').add('day', day);
+        {_.map(monthDays(), (date) => {
           const activities = getDayActivities(date);
+          const min = _.sumBy(activities, i => i.attributes.duration || 0);
+          const durationText = min > 60 ? `${Math.floor(min / 60)} ساعت` : `${min} دقیقه`;
+
+          date.jDate() === 31 && console.log(activities);
 
           return (
             <div
@@ -89,7 +104,7 @@ const SideComponent = (props: any) => {
                 setDate(date);
                 props.onChangeDate(date);
               }}
-              className={`hover:tw-bg-gray-100 tw-cursor-pointer tw-p-2 tw-ml-4 tw-rounded-l-2xl tw-py-4 tw-pr-6 tw-flex tw-items-center ${day + 1 === selectedDate.jDate() ? "tw-bg-gray-200" : ""}`}
+              className={`hover:tw-bg-gray-100 tw-cursor-pointer tw-p-2 tw-ml-4 tw-rounded-l-2xl tw-py-4 tw-pr-6 tw-flex tw-items-center ${date.jDate() === selectedDate.jDate() ? "tw-bg-gray-200" : ""}`}
             >
               <div className="tw-text-center">
                 <Typography variant="h4">
@@ -105,7 +120,7 @@ const SideComponent = (props: any) => {
                 <Typography
                   variant="caption"
                   className="tw-text-gray-400"
-                >مجموع {_.sumBy(activities, i => i.attributes.duration || 0)} ساعت</Typography>
+                >مجموع {durationText}</Typography>
               </div>
             </div>
           );

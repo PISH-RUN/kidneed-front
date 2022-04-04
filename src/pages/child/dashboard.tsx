@@ -15,7 +15,7 @@ import { useApp } from "@kidneed/hooks";
 import { strapi } from "@kidneed/services";
 import { ChildDashboard } from "../../core/types/model";
 import Link from "next/link";
-import { Guard } from "@kidneed/types";
+import { Guard, Models } from "@kidneed/types";
 import jMoment from "moment-jalaali";
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
@@ -222,9 +222,21 @@ const Dashboard = () => {
             sx={{ width: 118, height: 118, p: 2, background: "#57ABF4", cursor: "pointer" }}
             onClick={() => setShowUseSelect(true)} src="/images/avatar-woman.png"
           />
-          <Typography variant="h6" sx={{ fontWeight: 700, mt: 1 }}>حسنا خانوم</Typography>
+          {ctx.child &&
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: 700, mt: 1 }}
+            >
+              {ctx.child.gender === "boy" ? `آقا ${ctx.child.name}` : `${ctx.child.name} خانوم`}
+            </Typography>}
         </Box>
-        <UserSelect open={showUserSelect} onSelect={() => setShowUseSelect(false)} />
+        <UserSelect
+          open={showUserSelect}
+          onSelect={(child: Models.Child) => {
+            selectChild(child);
+            setShowUseSelect(false);
+          }}
+        />
         <Box
           component="img" src="/images/logo.png" alt="logo"
           sx={{ width: 120, top: 35, left: 40, maxWidth: 120, zIndex: 1, position: "absolute" }}
@@ -341,7 +353,16 @@ const Clock = () => {
         </Box>))}
       </Box>
 
-      <Box sx={{ position: "absolute", right: 0, width: "100%", height: `${100 - ((jMoment.duration(jMoment().format('HH:mm')).asHours() - 8) / 12) * 100}%`, bottom: 0, background: "#fff" }}>
+      <Box
+        sx={{
+          position: "absolute",
+          right: 0,
+          width: "100%",
+          height: `${100 - ((jMoment.duration(jMoment().format("HH:mm")).asHours() - 8) / 12) * 100}%`,
+          bottom: 0,
+          background: "#fff"
+        }}
+      >
         <Box sx={{ borderTop: "2px solid #57ABF4", position: "relative" }}>
           <Box sx={{ width: 16, height: 16, background: "#57ABF4", borderRadius: 8, float: "left", mt: "-9px" }}></Box>
         </Box>
@@ -449,6 +470,8 @@ const AvatarBox = ({ type, name, onSelect }: any) => {
 };
 
 const UserSelect = ({ open, onSelect }: any) => {
+  const { ctx } = useApp();
+
   if (!open) return <></>;
 
   return <Box
@@ -470,8 +493,15 @@ const UserSelect = ({ open, onSelect }: any) => {
       <Typography variant="h6">لطفا کودک خود را انتخاب کنید.</Typography>
 
       <Stack direction="row" spacing={4} sx={{ mt: 4, "& > *": { flexGrow: 1 } }}>
-        <AvatarBox type="girl" name="علی آقا" onSelect={onSelect} />
-        <AvatarBox type="boy" name="علی آقا" onSelect={onSelect} />
+        {ctx.children && ctx.children.map(child => (
+          <AvatarBox
+            key={child.id}
+            type={child.gender}
+            name={child.gender === "boy" ? `آقا ${child.name}` : `${child.name} خانوم`}
+            onSelect={() => onSelect(child)}
+          />
+        ))
+        }
       </Stack>
     </Box>
   </Box>;

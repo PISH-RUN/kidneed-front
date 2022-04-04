@@ -13,20 +13,16 @@ export const AddChild: React.FC<{
   setPage: React.Dispatch<React.SetStateAction<string>>;
   setChildId: React.Dispatch<React.SetStateAction<number | undefined>>;
 }> = (props) => {
-  const { ctx } = useApp();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
 
 
-  const onFinish = () => {
+  const onFinish = (values: any) => {
     setLoading(true);
     strapi
-      .request<any>("post", "/children/", {
+      .request<any>("post", "/children/register", {
         data: {
-          data: {
-            ...form.getFieldsValue(),
-            user: ctx?.user?.id
-          }
+          data: values
         }
       })
       .then((response) => {
@@ -98,7 +94,9 @@ export const AddChild: React.FC<{
             <Radio value={"girl"}>دختر خانوم</Radio>
           </Radio.Group>
         </Form.Item>
-        <AgeSlider name="age" style={{ marginBottom: "50px" }} />
+        <Form.Item name="age">
+          <AgeSlider />
+        </Form.Item>
         <div className={styles.formButtons}>
           <PrimaryButton
             style={{ minWidth: "180px" }}

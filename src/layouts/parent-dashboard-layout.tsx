@@ -1,5 +1,17 @@
 import { useEffect, useState } from "react";
-import { Avatar, Box, Button, Grid, ListItemIcon, Menu, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  Grid,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography
+} from "@mui/material";
 import Image from "next/image";
 import LogoImage from "../public/images/logo.png";
 import DashboardIcon from "layouts/icons/dashboard";
@@ -18,13 +30,13 @@ import { Models } from "@kidneed/types";
 import { DateRange, LocalizationProvider, StaticDateRangePicker } from "@mui/lab";
 import JalaliUtils from "@date-io/jalaali";
 import jMoment from "moment-jalaali";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaSignOutAlt } from "react-icons/fa";
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
 
 export type ParentDashboardLayoutProps = {
   children: React.ReactNode;
-  showChild?: boolean;
+  showChild?: boolean | "header";
   showRange?: boolean;
   onRangeChange?: (range: DateRange<Date>) => void;
   SideComponent?: React.ReactNode;
@@ -80,7 +92,7 @@ const menu = [
     icon: <ChatBubbleIcon />
   }, {
     title: "تنظیمات",
-    link: "/parent/dashboard6",
+    link: "/parent/setting",
     icon: <SettingIcon />
   }
 ];
@@ -118,12 +130,11 @@ const NavBar = () => {
   );
 };
 
-export default function ParentDashboardLayout(props: ParentDashboardLayoutProps) {
-  const { children, SideComponent, showChild, showRange, onRangeChange } = props;
-  const [range, setRange] = useState<DateRange<Date>>(today);
+const ChildSelector = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const { ctx, selectChild } = useApp();
   const router = useRouter();
+
 
   const handleOpen = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -138,6 +149,74 @@ export default function ParentDashboardLayout(props: ParentDashboardLayoutProps)
     setAnchorEl(null);
   };
 
+  return (
+    <>
+      <Stack
+        onClick={handleOpen}
+        direction="row"
+        alignItems="center"
+        spacing={1}
+        sx={{ py: 2, px: 2, cursor: "pointer" }}
+      >
+        <Avatar
+          sx={{ width: 80, height: 80, p: 2, background: "#E2F1FD" }}
+          src="/images/avatar-woman.png"
+        />
+        <Box flexGrow={1}>
+          {ctx.child &&
+            <span className="tw-text-xl tw-font-bold">{ctx.child.gender === "boy" ? `آقا ${ctx.child.name}` : `${ctx.child.name} خانوم`}</span>
+          }
+        </Box>
+        <Box>
+          <ArrowDown sx={{ color: "#8CA3A5", fontSize: 16 }} />
+        </Box>
+      </Stack>
+      <Menu
+        anchorEl={anchorEl}
+        open={!!anchorEl}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button"
+        }}
+        PaperProps={{
+          sx: {
+            minWidth: 280
+          }
+        }}
+      >
+        {ctx.children?.map(c => (
+          <MenuItem
+            key={c.id}
+            selected={ctx.child?.id === c.id}
+            onClick={() => handleSelectChild(c)}
+          >{c.name}</MenuItem>
+        ))}
+        <MenuItem
+          onClick={() => router.push("/add-child")}
+        >
+          <ListItemIcon>
+            <FaPlus />
+          </ListItemIcon>
+          افزودن فرزند
+        </MenuItem>
+        <Divider />
+        <MenuItem
+          onClick={() => router.push("/child/dashboard")}
+        >
+          <ListItemIcon>
+            <FaSignOutAlt />
+          </ListItemIcon>
+          ورود به محیط کودک
+        </MenuItem>
+      </Menu>
+    </>
+  );
+};
+
+export default function ParentDashboardLayout(props: ParentDashboardLayoutProps) {
+  const { children, SideComponent, showChild, showRange, onRangeChange } = props;
+  const [range, setRange] = useState<DateRange<Date>>(today);
+
   useEffect(() => {
     console.log(range);
     if (range[0] !== null && range[1] !== null) {
@@ -151,63 +230,16 @@ export default function ParentDashboardLayout(props: ParentDashboardLayoutProps)
         <NavBar />
       </Grid>
       <Grid item xs>
+        {showChild === "header" && <Box className="tw-flex tw-justify-end tw-pt-5">
+          <ChildSelector />
+        </Box>}
         <Box sx={{ borderRadius: 8, p: 2, mt: 2, background: "#F5F9F8", minHeight: "90vh" }}>
           {children}
         </Box>
       </Grid>
-      {(showChild || !!SideComponent) &&
+      {(showChild === true || !!SideComponent) &&
         <Grid item sx={{ width: { xl: 300, xs: 250 } }}>
-          {showChild &&
-            <Stack
-              onClick={handleOpen}
-              direction="row"
-              alignItems="center"
-              spacing={1}
-              sx={{ py: 2, px: 2, cursor: "pointer" }}
-            >
-              <Avatar
-                sx={{ width: 80, height: 80, p: 2, background: "#E2F1FD" }}
-                src="/images/avatar-woman.png"
-              />
-              <Box flexGrow={1}>
-                {ctx.child &&
-                  <span className="tw-text-xl tw-font-bold">{ctx.child.gender === "boy" ? `آقا ${ctx.child.name}` : `${ctx.child.name} خانوم`}</span>
-                }
-              </Box>
-              <Box>
-                <ArrowDown sx={{ color: "#8CA3A5", fontSize: 16 }} />
-              </Box>
-            </Stack>
-          }
-          <Menu
-            anchorEl={anchorEl}
-            open={!!anchorEl}
-            onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button"
-            }}
-            PaperProps={{
-              sx: {
-                minWidth: 280
-              }
-            }}
-          >
-            {ctx.children?.map(c => (
-              <MenuItem
-                key={c.id}
-                selected={ctx.child?.id === c.id}
-                onClick={() => handleSelectChild(c)}
-              >{c.name}</MenuItem>
-            ))}
-            <MenuItem
-              onClick={() => router.push("/add-child")}
-            >
-              <ListItemIcon>
-                <FaPlus />
-              </ListItemIcon>
-              افزودن فرزند
-            </MenuItem>
-          </Menu>
+          {showChild && <ChildSelector />}
           {showRange &&
             <Box
               sx={{
