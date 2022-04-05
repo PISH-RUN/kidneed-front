@@ -25,7 +25,7 @@ const WorkView = () => {
       <Box sx={{ boxShadow: "0px 14px 17px rgba(0, 0, 0, 0.08)" }} className="tw-rounded-t-3xl tw-w-full">
         <div className="tw-py-10 tw-px-8 tw-rounded-t-3xl">
           <div className="tw-px-4">
-            <Typography variant="h5" className="!tw-font-bold">حوزه انتخابی این ماه شما "حوزه حرکتی" می
+            <Typography variant="h5" className="!tw-font-bold">حوزه انتخابی این ماه شما &rdquo;حوزه حرکتی&rdquo; می
               باشد</Typography>
             <Typography variant="body1" className="!tw-mt-4">فرزند شما تا کنون 85٪ پایبندی به برنامه داشته و توانسته
               100٪ جوایز مشخص شده را بدست آورد. شما میتوانید خلاصه فعالیت های کودک خود را در زیر مشاهده
