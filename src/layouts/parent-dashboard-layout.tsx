@@ -36,10 +36,13 @@ jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
 
 export type ParentDashboardLayoutProps = {
   children: React.ReactNode;
+  Header?: React.ReactNode;
   showChild?: boolean | "header";
   showRange?: boolean;
   onRangeChange?: (range: DateRange<Date>) => void;
   SideComponent?: React.ReactNode;
+  bp?: number
+  bd?: string
 };
 
 const today: DateRange<Date> = [new Date(), new Date()];
@@ -77,7 +80,7 @@ const menu = [
     icon: <CalendarIcon />
   }, {
     title: "کارنما",
-    link: "/parent/dashboard2",
+    link: "/parent/workView",
     icon: <TelescopeIcon />
   }, {
     title: "بچه زرنگ",
@@ -85,7 +88,7 @@ const menu = [
     icon: <GiftIcon />
   }, {
     title: "راه چه",
-    link: "/earth",
+    link: "/parent/approach",
     icon: <BulbIcon />
   }, {
     title: "پیام ها",
@@ -215,7 +218,7 @@ const ChildSelector = () => {
 };
 
 export default function ParentDashboardLayout(props: ParentDashboardLayoutProps) {
-  const { children, SideComponent, showChild, showRange, onRangeChange } = props;
+  const { children, SideComponent, showChild, showRange, onRangeChange, Header, bp, bd } = props;
   const [range, setRange] = useState<DateRange<Date>>(today);
 
   useEffect(() => {
@@ -231,10 +234,17 @@ export default function ParentDashboardLayout(props: ParentDashboardLayoutProps)
         <NavBar />
       </Grid>
       <Grid item xs>
-        {showChild === "header" && <Box className="tw-flex tw-justify-end tw-pt-5">
-          <ChildSelector />
+        {(Header || showChild === "header") && <Box className="tw-flex tw-justify-between tw-pt-5 tw-items-center">
+          {Header && Header}
+          {showChild === "header" && <Box sx={{ minWidth: 250 }}><ChildSelector /></Box>}
         </Box>}
-        <Box sx={{ borderRadius: 8, p: 2, mt: 2, background: "#F5F9F8", minHeight: "90vh" }}>
+        <Box
+          sx={{
+            display: bd,
+            borderRadius: 6, p: bp !== undefined ? bp : 2, mt: 2, background: "#F5F9F8", minHeight: "90vh",
+            mr: (showChild !== true && !SideComponent) ? 2 : 0
+          }}
+        >
           {children}
         </Box>
       </Grid>

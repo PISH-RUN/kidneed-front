@@ -63,7 +63,7 @@ const SideComponent = (props: any) => {
 
   const monthDays = () => {
     const days = [];
-    let day = jMoment(month).startOf("jMonth");
+    let day = jMoment(month);
     while (day.jMonth() === month.jMonth()) {
       days.push(jMoment(day));
       day = day.add("day", 1);

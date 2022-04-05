@@ -1,0 +1,1 @@
+export const API = process.env.NEXT_PUBLIC_STRAPI_URL || "https://api.yekodo.net";

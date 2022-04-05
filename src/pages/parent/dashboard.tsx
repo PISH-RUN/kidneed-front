@@ -29,64 +29,7 @@ import { DateRange } from "@mui/lab";
 import { useActivity } from "../../core-team/api/activity";
 import jMoment from "moment-jalaali";
 import { useDashboard, useStats } from "../../core-team/api/dashboard";
-
-const styles = {
-  card: {
-    p: 4,
-    marginTop: 1,
-    borderRadius: 8,
-    height: "100%",
-    "& *": {
-      color: "#fff"
-    },
-    position: "relative",
-    pb: 8
-  },
-  cardImage: {
-    textAlign: "center",
-    mb: 2
-  },
-  cardBottom: {
-    position: "absolute",
-    bottom: 16,
-    width: "100%",
-    right: 0,
-    px: 3
-  }
-};
-
-const scheduleData = [
-  {
-    image: PsImage1,
-    title: "تماشای فیلم",
-    subtitle: "سریال"
-  },
-  {
-    image: PsImage2,
-    title: "تماشای فیلم",
-    subtitle: "سریال"
-  },
-  {
-    image: PsImage3,
-    title: "تماشای فیلم",
-    subtitle: "سریال"
-  },
-  {
-    image: PsImage1,
-    title: "تماشای فیلم",
-    subtitle: "سریال"
-  },
-  {
-    image: PsImage2,
-    title: "تماشای فیلم",
-    subtitle: "سریال"
-  },
-  {
-    image: PsImage3,
-    title: "تماشای فیلم",
-    subtitle: "سریال"
-  }
-];
+import { ActivityStats } from "../../core-team/components";
 
 const Schedule = (props: any) => {
   const { sum, data } = props;
@@ -191,62 +134,7 @@ const Dashboard = () => {
       <Typography sx={{ mb: 2 }} variant="h4">
         سلام {ctx?.user?.name}! 👋
       </Typography>
-      <Grid
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gridRowGap: 16,
-          gridColumnGap: 16
-        }}
-        container
-      >
-        <Grid item>
-          {/* @ts-ignore */}
-          <Box sx={{ ...styles.card, background: "#8BDA92" }}>
-            <Box sx={styles.cardImage}>
-              <Image src={ImageCard1} />
-            </Box>
-
-            <Box sx={styles.cardBottom}>
-              <Typography variant="h4">{isLoading ? '-' : stats?.book} ساعت</Typography>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body1">مطالعه</Typography>
-                <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
-              </Stack>
-            </Box>
-          </Box>
-        </Grid>
-        <Grid item>
-          {/* @ts-ignore */}
-          <Box sx={{ ...styles.card, background: "#FED150" }}>
-            <Box sx={styles.cardImage}>
-              <Image src={ImageCard2} />
-            </Box>
-            <Box sx={styles.cardBottom}>
-              <Typography variant="h4">{isLoading ? '-' : stats?.game} ساعت</Typography>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body1">بازی</Typography>
-                <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
-              </Stack>
-            </Box>
-          </Box>
-        </Grid>
-        <Grid item>
-          {/* @ts-ignore */}
-          <Box sx={{ ...styles.card, background: "#57ABF4" }}>
-            <Box sx={styles.cardImage}>
-              <Image src={ImageCard3} />
-            </Box>
-            <Box sx={styles.cardBottom}>
-              <Typography variant="h4">{isLoading ? '-' : stats?.video} ساعت</Typography>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body1">فیلم</Typography>
-                <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
-              </Stack>
-            </Box>
-          </Box>
-        </Grid>
-      </Grid>
+      <ActivityStats stats={stats} loading={isLoading} />
       <Schedule sum={sum} data={data} />
     </ParentDashboardLayout>
   );
