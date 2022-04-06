@@ -2,7 +2,7 @@
   "name": "planet-front",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 80",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -26,12 +26,12 @@
     "react-dom": "17.0.2",
     "react-hook-form": "^7.25.3",
     "react-icons": "^4.3.1",
+    "react-player": "^2.10.0",
     "react-query": "^3.34.12",
     "recoil": "^0.6.1",
     "strapi-sdk-js": "^2.1.5",
     "stylis": "^4.0.13",
     "stylis-plugin-rtl": "^2.1.1",
-    "video.js": "^7.18.1",
     "xstate": "^4.29.0"
   },
   "devDependencies": {
@@ -39,7 +39,6 @@
     "@types/moment-jalaali": "^0.7.5",
     "@types/node": "17.0.13",
     "@types/react": "17.0.38",
-    "@types/video.js": "^7.3.33",
     "autoprefixer": "^10.4.2",
     "cypress": "^9.4.1",
     "eslint": "8.8.0",
