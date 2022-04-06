@@ -24,7 +24,7 @@ const Video = () => {
 
   return (
     <div className="tw-justify-center tw-items-center tw-flex tw-w-full tw-h-screen tw-bg-sky-100">
-      <ReactPlayer url={url} />
+      <ReactPlayer controls url={url} />
     </div>
   );
 };
