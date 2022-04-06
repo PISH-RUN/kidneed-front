@@ -11,7 +11,6 @@ const SignStep = () => {
 
   const handleSubmit = (values: any) => {
     const signList: string[] = [];
-    console.log(values);
     _.filter(values, (answer, id) => {
       if (answer === "yes") {
         signList.push(id);

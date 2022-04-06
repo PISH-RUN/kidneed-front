@@ -1,33 +1,14 @@
 import { FC, useState } from "react";
-import { Button, Card, Form, Input, Modal, Select } from "antd";
+import { Button, Card, Form, Input, Modal, Select, Typography } from "antd";
 import { Tab, Tabs } from "@mui/material";
+import jMoment from "moment-jalaali";
 
-const ContentSelect = () => (
-  <Form layout="vertical">
-    <Form.Item label="زمان">
-      <Input className="tw-w-24" />
-    </Form.Item>
-    <Form.Item label="محتوا اول">
-      <Input />
-    </Form.Item>
-    <Form.Item label="محتوا دوم">
-      <Select mode="tags" />
-    </Form.Item>
-    <Form.Item label="نحوه دیدن">
-      <Input className="tw-w-40" />
-    </Form.Item>
-    <Form.Item label="شروط">
-      <Input className="tw-w-40" />
-    </Form.Item>
-  </Form>
-);
-
-const ContentModal: FC<any> = ({ visible, onClose }) => {
+const ContentModal: FC<any> = ({ time, visible, onClose }) => {
   const [tab, setTab] = useState("video");
 
   return (
     <Modal
-      footer={false} width={700} visible={visible} closable={false} className="tw-rounded-2xl"
+      footer={false} width={700} visible={visible} closable={false} className="tw-rounded-3xl tw-overflow-hidden tw-p-0"
     >
       <div className="tw-px-6">
         <Tabs value={tab} onChange={(event, newValue) => setTab(newValue)} aria-label="basic tabs example">
@@ -39,7 +20,17 @@ const ContentModal: FC<any> = ({ visible, onClose }) => {
         </Tabs>
 
         <div className="tw-mt-10">
-          <ContentSelect />
+          <Form layout="vertical">
+            <Form.Item label="زمان">
+              <span className="tw-py-1 tw-px-2 tw-rounded-md tw-bg-gray-100">{jMoment(time).format('dddd jDD jMMMM')}</span>
+            </Form.Item>
+            <Form.Item label="محتوا اول">
+              <Input />
+            </Form.Item>
+            <Form.Item label="محتوا دوم">
+              <Select mode="tags" />
+            </Form.Item>
+          </Form>
         </div>
         <div className="tw-mt-10 tw-text-center">
           <Button type="primary" className="tw-h-10 tw-w-32 tw-ml-5 tw-rounded-full tw-bg-blue-400">افزودن</Button>

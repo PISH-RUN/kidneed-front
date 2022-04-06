@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { openGuard } from "@kidneed/utils";
 import BaseLayout from "layouts/baseLayout";
 import { Box, Typography, Grid, Button, Stack, Avatar, Badge, Input, InputAdornment, TextField } from "@mui/material";
 import PlayIcon from "layouts/icons/play";
@@ -10,13 +9,14 @@ import GameIcon from "layouts/icons/game";
 import { HiOutlineBookOpen } from "react-icons/hi";
 import LoginIcon from "layouts/icons/login";
 import LockIcon from "layouts/icons/lock";
-import { set } from "react-hook-form";
 import { useApp } from "@kidneed/hooks";
-import { strapi } from "@kidneed/services";
-import { ChildDashboard } from "../../core/types/model";
 import Link from "next/link";
 import { Guard, Models } from "@kidneed/types";
 import jMoment from "moment-jalaali";
+import { useDashboard } from "../../core-team/api/dashboard";
+import { useContents } from "../../core-team/api/activity";
+import _ from "lodash";
+import { PLAYERS_URL } from "../../core-team/constants";
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
 
@@ -89,7 +89,7 @@ const data = [];
 
 const typeColors = {
   "video": "#57ABF4",
-  "music": "#EF5DA8",
+  "audio": "#EF5DA8",
   "activity": "#8BDA92",
   "game": "#FF5C00",
   "book": "#8BDA92"
@@ -97,19 +97,29 @@ const typeColors = {
 
 const typeIcons = {
   "video": <VideoIcon />,
-  "music": <MusicIcon />,
+  "audio": <MusicIcon />,
   "activity": <ActivityIcon />,
   "game": <GameIcon />,
   "book": <HiOutlineBookOpen />
 };
 
 const DataBox = ({ data }: any) => {
+  const { data: contents } = useContents(_.map(data, "id"));
+
+  if (!data[0]) return null;
+
+  const duration = _.sumBy(data, (i: any) => i.duration)
+
+  const content1 = { activity: data[0], ...(contents?.data?.find((c: any) => c.id === data[0].id) || {}) };
+  const source1 = content1?.attributes?.meta?.source && content1?.attributes?.meta?.source[0].src;
+
+  const content2 = { activity: data[1], ...(contents?.data?.find((c: any) => c.id === data[1].id) || {}) };
+  const source2 = content2?.attributes?.meta?.source && content2?.attributes?.meta?.source[0].src;
 
   // @ts-ignore
-  const color = typeColors[data.type];
+  const color = typeColors[content1.activity.type];
   // @ts-ignore
-  const icon = typeIcons[data.type];
-  console.log(data.url0);
+  const icon = typeIcons[content1.activity.type];
 
   return <Box
     sx={{
@@ -127,7 +137,7 @@ const DataBox = ({ data }: any) => {
         <Box sx={{ ...styles.dataMenu, background: color }}>{icon}</Box>
         {/* @ts-ignore */}
         <Box sx={{ ...styles.dataMenu, background: "#FED150" }}>
-          <Typography variant="h5" sx={{ color: "#fff", fontWeight: 700, mt: 0.5 }}>{data.time}</Typography>
+          <Typography variant="h5" sx={{ color: "#fff", fontWeight: 700, mt: 0.5 }}>{duration}</Typography>
         </Box>
         {/* @ts-ignore */}
         <Box sx={{ ...styles.dataMenu, background: color }}><img src="/images/childImages/coins.png" /></Box>
@@ -136,10 +146,11 @@ const DataBox = ({ data }: any) => {
         <Link href={data.url0 || "#"}>
           <Box textAlign="center">
             {/* @ts-ignore */}
-            <Box sx={{ ...styles.cardImage, backgroundImage: `url("${data.img0}")` }} />
+            <Box sx={{ ...styles.cardImage, backgroundImage: `url("${content1.poster}")` }} />
             <Button
               variant="contained" color="primary" sx={{ width: 220, height: 70, borderRadius: 6, marginTop: -5 }}
               size="large"
+              onClick={() => window.open(`${PLAYERS_URL}/${content1.activity.type}?url=${source1}`, "_newtab")}
             ><PlayIcon /></Button>
           </Box>
         </Link>
@@ -147,10 +158,11 @@ const DataBox = ({ data }: any) => {
       <Grid item xs={6}>
         <Box textAlign="center">
           {/* @ts-ignore */}
-          <Box sx={{ ...styles.cardImage, backgroundImage: `url("${data.img1}")` }} />
+          <Box sx={{ ...styles.cardImage, backgroundImage: `url("${content2.img1}")` }} />
           <Button
             variant="contained" color="primary" sx={{ width: 220, height: 70, borderRadius: 6, marginTop: -5 }}
             size="large"
+            onClick={() => window.open(`${PLAYERS_URL}/${content2.activity.type}?url=${source2}`, "_newtab")}
           ><PlayIcon /></Button>
         </Box>
       </Grid>
@@ -166,43 +178,8 @@ const mediaUrlType = {
 
 const Dashboard = () => {
   const [showUserSelect, setShowUseSelect] = useState(false);
-  const [result, setResult] = useState([]);
-
   const { ctx, selectChild } = useApp();
-
-  useEffect(() => {
-    if (!ctx.child) {
-      if (ctx.children!.length) {
-        selectChild(ctx.children![0]);
-      }
-    }
-    const childId = ctx.child?.id;
-    const dataResult: any = [];
-    strapi.request<ChildDashboard>("get", `children/${childId}/dashboard`).then((data) => {
-      Object.keys(data).map((key, i) => {
-        // @ts-ignore
-        if (data[key]?.length > 0)
-          dataResult.push({
-            type: key,
-            // @ts-ignore
-            url0: `http://players.yekodo.net/${mediaUrlType[key]}?url=${data[key][0]?.content?.sourceLink}${key === "video" ? `&thumbnail=${data[key][0]?.content?.image}` : ""}}`,
-            // @ts-ignore
-            url1: `http://players.yekodo.net/${mediaUrlType[key]}?url=${data[key][1]?.content?.sourceLink}${key === "video" ? `&thumbnail=${data[key][1]?.content?.image}` : ""}}`,
-            // @ts-ignore
-            img0: data[key][0]?.content?.image || "/images/childImages/d0.png",
-            // @ts-ignore
-            img1: data[key][1]?.content?.image || "/images/childImages/d1.png",
-            // @ts-ignore
-            time: data[key]?.time || "10:00"
-          });
-      });
-
-      // @ts-ignore
-      setResult(dataResult);
-    });
-
-
-  }, [ctx]);
+  const { data: result } = useDashboard(ctx?.child?.id);
 
   return <BaseLayout>
     <>
@@ -263,7 +240,11 @@ const Dashboard = () => {
 
         <Box sx={{ position: "relative", zIndex: 12 }}>
           <Box sx={{ maxWidth: 800, m: "300px auto 0" }}>
-            {result?.map((d, index) => <DataBox key={index} data={d} />)}
+            {result?.activity?.length > 0 && <DataBox data={result?.activity} />}
+            {result?.video?.length > 0 && <DataBox data={result?.video} />}
+            {result?.game?.length > 0 && <DataBox data={result?.game} />}
+            {result?.book?.length > 0 && <DataBox data={result?.book} />}
+            {result?.audio?.length > 0 && <DataBox data={result?.audio} />}
           </Box>
         </Box>
       </Box>

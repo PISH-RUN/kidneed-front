@@ -2,19 +2,18 @@ import ParentDashboardLayout from "layouts/parent-dashboard-layout";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Avatar, Box, CircularProgress, Stack, Typography } from "@mui/material";
-import ArrowDown from "../../layouts/icons/arrow-down";
 import { openGuard } from "@kidneed/utils";
 import PsImage1 from "public/images/temp/image-24.png";
 import PsImage2 from "public/images/temp/image-25.png";
-import PsImage3 from "public/images/temp/image-26.png";
 import { Button, Card, Tag } from "antd";
 import ContentModal from "../../core-team/components/contentModal";
-import { useActivity, useTodayActivity } from "../../core-team/api/activity";
+import { useActivity, useContent, useContents, useTodayActivity } from "../../core-team/api/activity";
 import { useApp } from "@kidneed/hooks";
 import _ from "lodash";
 import jMoment from "moment-jalaali";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Moment } from "moment";
+import { ContentDetail } from "../../core-team/components";
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
 
@@ -24,29 +23,16 @@ const typeNames: any = {
   video: "ویدئو",
   activity: "فعالیت عملی",
   book: "کتاب",
+  game: "بازی",
   audio: "صوت"
 };
 
-const data: any = [
-  {
-    images: [PsImage1, PsImage2],
-    type: "انیمیشن",
-    duration: "01:15",
-    tags: ["صبر", "تیزهوشی", "امید"]
-  },
-  {
-    images: [PsImage2, PsImage3],
-    type: "کتاب صوتی",
-    duration: "01:15",
-    tags: ["صبر", "تیزهوشی", "امید"]
-  },
-  {
-    images: [PsImage3, PsImage1],
-    type: "بازی محیطی",
-    duration: "01:15",
-    tags: ["صبر", "تیزهوشی", "امید"]
-  }
-];
+const tags: any = {
+  A: "رشدی حرکتی",
+  B: "رشدی شناختی",
+  C: "رشدی هیجانی",
+  D: "رشد اجتماعی-اخلاقی"
+};
 
 const SideComponent = (props: any) => {
   const [month, setMonth] = useState(today);
@@ -96,8 +82,6 @@ const SideComponent = (props: any) => {
           const min = _.sumBy(activities, i => i.attributes.duration || 0);
           const durationText = min > 60 ? `${Math.floor(min / 60)} ساعت` : `${min} دقیقه`;
 
-          date.jDate() === 31 && console.log(activities);
-
           return (
             <div
               onClick={() => {
@@ -134,7 +118,10 @@ const DayPlan = () => {
   const { ctx, selectChild } = useApp();
   const [selectPlan, setSelectPlant] = useState(false);
   const [selectedDate, setDate] = useState(today);
+  const [selectedContent, setContent] = useState();
   const { data: activities, isLoading } = useTodayActivity(ctx?.child?.id, selectedDate);
+  const { data: content } = useContent(selectedContent);
+  const { data: contents } = useContents(activities?.data?.map((i: any) => i.attributes.content));
 
   useEffect(() => {
     if (!ctx.child && ctx.children) {
@@ -153,46 +140,65 @@ const DayPlan = () => {
         {isLoading && <div className="tw-text-center tw-py-10">
           <CircularProgress />
         </div>}
-        {activities && activities?.data?.map((item: any, index: number) => (
-          <Card key={index} className="tw-w-full tw-mb-4 tw-rounded-3xl">
-            <div className="tw-flex">
-              <div className="tw-ml-4">
-                <Image src={PsImage2} />
+        {activities && _.map(_.groupBy(activities?.data, i => i.attributes.type), (items: any, type: string) => {
+          const content1 = _.find(contents?.data, i => i.id === parseInt(items[0].attributes.content));
+          const content2 = _.find(contents?.data, i => i.id === parseInt(items[1].attributes.content));
+          const contentTags: string[] = [];
+
+          content1?.attributes?.editions?.data?.map((tag: any) => {
+            if(contentTags.indexOf(tag?.attributes?.tag) === -1) {
+              contentTags.push(tag?.attributes?.tag);
+            }
+          })
+
+          content2?.attributes?.editions?.data?.map((tag: any) => {
+            if(contentTags.indexOf(tag?.attributes?.tag) === -1) {
+              contentTags.push(tag?.attributes?.tag);
+            }
+          })
+
+          return (
+            <Card key={type} className="tw-w-full tw-mb-4 tw-rounded-3xl">
+              <div className="tw-flex">
+                <div className="tw-ml-4 tw-cursor-pointer" onClick={() => setContent(items[0].attributes.content)}>
+                  <img className="tw-w-80 tw-rounded-2xl" src={content1?.attributes?.meta?.poster} />
+                </div>
+                <div className="tw-cursor-pointer" onClick={() => setContent(items[1].attributes.content)}>
+                  <img className="tw-w-72 tw-rounded-2xl" src={content2?.attributes?.meta?.poster} />
+                </div>
+                <div>
+                  <div className="tw-pt-5 tw-pr-4">
+                    <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">نوع محتوا:</span>
+                    <span className="tw-text-xl tw-font-bold">{typeNames[items[0].attributes.type]}</span>
+                  </div>
+                  <div className="tw-pt-5 tw-pr-4">
+                    <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">مدت زمان:</span>
+                    <span className="tw-text-xl tw-font-bold">{_.sumBy(items, (i: any) => i.attributes.duration)}</span>
+                  </div>
+                  <div className="tw-mt-8 tw-pt-5 tw-pr-4">
+                    <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">تگ ها:</span>
+                    <span className="tw-text-xl tw-font-bold">{contentTags.map((tag: any) => <Tag
+                      key={tag}
+                      className="tw-bg-gray-300 tw-text-white tw-px-3 tw-font-normal tw-rounded-full tw-text-base"
+                    >{tags[tag]}</Tag>)}</span>
+                  </div>
+                  <div className="tw-mt-5 tw-mr-3">
+                    <Button
+                      onClick={() => setSelectPlant(!selectPlan)}
+                      size="large"
+                      className="hover:tw-bg-gray-200 hover:tw-text-gray-500 hover:tw-border-gray-100 tw-w-60 tw-h-14 tw-bg-gray-100 tw-border-gray-50 tw-text-gray-500 tw-rounded-full"
+                      block
+                    >
+                      ویرایش
+                    </Button>
+                  </div>
+                </div>
               </div>
-              <div>
-                <Image src={PsImage1} />
-              </div>
-              <div>
-                <div className="tw-pt-5 tw-pr-4">
-                  <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">نوع محتوا:</span>
-                  <span className="tw-text-xl tw-font-bold">{typeNames[item.attributes.type]} {item.id}</span>
-                </div>
-                <div className="tw-pt-5 tw-pr-4">
-                  <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">مدت زمان:</span>
-                  <span className="tw-text-xl tw-font-bold">{item.attributes.duration}</span>
-                </div>
-                <div className="tw-mt-8 tw-pt-5 tw-pr-4">
-                  <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">تگ ها:</span>
-                  <span className="tw-text-xl tw-font-bold">{["صبر", "تیزهوشی", "امید"].map((tag: any) => <Tag
-                    key={tag}
-                    className="tw-bg-gray-300 tw-text-white tw-px-3 tw-font-normal tw-rounded-full tw-text-base"
-                  >{tag}</Tag>)}</span>
-                </div>
-                <div className="tw-mt-5 tw-mr-5">
-                  <Button
-                    onClick={() => setSelectPlant(!selectPlan)}
-                    size="large"
-                    className="hover:tw-bg-gray-200 hover:tw-text-gray-500 hover:tw-border-gray-100 tw-h-14 tw-bg-gray-100 tw-border-gray-50 tw-text-gray-500 tw-rounded-full"
-                    block
-                  >
-                    ویرایش
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </Card>
-        ))}
-        <ContentModal visible={selectPlan} onClose={() => setSelectPlant(false)} />
+            </Card>
+          )
+        })}
+        <ContentModal visible={selectPlan} onClose={() => setSelectPlant(false)} time={selectedDate} />
+        <ContentDetail visible={!!selectedContent && !!content?.data} content={content?.data} onCancel={() => setContent(undefined)} />
       </div>
     </ParentDashboardLayout>
   );

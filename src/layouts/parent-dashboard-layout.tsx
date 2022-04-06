@@ -222,7 +222,6 @@ export default function ParentDashboardLayout(props: ParentDashboardLayoutProps)
   const [range, setRange] = useState<DateRange<Date>>(today);
 
   useEffect(() => {
-    console.log(range);
     if (range[0] !== null && range[1] !== null) {
       onRangeChange && onRangeChange(range);
     }

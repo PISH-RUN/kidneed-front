@@ -110,7 +110,6 @@ const Earth = () => {
   };
   const getRoot = async (e) => {
     const yes = questionData.filter((que) => que.answer === true);
-    console.log(yes);
     const string = "";
     const hi = yes.map((hi, index) => {
       string += (index === 0 ? "" : "&") + "signId[]=" + hi.id;

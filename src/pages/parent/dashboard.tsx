@@ -41,10 +41,6 @@ const Schedule = (props: any) => {
     }
   }, [ctx]);
 
-  if(data) {
-    console.log(_.flatten(_.values(data)));
-  }
-
   return (
     <Paper sx={{ mt: 4, p: 3, boxShadow: "none", borderRadius: 8 }}>
       <Stack direction="row" justifyContent="space-between">
