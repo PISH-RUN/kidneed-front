@@ -5,6 +5,7 @@ import { FaPlay } from "react-icons/fa";
 import { PLAYERS_URL } from "../../constants";
 import _ from "lodash";
 import jMoment from "moment-jalaali";
+import { useRouter } from "next/router";
 
 const tags: any = {
   A: "رشدی حرکتی",
@@ -20,9 +21,20 @@ const ageCategory: any = {
 
 export const ContentDetail = (props: any) => {
   const { content, ...rest } = props;
+  const router = useRouter();
 
   const poster = content?.attributes?.meta?.poster;
-  const source = content?.attributes?.meta?.source && content?.attributes?.meta?.source[0].src;
+
+  const openPlayer = () => {
+    const playerType = content?.attributes?.type;
+    let source = content?.attributes?.meta?.source && content?.attributes?.meta?.source[0].src;
+    source = source ? source : content?.attributes?.srcFile;
+
+    if(playerType === 'activity')
+      router.push(`/players/activity?id=${content.id}`)
+    else if (source)
+      router.push(`/players/${playerType}?url=${source}`)
+  };
 
   return (
     <Modal
@@ -40,7 +52,7 @@ export const ContentDetail = (props: any) => {
           <div className="tw-flex tw-mb-2">
             <div
               className="tw-w-96 tw-ml-8 tw-relative tw-cursor-pointer tw-h-fit"
-              onClick={() => source && window.open(`${PLAYERS_URL}/video?url=${source}`, "_newtab")}
+              onClick={openPlayer}
             >
               <img className="tw-w-96 tw-rounded-2xl" src={poster} alt="" />
               <div className="tw-absolute tw-rounded-2xl tw-w-full tw-h-full tw-flex tw-items-center tw-justify-center tw-top-0 tw-bg-gray-500 tw-bg-opacity-30">
@@ -97,7 +109,7 @@ export const ContentDetail = (props: any) => {
                 <Typography variant="body1" className="!tw-w-40">بازیگران:</Typography>
                 <Typography
                   variant="body1"
-                >{content?.attributes?.meta?.factors?.faces ? _.map(content?.attributes?.meta?.factors?.faces, "name").join("، ") : '-'}</Typography>
+                >{content?.attributes?.meta?.factors?.faces ? _.map(content?.attributes?.meta?.factors?.faces, "name").join("، ") : "-"}</Typography>
               </div>
               <div className="tw-flex tw-mb-2">
                 <Typography variant="body1" className="!tw-w-40">ژانر:</Typography>
@@ -110,7 +122,7 @@ export const ContentDetail = (props: any) => {
                 <Typography
                   variant="body1"
                   className="!tw-w-40"
-                >{content?.attributes?.meta?.dubbed ? content?.attributes?.meta?.dubbed[0].name : '-'}</Typography>
+                >{content?.attributes?.meta?.dubbed ? content?.attributes?.meta?.dubbed[0].name : "-"}</Typography>
               </div>
               <div className="tw-flex tw-mb-2">
                 <Typography variant="body1" className="!tw-w-40">وضعیت زیرنویس:</Typography>

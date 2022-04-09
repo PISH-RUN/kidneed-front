@@ -1,11 +1,9 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement } from "react";
 import { Guard } from "@kidneed/types";
 import { Box, Button, Typography } from "@mui/material";
 import BaseLayout from "layouts/baseLayout";
 import { useRouter } from "next/router";
 import { useContent } from "core-team/api/activity";
-import { PLAYERS_URL } from "../../core-team/constants";
-import { FaPlay } from "react-icons/fa";
 
 const Activity = () => {
   const { query } = useRouter();
