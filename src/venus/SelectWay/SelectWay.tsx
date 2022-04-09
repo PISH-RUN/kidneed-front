@@ -6,6 +6,7 @@ import { SecondVideo } from "venus/Video/SecondVideo";
 import { ContentWrapper } from "../ContentWrapper/ContentWrapper";
 import { Way } from "../Way/Way";
 import styles from "./SelectWay.module.css";
+import { useSetGrowthField } from "../../core-team/api/register";
 
 const fields: any = {
   "A": "physical",
@@ -19,16 +20,14 @@ export const SelectWay: React.FC<{
   setWay: React.Dispatch<React.SetStateAction<string | undefined>>;
   childId?: number;
 }> = (props) => {
+  const { mutateAsync: setGrowthField } = useSetGrowthField();
+
   const selectWay = (type?: "A" | "B" | "C" | "D") => {
     if (type)
-      strapi
-        .request<any>("post", `/children/${props.childId}/growth-field`, {
-          data: {
-            data: {
-              field: fields[type]
-            }
-          }
-        })
+      setGrowthField({
+        childId: props.childId,
+        field: fields[type]
+      })
         .then(() => {
           props.setWay(fields[type]);
           props.setPage("quiz");

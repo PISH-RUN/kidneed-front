@@ -6,9 +6,9 @@ import { UserOutlined } from "@ant-design/icons";
 import styles from "./AddChild.module.css";
 import { AgeSlider } from "../AgeSlider/AgeSlider";
 import { PrimaryButton } from "../PrimaryButton/PrimaryButton";
-import { strapi } from "@kidneed/services";
 import { useApp } from "@kidneed/hooks";
 import jMoment from "moment-jalaali";
+import { useRegister } from "../../core-team/api/register";
 
 export const AddChild: React.FC<{
   setPage: React.Dispatch<React.SetStateAction<string>>;
@@ -17,16 +17,14 @@ export const AddChild: React.FC<{
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
   const { selectChild, addChild } = useApp();
+  const { mutateAsync: addChildRequest } = useRegister();
 
   const onFinish = (values: any) => {
     setLoading(true);
-    strapi
-      .request<any>("post", "/children/register", {
-        data: {
-          data: values,
-          age: jMoment().jYear() - values.age
-        }
-      })
+    addChildRequest({
+      data: values,
+      age: jMoment().jYear() - values.age
+    })
       .then((response) => {
         addChild({ id: response.data.id, ...response.data.attributes });
         selectChild({ id: response.data.id, ...response.data.attributes });

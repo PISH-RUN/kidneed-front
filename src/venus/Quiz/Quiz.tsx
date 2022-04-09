@@ -10,14 +10,20 @@ import { QuestionSlider } from "../QuestionSlider/QuestionSlider";
 import styles from "./Quiz.module.css";
 import { useApp } from "@kidneed/hooks";
 import jMoment from "moment-jalaali";
-import { useSubmitAnswer } from "core-team/api/question";
+import { useQuestions, useSubmitAnswer } from "core-team/api/question";
 import _ from "lodash";
 
 export const Quiz: React.FC<{ way?: string, childId?: number }> = (props) => {
-  const [data, setData] = useState<Array<any>>([]);
   const { ctx } = useApp();
   const router = useRouter();
   const { mutateAsync: submitAnswer } = useSubmitAnswer();
+
+  const age = jMoment().jYear() - (ctx?.child?.birthYear || 0);
+  let ageCategory = "";
+  if (age >= 3 && age <= 7) ageCategory = "3";
+  if (age >= 8 && age <= 12) ageCategory = "8";
+
+  const { data } = useQuestions(ageCategory, props.way || "system");
 
   const handleSubmit = (values: any) => {
     if (ctx.child) {
@@ -32,23 +38,6 @@ export const Quiz: React.FC<{ way?: string, childId?: number }> = (props) => {
       });
     }
   };
-
-  useEffect(() => {
-    const age = jMoment().jYear() - (ctx?.child?.birthYear || 0);
-    let ageCategory = "";
-    if (age >= 3 && age <= 7) ageCategory = "3";
-    if (age >= 8 && age <= 12) ageCategory = "8";
-
-    strapi
-      .request<any>("get", `/growth-questions?filters[ageCategory][$eq]=${ageCategory}&filters[field][$eq]=${props.way || "system"}`)
-      .then((response) => {
-        setData(response?.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        message.error("خطایی رخ داده است");
-      });
-  }, []);
 
   return (
     <ContentWrapper
