@@ -8,6 +8,7 @@ import { AgeSlider } from "../AgeSlider/AgeSlider";
 import { PrimaryButton } from "../PrimaryButton/PrimaryButton";
 import { strapi } from "@kidneed/services";
 import { useApp } from "@kidneed/hooks";
+import jMoment from "moment-jalaali";
 
 export const AddChild: React.FC<{
   setPage: React.Dispatch<React.SetStateAction<string>>;
@@ -15,17 +16,20 @@ export const AddChild: React.FC<{
 }> = (props) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
-
+  const { selectChild, addChild } = useApp();
 
   const onFinish = (values: any) => {
     setLoading(true);
     strapi
       .request<any>("post", "/children/register", {
         data: {
-          data: values
+          data: values,
+          age: jMoment().jYear() - values.age
         }
       })
       .then((response) => {
+        addChild({ id: response.data.id, ...response.data.attributes });
+        selectChild({ id: response.data.id, ...response.data.attributes });
         props.setChildId(response.data.id);
         props.setPage("selectWay");
       })
@@ -51,7 +55,7 @@ export const AddChild: React.FC<{
         </Text>
         <Form.Item
           rules={[{ required: true, message: "این فیلد الزامی است" }]}
-          name="parent_name"
+          name="parentName"
         >
           <Input
             size="large"
@@ -80,7 +84,7 @@ export const AddChild: React.FC<{
         </Form.Item>
         <Form.Item
           rules={[{ required: true, message: "این فیلد الزامی است" }]}
-          name="name"
+          name="childName"
         >
           <Input
             size="large"

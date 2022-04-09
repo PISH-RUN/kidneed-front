@@ -32,8 +32,10 @@ export const ContentDetail = (props: any) => {
 
     if(playerType === 'activity')
       router.push(`/players/activity?id=${content.id}`)
+    else if (playerType === 'game')
+      router.push(`/players/${playerType}?url=${encodeURIComponent(content?.attributes?.sourceUrl)}`)
     else if (source)
-      router.push(`/players/${playerType}?url=${source}`)
+      router.push(`/players/${playerType}?url=${encodeURIComponent(source)}`)
   };
 
   return (
@@ -69,7 +71,7 @@ export const ContentDetail = (props: any) => {
                     <Typography
                       key={edition.id}
                       variant="body1"
-                      className="!tw-ml-4 tw-mb-4 !tw-font-bold tw-text-blue-900 tw-p-3 tw-rounded-lg tw-border tw-border-gray-300"
+                      className="tw-whitespace-nowrap !tw-ml-4 tw-mb-4 !tw-font-bold tw-text-blue-900 tw-p-3 tw-rounded-lg tw-border tw-border-gray-300"
                     >{tags[edition?.attributes?.tag]}</Typography>
                   ))}
                 </div>

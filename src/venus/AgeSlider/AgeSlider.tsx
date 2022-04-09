@@ -1,5 +1,5 @@
 import { Form, Slider } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./AgeSlider.module.css";
 
 interface AgeSliderProps {
@@ -9,6 +9,11 @@ interface AgeSliderProps {
 }
 
 export const AgeSlider: React.FC<AgeSliderProps> = (props) => {
+
+  useEffect(() => {
+    (!props.value && props.onChange) && props.onChange(3)
+  }, [])
+
   return (
     <div className={styles.ageSliderContainer} style={props.style}>
       <div className="tw-flex">
@@ -19,10 +24,11 @@ export const AgeSlider: React.FC<AgeSliderProps> = (props) => {
         />
         <div className="tw-flex-auto tw-relative tw-mx-2">
           <Slider
+            tooltipVisible
+            tooltipPlacement="bottom"
             defaultValue={3}
             min={3}
             max={12}
-            step={3}
             dots
             marks={{
               3: "3",

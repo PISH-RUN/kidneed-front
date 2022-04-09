@@ -1,31 +1,16 @@
-import React, { ReactElement, useRef } from "react";
+import React, { useState, useRef, ReactElement } from "react";
 // @ts-ignore
-import ReactPlayer from 'react-player'
 import { useRouter } from "next/router";
 import { Guard } from "@kidneed/types";
 import BaseLayout from "../../layouts/baseLayout";
-import Activity from "./activity";
+import { PLAYERS_URL } from "../../core-team/constants";
 
 const Video = () => {
   const { query } = useRouter();
-  const { url, thumbnail } = query;
-
-  const time = useRef();
-  const state = {
-    video: {
-      src: url,
-      poster: thumbnail
-    }
-  };
-
-  const onVideoTimeUpdate = (t: any) => {
-    time.current = t;
-  };
+  const { url } = query;
 
   return (
-    <div className="tw-justify-center tw-items-center tw-flex tw-w-full tw-h-screen tw-bg-sky-100">
-      <ReactPlayer controls url={url} />
-    </div>
+    <iframe src={`${PLAYERS_URL}/video?url=${url as string}`} className='tw-w-full tw-h-screen' />
   );
 };
 

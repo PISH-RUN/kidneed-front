@@ -5,7 +5,7 @@ import styles from "./PrimaryButton.module.css";
 
 export const PrimaryButton: React.FC<ButtonProps> = (props) => {
     return (
-        <AntButton className={styles.customBtn} {...props}>
+        <AntButton {...props} className={`${styles.customBtn} ${props.className}`}>
             {props.children}
         </AntButton>
     )
