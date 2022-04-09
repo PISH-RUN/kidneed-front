@@ -17,6 +17,7 @@ import { useDashboard } from "../../core-team/api/dashboard";
 import { useContents } from "../../core-team/api/activity";
 import _ from "lodash";
 import { PLAYERS_URL } from "../../core-team/constants";
+import { useRouter } from "next/router";
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
 
@@ -104,16 +105,17 @@ const typeIcons = {
 };
 
 const DataBox = ({ data }: any) => {
-  const { data: contents } = useContents(_.map(data, "id"));
+  const router = useRouter();
+  const { data: contents } = useContents(_.map(data, "content"));
 
   if (!data[0]) return null;
 
   const duration = _.sumBy(data, (i: any) => i.duration)
 
-  const content1 = { activity: data[0], ...(contents?.data?.find((c: any) => c.id === data[0].id) || {}) };
+  const content1 = { activity: data[0], ...(contents?.data?.find((c: any) => c.id === parseInt(data[0].content)) || {}) };
   const source1 = content1?.attributes?.meta?.source && content1?.attributes?.meta?.source[0].src;
 
-  const content2 = { activity: data[1], ...(contents?.data?.find((c: any) => c.id === data[1].id) || {}) };
+  const content2 = { activity: data[1], ...(contents?.data?.find((c: any) => c.id === parseInt(data[1].content)) || {}) };
   const source2 = content2?.attributes?.meta?.source && content2?.attributes?.meta?.source[0].src;
 
   // @ts-ignore
@@ -146,11 +148,11 @@ const DataBox = ({ data }: any) => {
         <Link href={data.url0 || "#"}>
           <Box textAlign="center">
             {/* @ts-ignore */}
-            <Box sx={{ ...styles.cardImage, backgroundImage: `url("${content1.poster}")` }} />
+            <Box sx={{ ...styles.cardImage, backgroundImage: `url("${content1?.attributes?.meta?.poster}")` }} />
             <Button
               variant="contained" color="primary" sx={{ width: 220, height: 70, borderRadius: 6, marginTop: -5 }}
               size="large"
-              onClick={() => window.open(`${PLAYERS_URL}/${content1.activity.type}?url=${source1}`, "_newtab")}
+              onClick={() => router.push(`/players/${content1.activity.type}?child=true&id=${content1.activity.id}&url=${encodeURIComponent(source1)}`)}
             ><PlayIcon /></Button>
           </Box>
         </Link>
@@ -162,7 +164,7 @@ const DataBox = ({ data }: any) => {
           <Button
             variant="contained" color="primary" sx={{ width: 220, height: 70, borderRadius: 6, marginTop: -5 }}
             size="large"
-            onClick={() => window.open(`${PLAYERS_URL}/${content2.activity.type}?url=${source2}`, "_newtab")}
+            onClick={() => router.push(`/players/${content2.activity.type}?child=true&id=${content2.activity.id}&url=${encodeURIComponent(source2)}`)}
           ><PlayIcon /></Button>
         </Box>
       </Grid>

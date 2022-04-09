@@ -26,13 +26,22 @@ import ArrowDown from "layouts/icons/arrow-down";
 import { Guard } from "@kidneed/types";
 import React, { useEffect, useState } from "react";
 import { DateRange } from "@mui/lab";
-import { useActivity } from "../../core-team/api/activity";
+import { useActivity, useActivityStats, useContents } from "../../core-team/api/activity";
 import jMoment from "moment-jalaali";
 import { useDashboard, useStats } from "../../core-team/api/dashboard";
 import { ActivityStats } from "../../core-team/components";
+import moment from "moment";
+
+const titles: any = {
+  "video": "تماشای فیلم",
+  "game": "بازی",
+  "book": "خواندن داستان",
+  "audio": "شنیدن داستان",
+  "activity": "فعالیت عملی",
+}
 
 const Schedule = (props: any) => {
-  const { sum, data } = props;
+  const { sum, data, contents } = props;
   const { ctx, selectChild } = useApp();
 
   useEffect(() => {
@@ -47,7 +56,7 @@ const Schedule = (props: any) => {
         <Box>
           <Typography variant="h4">برنامه امروز</Typography>
           <Typography variant="h5" sx={{ color: "#8CA3A5", mt: 2 }}>
-            شامل مجموعا {sum} ساعت برنامه ریزی
+            شامل مجموعا {moment.duration(sum, 'minute').humanize()} برنامه ریزی
           </Typography>
         </Box>
         <Box>
@@ -66,23 +75,28 @@ const Schedule = (props: any) => {
           </Button>
         </Box>
       </Stack>
-      <Grid container sx={{ mt: 3 }}>
-        {data && _.map(_.flatten(_.values(data)), (item: any, index: number) => (
-          <Grid key={index} item xs={6} sx={{ mt: 2 }}>
-            <Stack direction="row" alignItems="flex-start" spacing={3}>
-              <Box sx={{ width: 150 }}>
-                {item.payload?.image && <Image src={item.payload?.image} />}
-              </Box>
-              <Box>
-                <Typography variant="h5">{item.type}</Typography>
-                <Typography variant="h6" sx={{ color: "#8CA3A5", mt: 1 }}>
-                  {" "}
-                  {item.subtitle}
-                </Typography>
-              </Box>
-            </Stack>
-          </Grid>
-        ))}
+      <Grid container sx={{ mt: 5 }}>
+        {data && _.map(_.flatten(_.values(data)), (item: any, index: number) => {
+          const content = _.find(contents?.data, { id: parseInt(item.content) });
+          const poster = content?.attributes?.meta?.poster;
+
+          return (
+            <Grid key={index} item xs={6} sx={{ mb: 3 }}>
+              <Stack direction="row" alignItems="flex-start" spacing={3}>
+                <Box sx={{ width: 150 }}>
+                  <img src={poster} className="tw-rounded-xl tw-h-24" />
+                </Box>
+                <Box>
+                  <Typography variant="body1">{titles[item.type]}</Typography>
+                  <Typography variant="caption" sx={{ color: "#8CA3A5", mt: 1 }}>
+                    {" "}
+                    {content?.attributes?.title}
+                  </Typography>
+                </Box>
+              </Stack>
+            </Grid>
+          )
+        })}
       </Grid>
       <Box textAlign="center">
         <Button
@@ -121,7 +135,8 @@ const Dashboard = () => {
   const [range, setRange] = useState<DateRange<Date>>(today);
   const { ctx } = useApp();
   const { data } = useDashboard(ctx.child?.id);
-  const { data: stats, isLoading } = useStats(range, ctx.child?.id);
+  const { data: contents } = useContents(_.map(_.flatten(_.values(data)), i => parseInt(i.content)));
+  const { data: stats, isLoading } = useActivityStats(range, ctx.child?.id);
 
   const sum = _.sumBy(_.flatten(_.values(data)), (i: any) => i.attributes?.duration);
 
@@ -130,8 +145,8 @@ const Dashboard = () => {
       <Typography sx={{ mb: 2 }} variant="h4">
         سلام {ctx?.user?.name}! 👋
       </Typography>
-      <ActivityStats stats={stats} loading={isLoading} />
-      <Schedule sum={sum} data={data} />
+      <ActivityStats stats={stats?.data} loading={isLoading} />
+      <Schedule sum={sum} data={data} contents={contents} />
     </ParentDashboardLayout>
   );
 };

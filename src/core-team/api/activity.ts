@@ -20,12 +20,48 @@ export const useTodayActivity = (child?: number, date = moment()) =>
     }
   );
 
+export const useActivityStats = (date: [Date | Moment | null, Date | Moment | null], child?: number) => {
+  const start = jMoment(date[0]).startOf("day").format("YYYY-MM-DD");
+  const end = jMoment(date[1]).endOf("day").format("YYYY-MM-DD");
+
+  return useQuery(["activity", child, start, end], () =>
+      strapi.request<any>("get", `/children/${child}/stats`, {
+        params: {
+          from: start,
+          to: end
+        }
+      }),
+    {
+      enabled: !!child && date[0] !== null && date[1] !== null
+    }
+  );
+};
+
+export const useActivityGlance = (child?: number) =>
+  useQuery(["activity-glance", child], () =>
+      strapi.request<any>("get", `/children/${child}/current-month-activity-glance`),
+    {
+      enabled: !!child
+    }
+  );
+
 export const useContent = (id?: number) =>
   useQuery(["content", id], () =>
       axios.get(`${DAPI_URL}/api/contents/${id}?populate=*`).then(resp => Promise.resolve(resp.data)),
     {
       enabled: !!id
     }
+  );
+
+export const useUpdateProgress = () =>
+  useMutation(["progress"], ({ id, duration }: any) =>
+      strapi.request("post", `/activities/${id}/progress`, {
+        data: {
+          data: {
+            progress: duration
+          }
+        }
+      })
   );
 
 export const useContents = (ids?: number[]) => {

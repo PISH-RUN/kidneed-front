@@ -1,19 +1,22 @@
 import ParentDashboardLayout from "layouts/parent-dashboard-layout";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { Avatar, Box, CircularProgress, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { openGuard } from "@kidneed/utils";
-import PsImage1 from "public/images/temp/image-24.png";
-import PsImage2 from "public/images/temp/image-25.png";
 import { Button, Card, Tag } from "antd";
-import ContentModal from "../../core-team/components/contentModal";
-import { useActivity, useContent, useContents, useTodayActivity } from "../../core-team/api/activity";
+import ContentModal from "core-team/components/contentModal";
+import {
+  useActivityGlance,
+  useContent,
+  useContents,
+  useTodayActivity
+} from "core-team/api/activity";
 import { useApp } from "@kidneed/hooks";
 import _ from "lodash";
 import jMoment from "moment-jalaali";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Moment } from "moment";
-import { ContentDetail } from "../../core-team/components";
+import { ContentDetail } from "core-team/components";
+import moment from "moment";
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
 
@@ -38,13 +41,10 @@ const SideComponent = (props: any) => {
   const [month, setMonth] = useState(today);
   const [selectedDate, setDate] = useState(today);
   const { ctx } = useApp();
-  const { data: activities } = useActivity([jMoment(month).startOf("jMonth"), jMoment(month).endOf("jMonth")], ctx?.child?.id);
+  const { data } = useActivityGlance(ctx?.child?.id);
 
   const getDayActivities = (day: Moment) => {
-    return _.filter(activities?.data, (item) => {
-      const activityDate = jMoment(item.attributes?.date, "YYYY-MM-DD");
-      return activityDate.jDate() === day.jDate() && activityDate.jMonth() === day.jMonth();
-    });
+    return data ? data.data[day.format("YYYY-MM-DD")] || [] : [];
   };
 
   const monthDays = () => {
@@ -79,8 +79,7 @@ const SideComponent = (props: any) => {
       <Box className="tw-overflow-y-auto">
         {_.map(monthDays(), (date) => {
           const activities = getDayActivities(date);
-          const min = _.sumBy(activities, i => i.attributes.duration || 0);
-          const durationText = min > 60 ? `${Math.floor(min / 60)} ساعت` : `${min} دقیقه`;
+          const durationText = moment.duration(activities.duration, "minute").humanize();
 
           return (
             <div
@@ -100,7 +99,7 @@ const SideComponent = (props: any) => {
                 <Typography
                   variant="body1"
                   className="tw-text-black"
-                >{activities.length} برنامه</Typography>
+                >{activities.count} برنامه</Typography>
                 <Typography
                   variant="caption"
                   className="tw-text-gray-400"
@@ -146,16 +145,16 @@ const DayPlan = () => {
           const contentTags: string[] = [];
 
           content1?.attributes?.editions?.data?.map((tag: any) => {
-            if(contentTags.indexOf(tag?.attributes?.tag) === -1) {
+            if (contentTags.indexOf(tag?.attributes?.tag) === -1) {
               contentTags.push(tag?.attributes?.tag);
             }
-          })
+          });
 
           content2?.attributes?.editions?.data?.map((tag: any) => {
-            if(contentTags.indexOf(tag?.attributes?.tag) === -1) {
+            if (contentTags.indexOf(tag?.attributes?.tag) === -1) {
               contentTags.push(tag?.attributes?.tag);
             }
-          })
+          });
 
           return (
             <Card key={type} className="tw-w-full tw-mb-4 tw-rounded-3xl">
@@ -173,7 +172,7 @@ const DayPlan = () => {
                   </div>
                   <div className="tw-pt-5 tw-pr-4">
                     <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">مدت زمان:</span>
-                    <span className="tw-text-xl tw-font-bold">{_.sumBy(items, (i: any) => i.attributes.duration)}</span>
+                    <span className="tw-text-xl tw-font-bold">{items[0].attributes.duration}</span>
                   </div>
                   <div className="tw-mt-8 tw-pt-5 tw-pr-4">
                     <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">تگ ها:</span>
@@ -195,10 +194,14 @@ const DayPlan = () => {
                 </div>
               </div>
             </Card>
-          )
+          );
         })}
         <ContentModal visible={selectPlan} onClose={() => setSelectPlant(false)} time={selectedDate} />
-        <ContentDetail visible={!!selectedContent && !!content?.data} content={content?.data} onCancel={() => setContent(undefined)} />
+        <ContentDetail
+          visible={!!selectedContent && !!content?.data}
+          content={content?.data}
+          onCancel={() => setContent(undefined)}
+        />
       </div>
     </ParentDashboardLayout>
   );

@@ -4,6 +4,7 @@ import ImageCard1 from "public/images/parentCard/img1.png";
 import ImageCard2 from "public/images/parentCard/img2.png";
 import ImageCard3 from "public/images/parentCard/img3.png";
 import React from "react";
+import moment from "moment";
 
 const styles = {
   card: {
@@ -49,7 +50,7 @@ export const ActivityStats = ({ stats, loading }: any) => {
           </Box>
 
           <Box sx={styles.cardBottom}>
-            <Typography variant="h4">{loading ? "-" : stats?.book} ساعت</Typography>
+            <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.book?.progress, 'minute').asHours().toString()) || 0)} ساعت</Typography>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body1">مطالعه</Typography>
               <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
@@ -64,7 +65,7 @@ export const ActivityStats = ({ stats, loading }: any) => {
             <Image src={ImageCard2} />
           </Box>
           <Box sx={styles.cardBottom}>
-            <Typography variant="h4">{loading ? "-" : stats?.game} ساعت</Typography>
+            <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.game?.progress, 'minute').asHours().toString()) || 0)} ساعت</Typography>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body1">بازی</Typography>
               <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
@@ -79,7 +80,7 @@ export const ActivityStats = ({ stats, loading }: any) => {
             <Image src={ImageCard3} />
           </Box>
           <Box sx={styles.cardBottom}>
-            <Typography variant="h4">{loading ? "-" : stats?.video} ساعت</Typography>
+            <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.video?.progress, 'minute').asHours().toString()) || 0)} ساعت</Typography>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body1">فیلم</Typography>
               <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
