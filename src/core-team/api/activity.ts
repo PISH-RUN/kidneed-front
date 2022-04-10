@@ -55,13 +55,13 @@ export const useContent = (id?: number) =>
 
 export const useUpdateProgress = () =>
   useMutation(["progress"], ({ id, duration }: any) =>
-      strapi.request("post", `/activities/${id}/progress`, {
+    strapi.request("post", `/activities/${id}/progress`, {
+      data: {
         data: {
-          data: {
-            progress: duration
-          }
+          progress: duration
         }
-      })
+      }
+    })
   );
 
 export const useContents = (ids?: number[]) => {
@@ -83,6 +83,23 @@ export const useContents = (ids?: number[]) => {
     }
   );
 };
+
+export const useSearchContents = () => useMutation(["contents-search"], ({ search, type }: any) => {
+    const query = qs.stringify({
+      populate: "*",
+      sort: ['title:asc'],
+      filters: {
+        type,
+        title: {
+          $contains: search
+        }
+      }
+    }, {
+      encodeValuesOnly: true
+    });
+    return axios.get(`${DAPI_URL}/api/contents?${query}`).then(resp => Promise.resolve(resp.data));
+  }
+);
 
 export const useActivity = (date: [Date | Moment | null, Date | Moment | null], child?: number) => {
   const start = jMoment(date[0]).startOf("day").format("YYYY-MM-DD");
@@ -115,3 +132,10 @@ export const useActivity = (date: [Date | Moment | null, Date | Moment | null], 
     }
   );
 };
+
+export const useAddActivity = (childId?: number) =>
+  useMutation(["create-activity", childId], (data: any) =>
+    strapi.request<any>("post", `/children/${childId}/activities`, {
+      data: { data }
+    })
+  );

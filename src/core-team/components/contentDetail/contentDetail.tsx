@@ -2,10 +2,10 @@ import { Modal } from "antd";
 import styles from "earth/styles/earth.module.css";
 import { Typography } from "@mui/material";
 import { FaPlay } from "react-icons/fa";
-import { PLAYERS_URL } from "../../constants";
-import _ from "lodash";
-import jMoment from "moment-jalaali";
 import { useRouter } from "next/router";
+import VideoDetails from "./video";
+import AudioDetails from "./audio";
+import BookDetails from "./book";
 
 const tags: any = {
   A: "رشدی حرکتی",
@@ -23,19 +23,19 @@ export const ContentDetail = (props: any) => {
   const { content, ...rest } = props;
   const router = useRouter();
 
-  const poster = content?.attributes?.meta?.poster;
+  const poster = content?.attributes?.meta?.img || content?.attributes?.meta?.poster;
 
   const openPlayer = () => {
     const playerType = content?.attributes?.type;
     let source = content?.attributes?.meta?.source && content?.attributes?.meta?.source[0].src;
     source = source ? source : content?.attributes?.srcFile;
 
-    if(playerType === 'activity')
-      router.push(`/players/activity?id=${content.id}`)
-    else if (playerType === 'game')
-      router.push(`/players/${playerType}?url=${encodeURIComponent(content?.attributes?.sourceUrl)}`)
+    if (playerType === "activity")
+      router.push(`/players/activity?id=${content.id}`);
+    else if (playerType === "game")
+      router.push(`/players/${playerType}?url=${encodeURIComponent(content?.attributes?.sourceUrl)}`);
     else if (source)
-      router.push(`/players/${playerType}?url=${encodeURIComponent(source)}`)
+      router.push(`/players/${playerType}?url=${encodeURIComponent(source)}`);
   };
 
   return (
@@ -62,8 +62,10 @@ export const ContentDetail = (props: any) => {
               </div>
             </div>
             <div className="tw-flex-1">
-              <Typography variant="body1" className="!tw-mb-4 !tw-font-bold">خلاصه اثر</Typography>
-              <Typography variant="body1">{content?.attributes?.description}</Typography>
+              <Typography variant="body1" className="!tw-mb-4 !tw-font-bold">توضیحات</Typography>
+              <Typography variant="body1">
+                {content?.attributes?.meta?.fields?.detail?.value || content?.attributes?.meta?.description || content?.attributes?.description}
+              </Typography>
               {content?.attributes?.editions?.data.length > 0 && <>
                 <Typography variant="body1" className="!tw-mb-4 !tw-mt-4 !tw-font-bold">برچسب ها</Typography>
                 <div className="tw-flex tw-mb-2">
@@ -81,66 +83,14 @@ export const ContentDetail = (props: any) => {
             </div>
           </div>
           <div className="tw-mt-10">
-            <Typography variant="body1" className="!tw-mb-4 !tw-font-bold !tw-mt-4">سایر اطلاعات</Typography>
-            <div className="">
-              <div className="tw-flex tw-mb-2">
-                <Typography variant="body1" className="!tw-w-40">سال ساخت:</Typography>
-                <Typography
-                  variant="body1"
-                >{content?.attributes?.meta?.productionYear?.solar && content?.attributes?.meta?.productionYear?.solar[0].name}</Typography>
-              </div>
-              <div className="tw-flex tw-mb-2">
-                <Typography variant="body1" className="!tw-w-40">کشور سازنده:</Typography>
-                <Typography
-                  variant="body1"
-                >{content?.attributes?.meta?.factors?.country && _.map(content?.attributes?.meta?.factors?.country, "name").join("، ")}</Typography>
-              </div>
-              <div className="tw-flex tw-mb-2">
-                <Typography variant="body1" className="!tw-w-40">کارگردان:</Typography>
-                <Typography
-                  variant="body1"
-                >{content?.attributes?.meta?.factors?.director && _.map(content?.attributes?.meta?.factors?.director, "name").join("، ")}</Typography>
-              </div>
-              <div className="tw-flex tw-mb-2">
-                <Typography variant="body1" className="!tw-w-40">نویسنده:</Typography>
-                <Typography
-                  variant="body1"
-                >{content?.attributes?.meta?.factors?.genre && _.map(content?.attributes?.meta?.factors?.writer, "name").join("، ")}</Typography>
-              </div>
-              <div className="tw-flex tw-mb-2">
-                <Typography variant="body1" className="!tw-w-40">بازیگران:</Typography>
-                <Typography
-                  variant="body1"
-                >{content?.attributes?.meta?.factors?.faces ? _.map(content?.attributes?.meta?.factors?.faces, "name").join("، ") : "-"}</Typography>
-              </div>
-              <div className="tw-flex tw-mb-2">
-                <Typography variant="body1" className="!tw-w-40">ژانر:</Typography>
-                <Typography
-                  variant="body1"
-                >{content?.attributes?.meta?.factors?.genre && _.map(content?.attributes?.meta?.factors?.genre, "name").join("، ")}</Typography>
-              </div>
-              <div className="tw-flex tw-mb-2">
-                <Typography variant="body1" className="!tw-w-40">وضعیت دوبله:</Typography>
-                <Typography
-                  variant="body1"
-                  className="!tw-w-40"
-                >{content?.attributes?.meta?.dubbed ? content?.attributes?.meta?.dubbed[0].name : "-"}</Typography>
-              </div>
-              <div className="tw-flex tw-mb-2">
-                <Typography variant="body1" className="!tw-w-40">وضعیت زیرنویس:</Typography>
-                <Typography
-                  variant="body1"
-                  className="!tw-w-40"
-                >{content?.attributes?.meta?.productionYear?.subtitle ? content?.attributes?.meta?.productionYear?.subtitle[0].name : "-"}</Typography>
-              </div>
-              <div className="tw-flex tw-mb-2">
-                <Typography variant="body1" className="!tw-w-40">مدت زمان فیلم:</Typography>
-                <Typography
-                  variant="body1"
-                  className="!tw-w-40"
-                >{jMoment.duration(content?.attributes?.meta?.duration, "minute").humanize()}</Typography>
-              </div>
-            </div>
+            {["game", "activity"].indexOf(content?.attributes?.type) === -1 &&
+              <Typography variant="body1" className="!tw-mb-4 !tw-font-bold !tw-mt-4">سایر اطلاعات</Typography>}
+            {(content?.attributes?.type === "video" && content?.attributes?.meta) &&
+              <VideoDetails data={content?.attributes?.meta} />}
+            {(content?.attributes?.type === "audio" && content?.attributes?.meta) &&
+              <AudioDetails data={content?.attributes?.meta} />}
+            {(content?.attributes?.type === "book" && content?.attributes?.meta) &&
+              <BookDetails data={content?.attributes?.meta} />}
           </div>
         </div>
       </div>

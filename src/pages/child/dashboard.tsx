@@ -357,9 +357,10 @@ const Clock = () => {
 
 const LoginDialog = ({ open, onClose }: any) => {
   const [inputValue, setInputValue] = useState("");
+  const [numbers, setNumbers] = useState([Math.floor(Math.random() * 10) + 1, Math.floor(Math.random() * 10) + 1]);
 
   const onSubmit = () => {
-    if (inputValue === "32") {
+    if (inputValue === eval(numbers.join("*")).toString()) {
       location.href = "/parent/dashboard";
     } else {
       alert("کد وارد شده اشتباه است.");
@@ -395,7 +396,7 @@ const LoginDialog = ({ open, onClose }: any) => {
           mt: 3
         }}
       >
-        <Typography variant="h6">4 * 8 چند می شود</Typography>
+        <Typography variant="h6">{numbers[0]} * {numbers[1]} چند می شود</Typography>
         <TextField
           id="input-with-icon-adornment"
           variant="outlined"

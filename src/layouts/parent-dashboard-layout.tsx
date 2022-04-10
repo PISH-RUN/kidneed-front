@@ -249,7 +249,7 @@ export default function ParentDashboardLayout(props: ParentDashboardLayoutProps)
       </Grid>
       {(showChild === true || !!SideComponent) &&
         <Grid item sx={{ width: { xl: 300, xs: 250 } }}>
-          {showChild && <ChildSelector />}
+          {showChild === true && <ChildSelector />}
           {showRange &&
             <Box
               sx={{

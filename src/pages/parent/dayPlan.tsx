@@ -115,7 +115,7 @@ const SideComponent = (props: any) => {
 
 const DayPlan = () => {
   const { ctx, selectChild } = useApp();
-  const [selectPlan, setSelectPlant] = useState(false);
+  const [selectPlan, setSelectPlan] = useState<any>(false);
   const [selectedDate, setDate] = useState(today);
   const [selectedContent, setContent] = useState();
   const { data: activities, isLoading } = useTodayActivity(ctx?.child?.id, selectedDate);
@@ -131,6 +131,17 @@ const DayPlan = () => {
   return (
     <ParentDashboardLayout
       showChild
+      Header={
+        <div className="tw-flex tw-justify-between tw-mt-4 tw-mb-3 tw-w-full">
+          <Typography variant="h5" className="!tw-font-bold tw-flex tw-items-center">تمام برنامه های {jMoment(selectedDate).format('jDD jMMMM')} {jMoment().diff(selectedDate, 'days') === 0 && '(امروز)'}</Typography>
+          <Button
+            onClick={() => setSelectPlan(true)}
+            className="tw-w-48 tw-h-12 tw-bg-blue-400 tw-text-white tw-rounded-full"
+          >
+            افزودن برنامه
+          </Button>
+        </div>
+      }
       SideComponent={<SideComponent
         onChangeDate={(date: any) => setDate(date)}
       />}
@@ -160,7 +171,7 @@ const DayPlan = () => {
             <Card key={type} className="tw-w-full tw-mb-4 tw-rounded-3xl">
               <div className="tw-flex">
                 <div className="tw-ml-4 tw-cursor-pointer" onClick={() => setContent(items[0].attributes.content)}>
-                  <img className="tw-w-80 tw-rounded-2xl" src={content1?.attributes?.meta?.poster} />
+                  <img className="tw-w-80 tw-rounded-2xl" src={content1?.attributes?.meta?.img || content1?.attributes?.meta?.poster} />
                 </div>
                 <div className="tw-cursor-pointer" onClick={() => setContent(items[1].attributes.content)}>
                   <img className="tw-w-72 tw-rounded-2xl" src={content2?.attributes?.meta?.poster} />
@@ -183,7 +194,7 @@ const DayPlan = () => {
                   </div>
                   <div className="tw-mt-5 tw-mr-3">
                     <Button
-                      onClick={() => setSelectPlant(!selectPlan)}
+                      onClick={() => setSelectPlan(items)}
                       size="large"
                       className="hover:tw-bg-gray-200 hover:tw-text-gray-500 hover:tw-border-gray-100 tw-w-60 tw-h-14 tw-bg-gray-100 tw-border-gray-50 tw-text-gray-500 tw-rounded-full"
                       block
@@ -196,7 +207,7 @@ const DayPlan = () => {
             </Card>
           );
         })}
-        <ContentModal visible={selectPlan} onClose={() => setSelectPlant(false)} time={selectedDate} />
+        <ContentModal visible={selectPlan} activity={selectPlan} onClose={() => setSelectPlan(false)} time={selectedDate} />
         <ContentDetail
           visible={!!selectedContent && !!content?.data}
           content={content?.data}
