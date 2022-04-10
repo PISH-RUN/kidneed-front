@@ -17,6 +17,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Moment } from "moment";
 import { ContentDetail } from "core-team/components";
 import moment from "moment";
+import { POSTER_ORIGIN } from "../../core-team/constants";
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
 
@@ -118,9 +119,16 @@ const DayPlan = () => {
   const [selectPlan, setSelectPlan] = useState<any>(false);
   const [selectedDate, setDate] = useState(today);
   const [selectedContent, setContent] = useState();
-  const { data: activities, isLoading } = useTodayActivity(ctx?.child?.id, selectedDate);
+  const { data: activities, isLoading, refetch } = useTodayActivity(ctx?.child?.id, selectedDate);
   const { data: content } = useContent(selectedContent);
   const { data: contents } = useContents(activities?.data?.map((i: any) => i.attributes.content));
+
+  const getPoster = (content: any) => {
+    let poster = content?.attributes?.meta?.verticalPoster && `${POSTER_ORIGIN}${content?.attributes?.meta?.verticalPoster[0].url}`;
+    poster = poster || content?.attributes?.meta?.img || content?.attributes?.meta?.poster;
+
+    return poster;
+  };
 
   useEffect(() => {
     if (!ctx.child && ctx.children) {
@@ -133,7 +141,8 @@ const DayPlan = () => {
       showChild
       Header={
         <div className="tw-flex tw-justify-between tw-mt-4 tw-mb-3 tw-w-full">
-          <Typography variant="h5" className="!tw-font-bold tw-flex tw-items-center">تمام برنامه های {jMoment(selectedDate).format('jDD jMMMM')} {jMoment().diff(selectedDate, 'days') === 0 && '(امروز)'}</Typography>
+          <Typography variant="h5" className="!tw-font-bold tw-flex tw-items-center">تمام برنامه
+            های {jMoment(selectedDate).format("jDD jMMMM")} {jMoment().diff(selectedDate, "days") === 0 && "(امروز)"}</Typography>
           <Button
             onClick={() => setSelectPlan(true)}
             className="tw-w-48 tw-h-12 tw-bg-blue-400 tw-text-white tw-rounded-full"
@@ -171,10 +180,10 @@ const DayPlan = () => {
             <Card key={type} className="tw-w-full tw-mb-4 tw-rounded-3xl">
               <div className="tw-flex">
                 <div className="tw-ml-4 tw-cursor-pointer" onClick={() => setContent(items[0].attributes.content)}>
-                  <img className="tw-w-80 tw-rounded-2xl" src={content1?.attributes?.meta?.img || content1?.attributes?.meta?.poster} />
+                  <img className="tw-w-60 tw-rounded-2xl" src={getPoster(content1)} />
                 </div>
                 <div className="tw-cursor-pointer" onClick={() => setContent(items[1].attributes.content)}>
-                  <img className="tw-w-72 tw-rounded-2xl" src={content2?.attributes?.meta?.poster} />
+                  <img className="tw-w-60 tw-rounded-2xl" src={getPoster(content2)} />
                 </div>
                 <div>
                   <div className="tw-pt-5 tw-pr-4">
@@ -207,7 +216,17 @@ const DayPlan = () => {
             </Card>
           );
         })}
-        <ContentModal visible={selectPlan} activity={selectPlan} onClose={() => setSelectPlan(false)} time={selectedDate} />
+        <ContentModal
+          visible={selectPlan}
+          activity={selectPlan}
+          onClose={(added: boolean) => {
+            if (added) {
+              refetch();
+            }
+            setSelectPlan(false);
+          }}
+          time={selectedDate}
+        />
         <ContentDetail
           visible={!!selectedContent && !!content?.data}
           content={content?.data}

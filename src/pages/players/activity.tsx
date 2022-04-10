@@ -10,7 +10,9 @@ const Activity = () => {
   const id = query.id;
   const { data: content, isLoading } = useContent(parseInt(id as string));
 
-  const poster = content?.attributes?.meta?.poster;
+  const poster = content?.data?.attributes?.meta?.poster;
+
+  console.log(`https://${content?.data?.attributes?.attachments?.data[0].attributes?.url}`);
 
   return (
     <div className="tw-min-h-screen tw-flex tw-full tw-items-center tw-justify-center tw-bg-sky-100 tw-py-10">
@@ -32,12 +34,12 @@ const Activity = () => {
               </div>
               <div className="tw-flex-1">
                 <Typography variant="body1" className="!tw-mb-4 !tw-font-bold">توضیحات</Typography>
-                <Typography variant="body1">{content?.attributes?.description}</Typography>
+                <Typography variant="body1">{content?.data?.attributes?.description}</Typography>
               </div>
             </div>
             <div>
               <video controls className="tw-w-full tw-h-96">
-                <source src={content?.attributes?.srcFile} type="video/mp4" />
+                <source src={content?.data?.attributes?.attachments?.data && `https://${content?.data?.attributes?.attachments?.data[0].attributes?.url}`} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>

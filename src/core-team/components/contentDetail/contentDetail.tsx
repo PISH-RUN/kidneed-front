@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import VideoDetails from "./video";
 import AudioDetails from "./audio";
 import BookDetails from "./book";
+import { POSTER_ORIGIN } from "../../constants";
 
 const tags: any = {
   A: "رشدی حرکتی",
@@ -23,14 +24,17 @@ export const ContentDetail = (props: any) => {
   const { content, ...rest } = props;
   const router = useRouter();
 
-  const poster = content?.attributes?.meta?.img || content?.attributes?.meta?.poster;
+  let poster = content?.attributes?.meta?.verticalPoster && `${POSTER_ORIGIN}${content?.attributes?.meta?.verticalPoster[0].url}`;
+  poster = poster || content?.attributes?.meta?.img || content?.attributes?.meta?.poster
 
   const openPlayer = () => {
     const playerType = content?.attributes?.type;
     let source = content?.attributes?.meta?.source && content?.attributes?.meta?.source[0].src;
     source = source ? source : content?.attributes?.srcFile;
 
-    if (playerType === "activity")
+    if (playerType === "video" && content?.attributes?.attachments?.data)
+      router.push(`/players/video?url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`);
+    else if (playerType === "activity")
       router.push(`/players/activity?id=${content.id}`);
     else if (playerType === "game")
       router.push(`/players/${playerType}?url=${encodeURIComponent(content?.attributes?.sourceUrl)}`);
@@ -53,10 +57,10 @@ export const ContentDetail = (props: any) => {
         <div className="tw-p-10">
           <div className="tw-flex tw-mb-2">
             <div
-              className="tw-w-96 tw-ml-8 tw-relative tw-cursor-pointer tw-h-fit"
+              className="tw-w-80 tw-ml-8 tw-relative tw-cursor-pointer tw-h-fit"
               onClick={openPlayer}
             >
-              <img className="tw-w-96 tw-rounded-2xl" src={poster} alt="" />
+              <img className="tw-w-80 tw-rounded-2xl" src={poster} alt="" />
               <div className="tw-absolute tw-rounded-2xl tw-w-full tw-h-full tw-flex tw-items-center tw-justify-center tw-top-0 tw-bg-gray-500 tw-bg-opacity-30">
                 <FaPlay className="tw-text-white tw-w-24 tw-h-24" />
               </div>
