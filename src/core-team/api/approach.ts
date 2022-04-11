@@ -3,36 +3,42 @@ import moment, { Moment } from "moment";
 import { strapi } from "@kidneed/services";
 import jMoment from "moment-jalaali";
 
-export const useApproach = (title?: string) =>
-  useQuery(["approach", title], () =>
-    strapi.request<any>("get", `/earth/approach`, {
+export const useSubjects = (title?: string) =>
+  useQuery(["subjects", title], () =>
+    strapi.request<any>("get", `/rahche-subjects`, {
       params: {
+        populate: "*",
         filters: {
-          title: {
-            $contains: ""
+          name: {
+            $contains: title
           }
         }
       }
     })
   );
 
-export const useSign = (approachId?: number) =>
-  useQuery(["sign", approachId], () =>
-      strapi.request<any>("get", `/earth/sign`, {
-        params: {
-          approachId: [approachId]
-        }
-      }),
+export const useSelectSubject = () =>
+  useMutation(["subject-select"], (subject: number) =>
+    strapi.request<any>("post", `/rahche/select`, {
+      data: {
+        data: { subject }
+      }
+    })
+  );
+
+export const useSign = (rahche?: number) =>
+  useQuery(["sign", rahche], () =>
+      strapi.request<any>("get", `/rahche/${rahche}/signs`),
     {
-      enabled: approachId !== undefined
+      enabled: rahche !== undefined
     }
   );
 
 export const useRoot = (signId?: number[]) =>
   useQuery(["root", signId], () =>
-      strapi.request<any>("get", `/earth/root`, {
-        params: signId ? {
-          signId: [signId]
-        } : {}
-      })
+    strapi.request<any>("get", `/earth/root`, {
+      params: signId ? {
+        signId: [signId]
+      } : {}
+    })
   );

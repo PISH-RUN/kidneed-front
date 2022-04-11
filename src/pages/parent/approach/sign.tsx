@@ -1,4 +1,4 @@
-import { useApproach, useSign } from "core-team/api/approach";
+import { useSubjects, useSign } from "core-team/api/approach";
 import { useRouter } from "next/router";
 import { Button, Typography } from "@mui/material";
 import { Form, Radio } from "antd";
@@ -30,8 +30,8 @@ const SignStep = () => {
       <Typography variant="h5">لطفا موارد زیر را برای فرزندتان مشخص نمایید</Typography>
       <div className="tw-mt-8">
         <Form layout="vertical" onFinish={handleSubmit}>
-          {sign?.map((s: any) => (
-            <Form.Item label={s.title} key={s.id} name={s.id} className="!tw-mt-10" initialValue="no">
+          {sign?.data && sign?.data?.map((s: any) => (
+            <Form.Item label={s.attributes?.body} key={s.id} name={s.id} className="!tw-mt-10" initialValue="no">
               <Radio.Group>
                 <Radio value="yes" className="tw-w-32">بله</Radio>
                 <Radio value="no" className="tw-w-32">خیر</Radio>

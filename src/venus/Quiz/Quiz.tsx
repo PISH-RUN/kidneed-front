@@ -1,36 +1,31 @@
-import { strapi } from "@kidneed/services";
-import { width } from "@mui/system";
-import { Form, message } from "antd";
+import { Form, Typography } from "antd";
 import Text from "antd/lib/typography/Text";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { PrimaryButton } from "venus/PrimaryButton/PrimaryButton";
 import { ContentWrapper } from "../ContentWrapper/ContentWrapper";
 import { QuestionSlider } from "../QuestionSlider/QuestionSlider";
 import styles from "./Quiz.module.css";
-import { useApp } from "@kidneed/hooks";
-import jMoment from "moment-jalaali";
-import { useQuestions, useSubmitAnswer } from "core-team/api/question";
+import { useQuestions, useQuiz, useSubmitQuiz, useSubmitSystemQuiz } from "core-team/api/question";
 import _ from "lodash";
 
 export const Quiz: React.FC<{ way?: string, childId?: number }> = (props) => {
-  const { ctx } = useApp();
   const router = useRouter();
-  const { mutateAsync: submitAnswer } = useSubmitAnswer();
+  const { mutateAsync: submitQuiz } = useSubmitQuiz();
+  const { mutateAsync: submitSystemQuiz } = useSubmitSystemQuiz();
+  const { data: quiz } = useQuiz(props.way, props.childId);
+  const { data: questions } = useQuestions(props.way, props.childId);
 
-  const age = jMoment().jYear() - (ctx?.child?.birthYear || 0);
-  let ageCategory = "";
-  if (age >= 3 && age <= 7) ageCategory = "3";
-  if (age >= 8 && age <= 12) ageCategory = "8";
-
-  const { data } = useQuestions(ageCategory, props.way || "system");
+  const data = props.way ? quiz : questions;
 
   const handleSubmit = (values: any) => {
-    if (ctx.child) {
-      submitAnswer({
-        childId: ctx.child.id,
+    if (props.childId) {
+      const request = props.way === undefined ? submitSystemQuiz : submitQuiz;
+      request({
+        childId: props.childId,
+        type: "startOfMonth",
         data: _.map(values, (val: string, key: string) => ({
-          question: key,
+          question: parseInt(key),
           value: val
         }))
       }).then(() => {
@@ -47,15 +42,16 @@ export const Quiz: React.FC<{ way?: string, childId?: number }> = (props) => {
       <Text style={{ fontSize: "16px" }}>لطفا موارد زیر را در مورد فرزندتان مشخص نمایید</Text>
       <Form layout="vertical" onFinish={handleSubmit}>
         <div className={styles.questionsWrapper}>
-          {data.map((item: any) => {
+          {data?.data?.map((item: any) => {
             return (
               <Form.Item
+                className="tw-mt-4"
                 key={item.id}
                 rules={[{ required: true, message: "این فیلد الزامی است" }]}
-                label={item.attributes?.question}
+                label={<Typography>{item.body}</Typography>}
                 style={{ marginBottom: 0 }}
                 name={item.id}
-                initialValue={1}
+                initialValue={2}
               >
                 <QuestionSlider />
               </Form.Item>

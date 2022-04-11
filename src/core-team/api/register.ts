@@ -8,10 +8,16 @@ export const useRegister = () =>
     })
   );
 
-export const useSetGrowthField = () =>
-  useMutation(["growth-field"], (data: any) =>
+export const useGrowthFields = () =>
+  useQuery(["growth-fields"], () =>
     strapi
-      .request<any>("post", `/children/${data.childId}/growth-field`, {
+      .request<any>("get", `/growth-fields`)
+  );
+
+export const useSetGrowthField = () =>
+  useMutation(["set-growth-field"], (data: any) =>
+    strapi
+      .request<any>("post", `/children/${data.childId}/select-growth-field`, {
         data: {
           data: {
             field: data.field,

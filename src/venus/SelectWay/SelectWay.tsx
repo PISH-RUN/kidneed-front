@@ -6,14 +6,7 @@ import { SecondVideo } from "venus/Video/SecondVideo";
 import { ContentWrapper } from "../ContentWrapper/ContentWrapper";
 import { Way } from "../Way/Way";
 import styles from "./SelectWay.module.css";
-import { useSetGrowthField } from "../../core-team/api/register";
-
-const fields: any = {
-  "A": "physical",
-  "B": "cognition",
-  "C": "emotional",
-  "D": "social"
-};
+import { useGrowthFields, useSetGrowthField } from "../../core-team/api/register";
 
 export const SelectWay: React.FC<{
   setPage: React.Dispatch<React.SetStateAction<string>>;
@@ -21,15 +14,16 @@ export const SelectWay: React.FC<{
   childId?: number;
 }> = (props) => {
   const { mutateAsync: setGrowthField } = useSetGrowthField();
+  const { data: fields } = useGrowthFields();
 
   const selectWay = (type?: "A" | "B" | "C" | "D") => {
     if (type)
       setGrowthField({
         childId: props.childId,
-        field: fields[type]
+        field: type
       })
         .then(() => {
-          props.setWay(fields[type]);
+          props.setWay(type);
           props.setPage("quiz");
         })
         .catch((error) => {
@@ -53,13 +47,9 @@ export const SelectWay: React.FC<{
           لطفا نوع حوزه رشدی را انتخاب نمایید
         </Text>
         <div className={styles.waysWrapper}>
-          <Way onClick={() => selectWay("A")} title="حرکتی جسمی" />
-          <Way onClick={() => selectWay("B")} title="شناختی" />
-          <Way onClick={() => selectWay("C")} title="هیجانی" />
-          <Way
-            onClick={() => selectWay("D")}
-            title="اخلاقی اجتماعی"
-          />
+          {fields?.data?.map((field: any) => (
+            <Way key={field?.id} onClick={() => selectWay(field?.id)} title={field?.attributes.name} />
+          ))}
         </div>
         <Way
           onClick={() => selectWay(undefined)}

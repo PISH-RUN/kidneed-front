@@ -1,43 +1,57 @@
-import { Avatar, Col, Input, Row, Steps, Typography } from "antd";
+import { Avatar, Col, Input, Row, Typography } from "antd";
 import { FiClock } from "react-icons/fi";
-import { useApproach } from "core-team/api/approach";
+import { useSubjects, useSelectSubject } from "core-team/api/approach";
 import { API } from "core-team/constants";
 import aimIcon from "earth/media/icons/aim.png";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const ApproachStep = () => {
-  const { data: approach } = useApproach();
+  const [search, setSearch] = useState("");
+  const { data: subjects } = useSubjects(search);
+  const { mutateAsync: selectSubject } = useSelectSubject();
   const router = useRouter();
+
+  const handleSelect = (subjectId: number) => {
+    selectSubject(subjectId).then(() => {
+      router.push(`/parent/approach?id=${subjectId}`);
+    });
+  };
 
   return (
     <>
-      <Input.Search placeholder="جستجو راه چه" className="tw-w-96" />
+      <Input.Search onSearch={(value) => setSearch(value)} placeholder="جستجو راه چه" className="tw-w-96" />
       <Row className="tw-mt-8" gutter={[0, 20]}>
-        {approach && approach.map((app: any) => (
-          <Col span={24} key={app.id}>
+        {subjects?.data && subjects?.data.map((subject: any) => (
+          <Col span={24} key={subject.id}>
             <div className="tw-bg-white tw-flex tw-rounded-xl tw-overflow-hidden">
               <div className="tw-p-5 tw-self-center">
-                <Avatar className="tw-w-40 tw-h-24 tw-rounded-xl" src={API + app.image.url} />
+                {subject.attributes.image?.data?.attributes?.url && <Avatar
+                  className="tw-w-40 tw-h-24 tw-rounded-xl"
+                  src={API + subject.attributes.image?.data?.attributes?.url}
+                />}
               </div>
               <div className="tw-p-3 tw-pr-0 tw-flex-1">
                 <div className="tw-flex tw-items-center">
                   <div>
                     <Image src={aimIcon} alt="card" className="tw-h-auto" />
                   </div>
-                  <Typography.Title level={5} className="!tw-mr-2">{app.title}</Typography.Title>
+                  <Typography.Title level={5} className="!tw-mr-2">{subject.attributes.name}</Typography.Title>
                 </div>
                 <Typography.Paragraph
                   ellipsis={{ rows: 3 }}
                   className="description"
-                >{app.description}</Typography.Paragraph>
+                >
+                  {subject.attributes.description}
+                </Typography.Paragraph>
                 <div className="date tw-text-gray-400 tw-text-xs tw-mt-3 tw-flex tw-items-center">
                   <FiClock className="tw-ml-2" />
-                  {app.duration} ساعت برنامه
+                  {subject.attributes.duration} ساعت برنامه
                 </div>
               </div>
               <div
-                onClick={() => router.push(`/parent/approach?id=${app.id}`)}
+                onClick={() => handleSelect(subject.id)}
                 className="tw-bg-green-400 tw-text-white tw-w-28 tw-flex tw-items-center tw-justify-center tw-flex-col tw-cursor-pointer hover:tw-bg-green-300"
               >
                 بیشتر بدانید
