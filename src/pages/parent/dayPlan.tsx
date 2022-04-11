@@ -164,15 +164,15 @@ const DayPlan = () => {
           const content2 = _.find(contents?.data, i => i.id === parseInt(items[1].attributes.content));
           const contentTags: string[] = [];
 
-          content1?.attributes?.editions?.data?.map((tag: any) => {
-            if (contentTags.indexOf(tag?.attributes?.tag) === -1) {
-              contentTags.push(tag?.attributes?.tag);
+          content1?.attributes?.movies?.data?.map((tag: any) => {
+            if (contentTags.indexOf(tag?.attributes?.body) === -1 && tag?.attributes?.body) {
+              contentTags.push(tag?.attributes?.body);
             }
           });
 
-          content2?.attributes?.editions?.data?.map((tag: any) => {
-            if (contentTags.indexOf(tag?.attributes?.tag) === -1) {
-              contentTags.push(tag?.attributes?.tag);
+          content2?.attributes?.movies?.data?.map((tag: any) => {
+            if (contentTags.indexOf(tag?.attributes?.body) === -1 && tag?.attributes?.body) {
+              contentTags.push(tag?.attributes?.body);
             }
           });
 
@@ -196,10 +196,16 @@ const DayPlan = () => {
                   </div>
                   <div className="tw-mt-8 tw-pt-5 tw-pr-4">
                     <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">تگ ها:</span>
-                    <span className="tw-text-xl tw-font-bold">{contentTags.map((tag: any) => <Tag
-                      key={tag}
-                      className="tw-bg-gray-300 tw-text-white tw-px-3 tw-font-normal tw-rounded-full tw-text-base"
-                    >{tags[tag]}</Tag>)}</span>
+                    <span className="tw-text-xl tw-font-bold">
+                      {contentTags.map((tag: any) =>
+                        <Tag
+                          key={tag}
+                          className="tw-bg-gray-300 tw-text-white tw-px-3 tw-font-normal tw-rounded-full tw-text-base"
+                        >
+                          {tag}
+                        </Tag>
+                      )}
+                    </span>
                   </div>
                   <div className="tw-mt-5 tw-mr-3">
                     <Button
