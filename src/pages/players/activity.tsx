@@ -12,8 +12,6 @@ const Activity = () => {
 
   const poster = content?.data?.attributes?.meta?.poster;
 
-  console.log(`https://${content?.data?.attributes?.attachments?.data[0].attributes?.url}`);
-
   return (
     <div className="tw-min-h-screen tw-flex tw-full tw-items-center tw-justify-center tw-bg-sky-100 tw-py-10">
       {isLoading && "در حال بارگذاری..."}
