@@ -18,10 +18,10 @@ export const useSubjects = (title?: string) =>
   );
 
 export const useSelectSubject = () =>
-  useMutation(["subject-select"], (subject: number) =>
+  useMutation(["subject-select"], (data: any) =>
     strapi.request<any>("post", `/rahche/select`, {
       data: {
-        data: { subject }
+        data: data
       }
     })
   );
@@ -34,11 +34,40 @@ export const useSign = (rahche?: number) =>
     }
   );
 
-export const useRoot = (signId?: number[]) =>
-  useQuery(["root", signId], () =>
-    strapi.request<any>("get", `/earth/root`, {
-      params: signId ? {
-        signId: [signId]
-      } : {}
+export const useSubmitSign = () =>
+  useMutation(["sign-submit"], (data: any) =>
+      strapi.request<any>("post", `/rahche/${data.rahche}/signs`, {
+        data: {
+          data: {
+            selected: data.selected
+          }
+        }
+      })
+  );
+
+export const useRoot = (rahche?: number) =>
+  useQuery(["root", rahche], () =>
+    strapi.request<any>("get", `/rahche/${rahche}/roots`),
+    {
+      enabled: !!rahche
+    }
+  );
+
+export const useSubmitRoot = () =>
+  useMutation(["root-submit"], (data: any) =>
+    strapi.request<any>("post", `/rahche/${data.rahche}/roots`, {
+      data: {
+        data: {
+          selected: data.selected
+        }
+      }
     })
+  );
+
+export const useApproaches = (rahche?: number) =>
+  useQuery(["approaches", rahche], () =>
+      strapi.request<any>("get", `/rahche/${rahche}/approaches`),
+    {
+      enabled: !!rahche
+    }
   );

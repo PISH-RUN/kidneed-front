@@ -1,35 +1,32 @@
-import { useRoot } from "core-team/api/approach";
+import { useSign, useSubmitSign } from "core-team/api/approach";
 import { useRouter } from "next/router";
 import { Button, Typography } from "@mui/material";
 import { Form, Radio } from "antd";
 import _ from "lodash";
 
-const RootStep = () => {
+const SignStep = () => {
   const router = useRouter();
-  const approachId = router.query.id;
-  let signIds: any = router.query.sign;
-  if (Array.isArray(signIds)) {
-    signIds = signIds.map(id => parseInt(id));
-  } else {
-    signIds = (!signIds || signIds === "") ? undefined : [signIds];
-  }
-  const { data: sign } = useRoot(signIds);
+  const rahche = router.query.id as string;
+  const { data: sign } = useSign(parseInt(rahche));
+  const { mutateAsync: submitSign } = useSubmitSign();
 
   const handleSubmit = (values: any) => {
-    const rootList: string[] = [];
+    const signList: string[] = [];
     _.filter(values, (answer, id) => {
       if (answer === "yes") {
-        rootList.push(id);
+        signList.push(id);
       }
     });
-    router.push({
-      pathname: "/parent/approach",
-      query: {
-        id: approachId,
-        sign: signIds,
-        root: rootList.length > 0 ? rootList : ""
-      }
-    });
+
+    submitSign({selected: signList, rahche}).then(() => {
+      router.push({
+        pathname: "/parent/rahche",
+        query: {
+          step: "root",
+          id: rahche,
+        }
+      });
+    })
   };
 
   return (
@@ -37,8 +34,8 @@ const RootStep = () => {
       <Typography variant="h5">لطفا موارد زیر را برای فرزندتان مشخص نمایید</Typography>
       <div className="tw-mt-8">
         <Form layout="vertical" onFinish={handleSubmit}>
-          {sign?.map((s: any) => (
-            <Form.Item label={s.title} key={s.id} name={s.id} className="!tw-mt-10" initialValue="no">
+          {sign?.data && sign?.data?.map((s: any) => (
+            <Form.Item label={s.body} key={s.id} name={s.id} className="!tw-mt-10" initialValue="no">
               <Radio.Group>
                 <Radio value="yes" className="tw-w-32">بله</Radio>
                 <Radio value="no" className="tw-w-32">خیر</Radio>
@@ -53,4 +50,4 @@ const RootStep = () => {
   );
 };
 
-export default RootStep;
+export default SignStep;

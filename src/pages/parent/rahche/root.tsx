@@ -1,27 +1,30 @@
-import { useSubjects, useSign } from "core-team/api/approach";
+import { useRoot, useSubmitRoot } from "core-team/api/approach";
 import { useRouter } from "next/router";
 import { Button, Typography } from "@mui/material";
 import { Form, Radio } from "antd";
 import _ from "lodash";
 
-const SignStep = () => {
+const RootStep = () => {
   const router = useRouter();
-  const approachId = router.query.id as string;
-  const { data: sign } = useSign(parseInt(approachId));
+  const rahche = router.query.id as string;
+  const { data: roots } = useRoot(parseInt(rahche));
+  const { mutateAsync: submitRoot } = useSubmitRoot();
 
   const handleSubmit = (values: any) => {
-    const signList: string[] = [];
+    const rootList: number[] = [];
     _.filter(values, (answer, id) => {
       if (answer === "yes") {
-        signList.push(id);
+        rootList.push(parseInt(id));
       }
     });
-    router.push({
-      pathname: "/parent/approach",
-      query: {
-        id: approachId,
-        sign: signList.length > 0 ? signList : ""
-      }
+    submitRoot({ selected: rootList, rahche }).then(() => {
+      router.push({
+        pathname: "/parent/rahche",
+        query: {
+          id: rahche,
+          step: "result"
+        }
+      });
     });
   };
 
@@ -30,8 +33,8 @@ const SignStep = () => {
       <Typography variant="h5">لطفا موارد زیر را برای فرزندتان مشخص نمایید</Typography>
       <div className="tw-mt-8">
         <Form layout="vertical" onFinish={handleSubmit}>
-          {sign?.data && sign?.data?.map((s: any) => (
-            <Form.Item label={s.attributes?.body} key={s.id} name={s.id} className="!tw-mt-10" initialValue="no">
+          {roots?.data?.map((s: any) => (
+            <Form.Item label={s.body} key={s.id} name={s.id} className="!tw-mt-10" initialValue="no">
               <Radio.Group>
                 <Radio value="yes" className="tw-w-32">بله</Radio>
                 <Radio value="no" className="tw-w-32">خیر</Radio>
@@ -46,4 +49,4 @@ const SignStep = () => {
   );
 };
 
-export default SignStep;
+export default RootStep;

@@ -6,16 +6,18 @@ import aimIcon from "earth/media/icons/aim.png";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { useApp } from "@kidneed/hooks";
 
-const ApproachStep = () => {
+const SubjectStep = () => {
   const [search, setSearch] = useState("");
   const { data: subjects } = useSubjects(search);
   const { mutateAsync: selectSubject } = useSelectSubject();
+  const { ctx } = useApp();
   const router = useRouter();
 
-  const handleSelect = (subjectId: number) => {
-    selectSubject(subjectId).then(() => {
-      router.push(`/parent/approach?id=${subjectId}`);
+  const handleSelect = (subject: number) => {
+    selectSubject({ subject, child: ctx?.child?.id }).then((resp) => {
+      router.push(`/parent/rahche?id=${resp?.data?.id}&step=sign`);
     });
   };
 
@@ -64,4 +66,4 @@ const ApproachStep = () => {
   );
 };
 
-export default ApproachStep;
+export default SubjectStep;

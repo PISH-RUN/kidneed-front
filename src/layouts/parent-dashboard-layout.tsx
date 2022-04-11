@@ -88,7 +88,7 @@ const menu = [
     icon: <GiftIcon />
   }, {
     title: "راه چه",
-    link: "/parent/approach",
+    link: "/parent/rahche",
     icon: <BulbIcon />
   }, {
     title: "پیام ها",
