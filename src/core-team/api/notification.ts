@@ -3,7 +3,7 @@ import { strapi } from "@kidneed/services";
 
 export const useNotification = () =>
   useQuery<any>(["notification"], () =>
-    strapi.request("get", "/notifications?populate=*")
+    strapi.request("get", "/users/me/notifications?populate=*")
   );
 
 export const useNotificationRead = () =>

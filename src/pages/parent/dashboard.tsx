@@ -50,13 +50,6 @@ const titles: any = {
 const Schedule = (props: any) => {
   const { sum, data, contents } = props;
   const router = useRouter();
-  const { ctx, selectChild } = useApp();
-
-  useEffect(() => {
-    if (!ctx.child && ctx.children) {
-      selectChild(ctx.children[0]);
-    }
-  }, [ctx]);
 
   return (
     <Paper sx={{ mt: 4, p: 3, boxShadow: "none", borderRadius: 8 }}>

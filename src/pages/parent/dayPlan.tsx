@@ -173,19 +173,13 @@ const ItemPic = ({ content, type }: any) => {
 };
 
 const DayPlan = () => {
-  const { ctx, selectChild } = useApp();
+  const { ctx } = useApp();
   const [selectPlan, setSelectPlan] = useState<any>(false);
   const [selectedDate, setDate] = useState(today);
   const [selectedContent, setContent] = useState();
   const { data: activities, isLoading, refetch } = useTodayActivity(ctx?.child?.id, selectedDate);
   const { data: content } = useContent(selectedContent);
   const { data: contents } = useContents(activities?.data?.map((i: any) => i.attributes.content));
-
-  useEffect(() => {
-    if (!ctx.child && ctx.children) {
-      selectChild(ctx.children[0]);
-    }
-  }, [ctx]);
 
   return (
     <ParentDashboardLayout

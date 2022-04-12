@@ -1,40 +1,83 @@
 import { Guard } from "@kidneed/types";
 import ParentDashboardLayout from "layouts/parent-dashboard-layout";
-import { Button, Col, Form, Input, Radio, Select } from "antd";
+import { Button, Col, Form, Input, notification, Radio, Select } from "antd";
 import { Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { AgeSlider } from "venus/AgeSlider/AgeSlider";
 import { FiUser, FiLock } from "react-icons/fi";
+import { useUpdateChild, useUpdateMe } from "../../core-team/api/user";
+import { useApp } from "@kidneed/hooks";
+import jMoment from "moment-jalaali";
 
 const Setting = () => {
+  const [loginType, setLoginType] = useState("question");
+  const { ctx, editChild } = useApp();
+  const { mutateAsync: updateMe } = useUpdateMe();
+  const { mutateAsync: updateChild } = useUpdateChild(ctx?.child?.id);
+
+  const handleSubmit = (values: any) => {
+    const userParams = {
+      name: values.name,
+      lockPassword: loginType === "question" ? undefined : values.lockPassword
+    };
+    const childParams = {
+      name: values.childName,
+      relation: values.relation,
+      age: values.age,
+      gender: values.gender
+    };
+
+    updateMe(userParams).then(() => {
+      notification.success({
+        message: "اطلاعات شما با موفقیت ویرایش شد."
+      });
+    });
+    updateChild(childParams).then((resp: any) => {
+      editChild({ id: resp?.data?.id, ...resp?.data?.attributes });
+      notification.success({
+        message: "اطلاعات فرزند شما با موفقیت ویرایش شد."
+      });
+    });
+  };
+
   return (
     <ParentDashboardLayout showChild="header">
       <div className="tw-py-8 tw-px-10">
         <Col xl={10} xs={24}>
-          <Form>
+          <Form onFinish={handleSubmit}>
             <Typography variant="body1">اطلاعات فرزند شما</Typography>
             <div className="tw-mt-6 tw-mb-8">
-              <Form.Item name="childName">
-                <Input placeholder="نام فرزند شما" size="large" prefix={<FiUser className="tw-text-blue-500" />} type="text" />
+              <Form.Item name="childName" initialValue={ctx?.child?.name}>
+                <Input
+                  placeholder="نام فرزند شما"
+                  size="large"
+                  prefix={<FiUser className="tw-text-blue-500" />}
+                  type="text"
+                />
               </Form.Item>
-              <Form.Item name="gender" initialValue="boy">
+              <Form.Item name="gender" initialValue={ctx?.child?.gender}>
                 <Radio.Group>
                   <Radio value={"boy"}>آقا پسر</Radio>
                   <Radio value={"girl"}>دختر خانوم</Radio>
                 </Radio.Group>
               </Form.Item>
-              <Form.Item name="age">
+              <Form.Item name="age" initialValue={ctx?.child?.birthYear && (jMoment().jYear() - ctx?.child?.birthYear)}>
                 <AgeSlider />
               </Form.Item>
             </div>
             <Typography variant="body1">اطلاعات شما</Typography>
             <div className="tw-mt-6 tw-mb-8">
-              <Form.Item name="childName">
-                <Input placeholder="نام شما" size="large" prefix={<FiUser className="tw-text-blue-500" />} type="text" />
+              <Form.Item name="name" initialValue={ctx?.user?.name}>
+                <Input
+                  placeholder="نام شما"
+                  size="large"
+                  prefix={<FiUser className="tw-text-blue-500" />}
+                  type="text"
+                />
               </Form.Item>
               <Form.Item
-                rules={[{ required: true, message: "این فیلد الزامی است" }]}
                 name="relation"
+                initialValue={ctx?.child?.relation}
               >
                 <Select
                   size="large"
@@ -55,14 +98,26 @@ const Setting = () => {
 
             <Typography variant="body1">نحوه ورود به محیط والدین</Typography>
             <div className="tw-mt-6">
-              <Radio.Group defaultValue="question">
+              <Radio.Group defaultValue="question" onChange={(event) => setLoginType(event.target.value)}>
                 <Radio value={"question"}>ورود با سوال ساده</Radio>
                 <Radio value={"password"}>ورود با رمز</Radio>
               </Radio.Group>
-              <Input.Password placeholder="رمز پیشنهادی" size="large" className="tw-mt-5" prefix={<FiLock className="tw-text-blue-500" />} />
+              <Form.Item name="lockPassword">
+                <Input.Password
+                  placeholder="رمز پیشنهادی"
+                  size="large"
+                  className="tw-mt-5"
+                  disabled={loginType === "question"}
+                  prefix={<FiLock className="tw-text-blue-500" />}
+                />
+              </Form.Item>
             </div>
 
-            <Button type="primary" className="tw-mt-10 tw-w-40 tw-ml-5 tw-rounded-full tw-bg-blue-400">ذخیره</Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="tw-mt-10 tw-w-40 tw-ml-5 tw-rounded-full tw-bg-blue-400"
+            >ذخیره</Button>
           </Form>
         </Col>
       </div>

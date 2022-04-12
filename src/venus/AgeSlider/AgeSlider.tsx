@@ -26,7 +26,7 @@ export const AgeSlider: React.FC<AgeSliderProps> = (props) => {
           <Slider
             tooltipVisible
             tooltipPlacement="bottom"
-            defaultValue={3}
+            defaultValue={props.value || 3}
             min={3}
             max={12}
             dots

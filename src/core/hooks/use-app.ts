@@ -35,6 +35,11 @@ export default function useApp() {
     [send]
   );
 
+  const editChild = useCallback(
+    (child: Models.Child) => send("EDIT_CHILD", { child }),
+    [send]
+  );
+
   const fetchUser = useCallback(
     async () => {
       const user = await Api.me();
@@ -50,6 +55,7 @@ export default function useApp() {
     passParent,
     selectChild,
     addChild,
+    editChild,
     fetchUser
   };
 }

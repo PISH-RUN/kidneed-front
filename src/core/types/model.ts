@@ -22,6 +22,7 @@ export interface Character extends Model {
 export interface Child extends Model {
   name: string;
   gender: "boy" | "girl";
+  relation: "father" | "mother";
   birthYear: number;
   budget: number;
   characters: Array<unknown>;

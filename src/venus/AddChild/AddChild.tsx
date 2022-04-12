@@ -23,7 +23,7 @@ export const AddChild: React.FC<{
     setLoading(true);
     addChildRequest({
       data: values,
-      age: jMoment().jYear() - values.age
+      age: values.age
     })
       .then((response) => {
         addChild({ id: response.data.id, ...response.data.attributes });

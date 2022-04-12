@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import BaseLayout from "layouts/baseLayout";
-import { Box, Typography, Grid, Button, Stack, Avatar, Badge, Input, InputAdornment, TextField } from "@mui/material";
+import { Box, Typography, Grid, Button, Stack, Avatar, Badge, InputAdornment, TextField } from "@mui/material";
 import PlayIcon from "layouts/icons/play";
 import VideoIcon from "layouts/icons/video";
 import MusicIcon from "layouts/icons/music";
@@ -19,6 +19,8 @@ import _ from "lodash";
 import { useRouter } from "next/router";
 import { POSTER_ORIGIN } from "../../core-team/constants";
 import { IoGameControllerOutline } from "react-icons/io5";
+import { Input, Tabs } from "antd";
+import { useVerifyPassword } from "../../core-team/api/user";
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
 
@@ -375,15 +377,25 @@ const Clock = () => {
 };
 
 const LoginDialog = ({ open, onClose }: any) => {
+  const [tab, setTab] = useState("question");
   const [inputValue, setInputValue] = useState("");
+  const [passwordValue, setPasswordValue] = useState("");
   const [numbers] = useState([Math.floor(Math.random() * 10) + 1, Math.floor(Math.random() * 10) + 1]);
+  const { mutateAsync: verifyPassword } = useVerifyPassword();
 
   const onSubmit = () => {
-    if (inputValue === eval(numbers.join("*")).toString()) {
-      location.href = "/parent/dashboard";
-    } else {
-      alert("کد وارد شده اشتباه است.");
+    if (tab === "question") {
+      if (inputValue === eval(numbers.join("*")).toString()) {
+        location.href = "/parent/dashboard";
+      } else {
+        alert("کد وارد شده اشتباه است.");
+      }
+      return;
     }
+
+    verifyPassword({ lockPassword: passwordValue }).then(() => {
+      location.href = "/parent/dashboard";
+    });
   };
 
   if (!open) return <></>;
@@ -404,7 +416,7 @@ const LoginDialog = ({ open, onClose }: any) => {
   >
     <Box>
       <Box component="img" src="/images/logo.png" alt="logo" sx={{ width: 260, maxWidth: 260 }} />
-      <Typography variant="h6">برای ورود به بخظ والدین، ابتدا لطفا پاسخ سوال زیر را وارد نمایید.</Typography>
+      <Typography variant="h6">برای ورود به بخش والدین، ابتدا لطفا پاسخ سوال زیر را وارد نمایید.</Typography>
       <Box
         sx={{
           background: "#fff",
@@ -412,25 +424,38 @@ const LoginDialog = ({ open, onClose }: any) => {
           borderRadius: 8,
           boxShadow: "0px 14px 17px rgba(0, 0, 0, 0.08)",
           p: 7,
+          pt: 4,
           mt: 3
         }}
       >
-        <Typography variant="h6">{numbers[0]} * {numbers[1]} چند می شود</Typography>
-        <TextField
-          id="input-with-icon-adornment"
-          variant="outlined"
-          fullWidth
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="پاسخ سوال را وارد کنید"
-          sx={{ mt: 3, "& legend": { display: "none" } }}
-          InputProps={{
-            startAdornment: <InputAdornment position="start">
-              <LockIcon />
-            </InputAdornment>
-          }}
-        />
-        <Stack direction="row" spacing={2} sx={{ width: "100%", "& button": { flexGrow: 1, borderRadius: 5 }, mt: 4 }}>
+        <Tabs activeKey={tab} onChange={(value) => setTab(value)}>
+          <Tabs.TabPane key="question" tab="ورود با سوال ساده">
+            <div className="tw-pt-3">
+              <Typography variant="h6">{numbers[0]} * {numbers[1]} چند می شود</Typography>
+              <Input
+                className="tw-mt-4 tw-py-3"
+                size="large"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="پاسخ سوال را وارد کنید"
+              />
+            </div>
+          </Tabs.TabPane>
+          <Tabs.TabPane key="password" tab="ورود با رمز">
+            <Typography variant="h6">رمز ورود خود را وارد کنید</Typography>
+            <Input.Password
+              size="large"
+              className="tw-mt-4 tw-py-3"
+              value={passwordValue}
+              onChange={(e) => setPasswordValue(e.target.value)}
+            />
+          </Tabs.TabPane>
+        </Tabs>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ width: "100%", "& button": { flexGrow: 1, borderRadius: 5 }, mt: 4 }}
+        >
           <Button variant="contained" size="large" onClick={onSubmit}>ورود</Button>
           <Button
             variant="outlined" size="large" sx={{ borderColor: "#D9D9D9", color: "rgba(0, 0, 0, 0.65)" }}

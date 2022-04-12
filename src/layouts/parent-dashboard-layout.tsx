@@ -227,11 +227,25 @@ export default function ParentDashboardLayout(props: ParentDashboardLayoutProps)
   const { children, SideComponent, showChild, showRange, onRangeChange, Header, bp, bd } = props;
   const [range, setRange] = useState<DateRange<Date>>(today);
 
+  const { ctx, selectChild } = useApp();
+
+  console.log(ctx.children);
+
+  useEffect(() => {
+    if (!ctx.child && ctx.children) {
+      selectChild(ctx.children[0]);
+    }
+  }, [ctx]);
+
   useEffect(() => {
     if (range[0] !== null && range[1] !== null) {
       onRangeChange && onRangeChange(range);
     }
   }, [range]);
+
+  if (!ctx.child && ctx.children) {
+    return <></>
+  }
 
   return <BaseLayout>
     <Grid container spacing={0}>

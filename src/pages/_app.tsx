@@ -5,7 +5,7 @@ import { ReactElement, ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Protected } from "@kidneed/containers";
 import { Guard } from "@kidneed/types";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, notification } from "antd";
 import FA from "antd/lib/locale/fa_IR";
 import { AppContext, appMachine } from "@kidneed/context";
 import { useInterpret } from "@xstate/react";
@@ -27,6 +27,10 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
   const getLayout = Component.getLayout ?? ((page) => page);
   const guard: Guard = Component.guard ?? (() => false);
+
+  notification.config({
+    placement: "bottomLeft",
+  });
 
   return (
     <AppContext.Provider value={{ appService }}>
