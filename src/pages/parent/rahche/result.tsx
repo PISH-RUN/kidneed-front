@@ -11,7 +11,7 @@ const ResultStep = () => {
   const rahche = router.query.id as string;
   const { data } = useApproaches(parseInt(rahche));
 
-  if (!data?.data) return;
+  if (!data?.data) return <></>;
 
   return (
     <div className="tw-p-10">
