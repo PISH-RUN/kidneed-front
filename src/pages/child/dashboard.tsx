@@ -17,6 +17,8 @@ import { useDashboard } from "../../core-team/api/dashboard";
 import { useContents } from "../../core-team/api/activity";
 import _ from "lodash";
 import { useRouter } from "next/router";
+import { POSTER_ORIGIN } from "../../core-team/constants";
+import { IoGameControllerOutline } from "react-icons/io5";
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
 
@@ -72,12 +74,43 @@ const typeColors = {
   "book": "#A084E1"
 };
 
-const typeIcons = {
-  "video": <VideoIcon />,
-  "audio": <MusicIcon />,
-  "activity": <ActivityIcon />,
-  "game": <GameIcon />,
-  "book": <HiOutlineBookOpen />
+const typeIcons: any = {
+  "video": VideoIcon,
+  "audio": MusicIcon,
+  "activity": ActivityIcon,
+  "game": GameIcon,
+  "book": HiOutlineBookOpen
+};
+
+const ItemPic = ({ content }: any) => {
+  const type = content?.attributes?.type;
+  const Icon = typeIcons[type];
+
+  const getPoster = (content: any) => {
+    let poster = content?.attributes?.meta?.verticalPoster && `${POSTER_ORIGIN}${content?.attributes?.meta?.verticalPoster[0].url}`;
+    poster = poster || content?.attributes?.meta?.img || content?.attributes?.meta?.poster;
+
+    return poster;
+  };
+
+  if (getPoster(content)) {
+    return <Box
+      sx={{
+        ...styles.cardImage,
+        backgroundImage: `url("${getPoster(content)}")`,
+        backgroundSize: "cover"
+      }}
+    />;
+  }
+
+  return (
+    <Box sx={styles.cardImage} className="tw-items-center tw-flex tw-justify-center">
+      {Icon && <Icon
+        className={`tw-text-gray-400 !tw-w-28 !tw-h-28 ${type !== "game" && "!tw-fill-transparent"}`}
+        style={{ stroke: "#8CA3A5" }}
+      />}
+    </Box>
+  );
 };
 
 const DataBox = ({ data }: any) => {
@@ -109,7 +142,8 @@ const DataBox = ({ data }: any) => {
   // @ts-ignore
   const color = typeColors[content1.activity.type];
   // @ts-ignore
-  const icon = typeIcons[content1.activity.type];
+  const Icon = typeIcons[content1.activity.type];
+  const type = content1?.attributes?.type;
 
   return <Box
     sx={{
@@ -122,21 +156,21 @@ const DataBox = ({ data }: any) => {
     }}
   >
     <Grid container spacing={5}>
-      <Stack sx={{ position: "absolute", right: -50, top: "20%" }} spacing={1}>
+      <Stack sx={{ position: "absolute", right: -50, top: "30%" }} spacing={1}>
         {/* @ts-ignore */}
-        <Box sx={{ ...styles.dataMenu, background: color }}>{icon}</Box>
+        <Box sx={{ ...styles.dataMenu, background: color }}>
+          {Icon &&
+            <Icon className={`tw-stroke-white !tw-w-16 !tw-h-16 ${type !== "game" && "!tw-fill-transparent"}`} />}
+        </Box>
         {/* @ts-ignore */}
         <Box sx={{ ...styles.dataMenu, background: "#FED150" }}>
           <Typography variant="h5" sx={{ color: "#fff", fontWeight: 700, mt: 0.5 }}>{duration}</Typography>
         </Box>
-        {/* @ts-ignore */}
-        <Box sx={{ ...styles.dataMenu, background: color }}><img src="/images/childImages/coins.png" /></Box>
       </Stack>
       <Grid item xs={6}>
         <Link href={data.url0 || "#"}>
           <Box textAlign="center">
-            {/* @ts-ignore */}
-            <Box sx={{ ...styles.cardImage, backgroundImage: `url("${content1?.attributes?.meta?.poster}")` }} />
+            <ItemPic content={content1} />
             <Button
               variant="contained" color="primary" sx={{ width: 220, height: 70, borderRadius: 6, marginTop: -5 }}
               size="large"
@@ -147,8 +181,7 @@ const DataBox = ({ data }: any) => {
       </Grid>
       <Grid item xs={6}>
         <Box textAlign="center">
-          {/* @ts-ignore */}
-          <Box sx={{ ...styles.cardImage, backgroundImage: `url("${content2.img1}")` }} />
+          <ItemPic content={content2} />
           <Button
             variant="contained" color="primary" sx={{ width: 220, height: 70, borderRadius: 6, marginTop: -5 }}
             size="large"
@@ -231,7 +264,7 @@ const Dashboard = () => {
 
               return _.map(dataItems, item => (
                 <DataBox data={item} />
-              ))
+              ));
             })}
           </Box>
         </Box>
