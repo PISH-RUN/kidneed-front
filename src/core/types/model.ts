@@ -52,6 +52,7 @@ export interface User extends Model {
   mobile: string;
   name?: string;
   email?: string;
+  unreadNotifications?: number
 }
 
 export interface Content extends Model {

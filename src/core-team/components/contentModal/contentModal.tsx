@@ -3,7 +3,7 @@ import { Button, Card, Form, Input, Modal, notification, Select } from "antd";
 import { Tab, Tabs } from "@mui/material";
 import jMoment from "moment-jalaali";
 import { ContentSearch } from "../contentSearch/contentSearch";
-import { useAddActivity } from "../../api/activity";
+import { useAddActivity, useDeleteActivity, useEditActivity } from "../../api/activity";
 import { useApp } from "@kidneed/hooks";
 
 const ContentForm = ({ time, activity, onClose }: any) => {
@@ -12,26 +12,61 @@ const ContentForm = ({ time, activity, onClose }: any) => {
   const [form] = Form.useForm();
   const { ctx } = useApp();
   const { mutateAsync: addActivity } = useAddActivity(ctx.child?.id);
-  const { mutateAsync: editActivity } = useAddActivity(ctx.child?.id);
+  const { mutateAsync: editActivity } = useEditActivity();
+  const { mutateAsync: deleteActivity } = useDeleteActivity();
 
   const handleSubmit = () => {
     form.validateFields().then(values => {
-      const request = isEdit ? editActivity : addActivity;
-      request({
-        ...values,
-        duration: tab === "video" ? 30 : undefined,
-        date: jMoment(time).format("YYYY-MM-DD")
-      }).then(() => {
-        notification.success({
-          message: "برنامه با موفقیت ثبت شد."
+      if (isEdit) {
+        const promises = [
+          editActivity({
+            id: activity[0].id,
+            content: values.content1.toString(),
+            duration: tab === "video" ? 30 : undefined,
+          }),
+          editActivity({
+            id: activity[1].id,
+            content: values.content2.toString(),
+            duration: tab === "video" ? 30 : undefined,
+          })
+        ]
+        Promise.all(promises).then(() => {
+          notification.success({
+            message: "برنامه با موفقیت ویرایش شد."
+          });
+          onClose(true);
+          form.resetFields();
         });
-        onClose(true);
-        form.resetFields();
-      });
+      } else {
+        addActivity({
+          ...values,
+          duration: tab === "video" ? 30 : undefined,
+          date: jMoment(time).format("YYYY-MM-DD")
+        }).then(() => {
+          notification.success({
+            message: "برنامه با موفقیت ثبت شد."
+          });
+          onClose(true);
+          form.resetFields();
+        });
+      }
     });
   };
 
-  activity[0] && console.log(activity[0].attributes?.content, form.getFieldValue("content1"));
+  const handleDelete = () => {
+    const promises = [
+      deleteActivity(activity[0].id),
+      deleteActivity(activity[1].id)
+    ]
+
+    Promise.all(promises).then(() => {
+      notification.success({
+        message: "برنامه با موفقیت حذف شد."
+      });
+      onClose(true);
+      form.resetFields();
+    });
+  }
 
   return (
     <>
@@ -59,7 +94,7 @@ const ContentForm = ({ time, activity, onClose }: any) => {
           <Form.Item label="محتوا اول" name="content1" initialValue={isEdit && activity[0].attributes?.content}>
             <ContentSearch type={tab} />
           </Form.Item>
-          <Form.Item label="محتوا دوم" name="content2" initialValue={isEdit && activity[1].attributes?.content}>
+          <Form.Item label="محتوا دوم" name="content2" initialValue={isEdit && activity[1] && activity[1].attributes?.content}>
             <ContentSearch type={tab} />
           </Form.Item>
         </div>
@@ -68,7 +103,9 @@ const ContentForm = ({ time, activity, onClose }: any) => {
             type="primary"
             htmlType="submit"
             className="tw-h-10 tw-w-32 tw-ml-5 tw-rounded-full tw-bg-blue-400"
-          >افزودن</Button>
+          >
+            {isEdit ? 'ویرایش' : 'افزودن'}
+          </Button>
           <Button
             className="tw-h-10 tw-w-32 tw-ml-5 tw-rounded-full"
             onClick={() => {
@@ -77,7 +114,7 @@ const ContentForm = ({ time, activity, onClose }: any) => {
             }}
           >لغو</Button>
           {isEdit &&
-            <Button type="primary" danger className="tw-h-10 tw-w-32 tw-ml-5 tw-rounded-full">حذف</Button>}
+            <Button onClick={handleDelete} type="primary" danger className="tw-h-10 tw-w-32 tw-ml-5 tw-rounded-full">حذف</Button>}
         </div>
       </Form>
     </>

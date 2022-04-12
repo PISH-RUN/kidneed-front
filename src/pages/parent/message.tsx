@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Guard } from "@kidneed/types";
 import ParentDashboardLayout from "layouts/parent-dashboard-layout";
 import { Avatar, Col, Input, Row, Select, Typography } from "antd";
 import { FiClock, FiCompass, FiInfo } from "react-icons/fi";
 import jMoment from "moment-jalaali";
-import { useNotification } from "../../core-team/api/notification";
+import { useNotification, useNotificationRead } from "../../core-team/api/notification";
 import { ApproachModal } from "../../core-team/components";
 import { useApproaches } from "../../core-team/api/approach";
+import { useApp } from "@kidneed/hooks";
 
 const types: any = {
   rahche: {
@@ -19,14 +20,20 @@ const types: any = {
     icon: <FiCompass />,
     label: "پاس گل"
   }
-}
+};
 
 const Message = () => {
   const [rahche, setRahche] = useState();
   const { data: rahcheData } = useApproaches(rahche);
+  const { fetchUser } = useApp();
   const { data } = useNotification();
+  const { mutateAsync: readAll } = useNotificationRead();
 
-  console.log(data);
+  useEffect(() => {
+    readAll().then(() => {
+      fetchUser();
+    });
+  }, []);
 
   return (
     <ParentDashboardLayout showChild="header">
@@ -69,17 +76,20 @@ const Message = () => {
                       {jMoment(notif?.attributes?.createdAt).format("jDD jMMMM - HH:mm")}
                     </div>
                   </div>
-                  <div className={`${type?.color} tw-text-white tw-w-28 tw-flex tw-items-center tw-justify-center tw-flex-col tw-cursor-pointer`} onClick={() => {
-                    if(notif?.attributes?.type === "rahche") {
-                      setRahche(notif?.attributes?.payload?.id);
-                    }
-                  }}>
+                  <div
+                    className={`${type?.color} tw-text-white tw-w-28 tw-flex tw-items-center tw-justify-center tw-flex-col tw-cursor-pointer`}
+                    onClick={() => {
+                      if (notif?.attributes?.type === "rahche") {
+                        setRahche(notif?.attributes?.payload?.id);
+                      }
+                    }}
+                  >
                     <FiCompass className="tw-text-4xl tw-mb-1" />
                     <span>{type?.label}</span>
                   </div>
                 </div>
               </Col>
-            )
+            );
           })}
         </Row>
       </div>

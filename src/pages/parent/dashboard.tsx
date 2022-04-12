@@ -32,14 +32,20 @@ import { useDashboard, useStats } from "../../core-team/api/dashboard";
 import { ActivityStats } from "../../core-team/components";
 import moment from "moment";
 import { useRouter } from "next/router";
+import { POSTER_ORIGIN } from "../../core-team/constants";
+import VideoIcon from "../../layouts/icons/video";
+import MusicIcon from "../../layouts/icons/music";
+import ActivityIcon from "../../layouts/icons/activity";
+import GameIcon from "../../layouts/icons/game";
+import { HiOutlineBookOpen } from "react-icons/hi";
 
 const titles: any = {
   "video": "تماشای فیلم",
   "game": "بازی",
   "book": "خواندن داستان",
   "audio": "شنیدن داستان",
-  "activity": "فعالیت عملی",
-}
+  "activity": "فعالیت عملی"
+};
 
 const Schedule = (props: any) => {
   const { sum, data, contents } = props;
@@ -58,7 +64,7 @@ const Schedule = (props: any) => {
         <Box>
           <Typography variant="h4">برنامه امروز</Typography>
           <Typography variant="h5" sx={{ color: "#8CA3A5", mt: 2 }}>
-            شامل مجموعا {moment.duration(sum, 'minute').humanize()} برنامه ریزی
+            شامل مجموعا {moment.duration(sum, "minute").humanize()} برنامه ریزی
           </Typography>
         </Box>
         <Box>
@@ -81,13 +87,12 @@ const Schedule = (props: any) => {
       <Grid container sx={{ mt: 5 }}>
         {data && _.map(_.flatten(_.values(data)), (item: any, index: number) => {
           const content = _.find(contents?.data, { id: parseInt(item.attributes?.content) });
-          const poster = content?.attributes?.meta?.poster;
 
           return (
             <Grid key={index} item xs={6} sx={{ mb: 3 }}>
               <Stack direction="row" alignItems="flex-start" spacing={3}>
-                <Box sx={{ width: 150 }}>
-                  <img src={poster} className="tw-rounded-xl tw-h-24" />
+                <Box sx={{ width: 80, height: 80 }}>
+                  <ItemPic content={content} type={item.attributes?.type} />
                 </Box>
                 <Box>
                   <Typography variant="body1">{titles[item.attributes?.type]}</Typography>
@@ -98,7 +103,7 @@ const Schedule = (props: any) => {
                 </Box>
               </Stack>
             </Grid>
-          )
+          );
         })}
       </Grid>
     </Paper>
@@ -114,6 +119,57 @@ const SideDashboard = () => {
 };
 
 const today: DateRange<Date> = [new Date(), new Date()];
+
+const typeIcons: any = {
+  "video": VideoIcon,
+  "audio": MusicIcon,
+  "activity": ActivityIcon,
+  "game": GameIcon,
+  "book": HiOutlineBookOpen
+};
+
+const styles = {
+  cardImage: {
+    backgroundSize: "cover",
+    backgroundColor: "#f0f0f0",
+    borderRadius: 4,
+    overflow: "hidden",
+    border: "none",
+    backgroundRepeat: "no-repeat",
+    cursor: "pointer"
+  }
+};
+
+const ItemPic = ({ content, type }: any) => {
+  const Icon = typeIcons[type];
+
+  const getPoster = (content: any) => {
+    let poster = content?.attributes?.meta?.verticalPoster && `${POSTER_ORIGIN}${content?.attributes?.meta?.verticalPoster[0].url}`;
+    poster = poster || content?.attributes?.meta?.img || content?.attributes?.meta?.poster;
+
+    return poster;
+  };
+
+  if (getPoster(content)) {
+    return <Box
+      className="tw-w-full tw-h-full"
+      sx={{
+        ...styles.cardImage,
+        backgroundImage: `url("${getPoster(content)}")`,
+        backgroundSize: "cover"
+      }}
+    />;
+  }
+
+  return (
+    <Box sx={styles.cardImage} className="tw-items-center tw-flex tw-justify-center tw-w-full tw-h-full tw-rounded-2xl">
+      {Icon && <Icon
+        className={`tw-text-gray-400 !tw-w-12 !tw-h-12 ${type !== "game" && "!tw-fill-transparent"}`}
+        style={{ stroke: "#8CA3A5" }}
+      />}
+    </Box>
+  );
+};
 
 const Dashboard = () => {
   const [range, setRange] = useState<DateRange<Date>>(today);

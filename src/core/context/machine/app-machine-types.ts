@@ -34,6 +34,11 @@ export type AddChildEvent = {
   child: Models.Child;
 };
 
+export type FetchUserEvent = {
+  type: "FETCH_USER";
+  user: Models.User;
+};
+
 export type ParentPassEvent = {
   type: "PARENT_PASS";
   child: Models.Child;
@@ -51,6 +56,7 @@ export type AppEvent =
   | LoggedInEvent
   | SelectChildEvent
   | AddChildEvent
+  | FetchUserEvent
   | ParentPassEvent
   | RetryEvent
   | LoggedOutEvent;

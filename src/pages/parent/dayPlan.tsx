@@ -215,7 +215,7 @@ const DayPlan = () => {
 
           return _.map(dataItems, (items: any) => {
             const content1 = _.find(contents?.data, i => i.id === parseInt(items[0].attributes.content));
-            const content2 = _.find(contents?.data, i => i.id === parseInt(items[1].attributes.content));
+            const content2 = items[1] ? _.find(contents?.data, i => i.id === parseInt(items[1].attributes.content)) : {};
             const contentTags: string[] = [];
 
             content1?.attributes?.movies?.data?.map((tag: any) => {
@@ -244,7 +244,7 @@ const DayPlan = () => {
                       className="tw-ml-4 tw-w-60 tw-h-72 tw-cursor-pointer"
                       onClick={() => setContent(items[1].attributes.content)}
                     >
-                      <ItemPic content={content2} type={items[1].attributes.type} />
+                      <ItemPic content={content2} type={items[1] && items[1].attributes.type} />
                     </div>
                   </div>
                   <div className="tw-flex-auto">

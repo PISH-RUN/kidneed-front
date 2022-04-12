@@ -139,3 +139,20 @@ export const useAddActivity = (childId?: number) =>
       data: { data }
     })
   );
+
+export const useEditActivity = () =>
+  useMutation(["edit-activity"], (data: any) =>
+    strapi.request<any>("put", `/activities/${data.id}`, {
+      data: {
+        data: {
+          ...data,
+          id: undefined
+        }
+      }
+    })
+  );
+
+export const useDeleteActivity = () =>
+  useMutation(["delete-activity"], (id: number) =>
+    strapi.request<any>("delete", `/activities/${id}`)
+  );

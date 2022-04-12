@@ -1,4 +1,5 @@
 import { useSelector } from "@xstate/react";
+import { Api } from "@kidneed/services";
 import { AppContext } from "@kidneed/context";
 import { Models } from "@kidneed/types";
 import { useCallback, useContext } from "react";
@@ -34,6 +35,14 @@ export default function useApp() {
     [send]
   );
 
+  const fetchUser = useCallback(
+    async () => {
+      const user = await Api.me();
+      send("FETCH_USER", { user });
+    },
+    [send]
+  );
+
   return {
     ctx,
     login,
@@ -41,5 +50,6 @@ export default function useApp() {
     passParent,
     selectChild,
     addChild,
+    fetchUser
   };
 }

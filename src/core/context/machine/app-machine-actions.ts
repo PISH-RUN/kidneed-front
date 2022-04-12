@@ -4,9 +4,10 @@ import {
   AddChildEvent,
   BootstrapDone,
   ChildrenFetchDone,
+  FetchUserEvent,
   LoggedInContext,
   PartialAppContext,
-  SelectChildEvent,
+  SelectChildEvent
 } from "./app-machine-types";
 
 export async function bootstrap() {
@@ -26,6 +27,12 @@ export async function fetchChildren(ctx: PartialAppContext) {
 export const bootstrapDone = assign(
   (_: PartialAppContext, event: BootstrapDone) => ({
     user: event.data.user,
+  })
+);
+
+export const fetchUser = assign(
+  (_: PartialAppContext, event: FetchUserEvent) => ({
+    user: event.user,
   })
 );
 

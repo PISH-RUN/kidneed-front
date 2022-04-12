@@ -12,8 +12,8 @@ import {
   childAdded,
   childrenFetched,
   childSelected,
-  fetchChildren,
-  logout,
+  fetchChildren, fetchUser,
+  logout
 } from "./app-machine-actions";
 
 export const appMachine = createMachine<PartialAppContext, AppEvent, AppState>({
@@ -96,6 +96,7 @@ export const appMachine = createMachine<PartialAppContext, AppEvent, AppState>({
       on: {
         LOGGED_OUT: { target: "guest", actions: logout },
         ADD_CHILD: { target: ".child", actions: childAdded },
+        FETCH_USER: { target: ".parent", actions: fetchUser },
         PARENT_PASS: { target: ".parent" },
       },
     },

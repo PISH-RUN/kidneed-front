@@ -92,6 +92,7 @@ const menu = [
     icon: <BulbIcon />
   }, {
     title: "پیام ها",
+    type: "notification",
     link: "/parent/message",
     icon: <ChatBubbleIcon />
   }, {
@@ -103,6 +104,7 @@ const menu = [
 
 const NavBar = () => {
   const { pathname, ...router } = useRouter();
+  const { ctx } = useApp();
 
   // @ts-ignore
   const isSelectedMenu = (link) => {
@@ -127,7 +129,11 @@ const NavBar = () => {
               sx={{ ...styles.navButton, ...(isSelectedMenu(m.link) ? styles.activeNavButton : {}) }}
               variant={isSelectedMenu(m.link) ? "contained" : "text"}
               startIcon={m.icon}
-            >{m.title}</Button>
+            >
+              {m.title}
+              {(m.type === "notification" && !!ctx?.user?.unreadNotifications && ctx?.user?.unreadNotifications > 0) &&
+                <span className="tw-text-sm tw-rounded-full tw-bg-orange-500 tw-w-8 tw-h-8 tw-flex tw-items-center tw-justify-center tw-mr-4">{ctx?.user?.unreadNotifications}</span>}
+            </Button>
           </Link>)}
       </Box>
     </Box>
@@ -233,7 +239,7 @@ export default function ParentDashboardLayout(props: ParentDashboardLayoutProps)
         <NavBar />
       </Grid>
       <Grid item xs>
-        {(Header || showChild === "header") && <Box className="tw-flex tw-justify-between tw-pt-5 tw-items-center">
+        {(Header || showChild === "header") && <Box className={`tw-flex tw-pt-5 tw-items-center ${!!Header && showChild === 'header' ? 'tw-justify-between' : 'tw-justify-end'}`}>
           {Header && Header}
           {showChild === "header" && <Box sx={{ minWidth: 250 }}><ChildSelector /></Box>}
         </Box>}
