@@ -2,7 +2,7 @@ import ParentDashboardLayout from "layouts/parent-dashboard-layout";
 import React, { useEffect, useState } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { openGuard } from "@kidneed/utils";
-import { Button, Card, Tag } from "antd";
+import { Avatar, Button, Card, Tag } from "antd";
 import ContentModal from "core-team/components/contentModal";
 import {
   useActivityGlance,
@@ -179,13 +179,15 @@ const DayPlan = () => {
           return (
             <Card key={type} className="tw-w-full tw-mb-4 tw-rounded-3xl">
               <div className="tw-flex">
-                <div className="tw-ml-4 tw-cursor-pointer" onClick={() => setContent(items[0].attributes.content)}>
-                  <img className="tw-w-60 tw-rounded-2xl" src={getPoster(content1)} />
+                <div className="tw-flex tw-flex-nowrap">
+                  <div className="tw-ml-4 tw-w-60 tw-h-72 tw-cursor-pointer" onClick={() => setContent(items[0].attributes.content)}>
+                    <Avatar className="tw-w-full tw-h-full tw-rounded-2xl" src={getPoster(content1)} />
+                  </div>
+                  <div className="tw-ml-4 tw-w-60 tw-h-72 tw-cursor-pointer" onClick={() => setContent(items[1].attributes.content)}>
+                    <Avatar className="tw-w-full tw-h-full tw-rounded-2xl" src={getPoster(content2)} />
+                  </div>
                 </div>
-                <div className="tw-cursor-pointer" onClick={() => setContent(items[1].attributes.content)}>
-                  <img className="tw-w-60 tw-rounded-2xl" src={getPoster(content2)} />
-                </div>
-                <div>
+                <div className="tw-flex-auto">
                   <div className="tw-pt-5 tw-pr-4">
                     <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">نوع محتوا:</span>
                     <span className="tw-text-xl tw-font-bold">{typeNames[items[0].attributes.type]}</span>

@@ -19,6 +19,7 @@ const ContentForm = ({ time, activity, onClose }: any) => {
       const request = isEdit ? editActivity : addActivity;
       request({
         ...values,
+        duration: tab === "video" ? 30 : undefined,
         date: jMoment(time).format("YYYY-MM-DD")
       }).then(() => {
         notification.success({

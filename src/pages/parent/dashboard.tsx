@@ -31,6 +31,7 @@ import jMoment from "moment-jalaali";
 import { useDashboard, useStats } from "../../core-team/api/dashboard";
 import { ActivityStats } from "../../core-team/components";
 import moment from "moment";
+import { useRouter } from "next/router";
 
 const titles: any = {
   "video": "تماشای فیلم",
@@ -42,6 +43,7 @@ const titles: any = {
 
 const Schedule = (props: any) => {
   const { sum, data, contents } = props;
+  const router = useRouter();
   const { ctx, selectChild } = useApp();
 
   useEffect(() => {
@@ -64,6 +66,7 @@ const Schedule = (props: any) => {
             variant="outlined"
             size="large"
             startIcon={<EditIcon />}
+            onClick={() => router.push("/parent/dayPlan")}
             sx={{
               color: "#8CA3A5",
               borderColor: "#8CA3A5!important",
@@ -77,7 +80,7 @@ const Schedule = (props: any) => {
       </Stack>
       <Grid container sx={{ mt: 5 }}>
         {data && _.map(_.flatten(_.values(data)), (item: any, index: number) => {
-          const content = _.find(contents?.data, { id: parseInt(item.content) });
+          const content = _.find(contents?.data, { id: parseInt(item.attributes?.content) });
           const poster = content?.attributes?.meta?.poster;
 
           return (
@@ -87,7 +90,7 @@ const Schedule = (props: any) => {
                   <img src={poster} className="tw-rounded-xl tw-h-24" />
                 </Box>
                 <Box>
-                  <Typography variant="body1">{titles[item.type]}</Typography>
+                  <Typography variant="body1">{titles[item.attributes?.type]}</Typography>
                   <Typography variant="caption" sx={{ color: "#8CA3A5", mt: 1 }}>
                     {" "}
                     {content?.attributes?.title}
@@ -98,25 +101,6 @@ const Schedule = (props: any) => {
           )
         })}
       </Grid>
-      <Box textAlign="center">
-        <Button
-          variant="outlined"
-          startIcon={<AddIcon />}
-          fullWidth
-          size="large"
-          sx={{
-            borderRadius: 8,
-            height: 56,
-            mt: 2,
-            color: "#8CA3A5",
-            borderColor: "#8CA3A5",
-            maxWidth: "60%",
-            margin: "16px auto 0"
-          }}
-        >
-          افزودن برنامه ای جدید
-        </Button>
-      </Box>
     </Paper>
   );
 };
@@ -135,10 +119,10 @@ const Dashboard = () => {
   const [range, setRange] = useState<DateRange<Date>>(today);
   const { ctx } = useApp();
   const { data } = useDashboard(ctx.child?.id);
-  const { data: contents } = useContents(_.map(_.flatten(_.values(data)), i => parseInt(i.content)));
+  const { data: contents } = useContents(_.map(_.flatten(_.values(data?.data)), i => parseInt(i?.attributes?.content)));
   const { data: stats, isLoading } = useActivityStats(range, ctx.child?.id);
 
-  const sum = _.sumBy(_.flatten(_.values(data)), (i: any) => i.attributes?.duration);
+  const sum = _.sumBy(_.flatten(_.values(data?.data)), (i: any) => i.attributes?.duration);
 
   return (
     <ParentDashboardLayout SideComponent={<SideDashboard />} showChild showRange onRangeChange={setRange}>
@@ -146,7 +130,7 @@ const Dashboard = () => {
         سلام {ctx?.user?.name}! 👋
       </Typography>
       <ActivityStats stats={stats?.data} loading={isLoading} />
-      <Schedule sum={sum} data={data} contents={contents} />
+      <Schedule sum={sum} data={data?.data} contents={contents} />
     </ParentDashboardLayout>
   );
 };

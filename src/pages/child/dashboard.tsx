@@ -16,7 +16,6 @@ import jMoment from "moment-jalaali";
 import { useDashboard } from "../../core-team/api/dashboard";
 import { useContents } from "../../core-team/api/activity";
 import _ from "lodash";
-import { PLAYERS_URL } from "../../core-team/constants";
 import { useRouter } from "next/router";
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
@@ -65,35 +64,12 @@ const styles = {
   }
 };
 
-const data = [];
-// const data = [{
-//   type: 'video',
-//   time: '10:00',
-//   img0: '/images/childImages/d0.png',
-//   img1: '/images/childImages/d1.png',
-// }, {
-//   type: 'music',
-//   time: '10:00',
-//   img0: '/images/childImages/d0.png',
-//   img1: '/images/childImages/d1.png',
-// }, {
-//   type: 'activity',
-//   time: '10:00',
-//   img0: '/images/childImages/d0.png',
-//   img1: '/images/childImages/d1.png',
-// }, {
-//   type: 'game',
-//   time: '10:00',
-//   img0: '/images/childImages/d0.png',
-//   img1: '/images/childImages/d1.png',
-// }]
-
 const typeColors = {
   "video": "#57ABF4",
   "audio": "#EF5DA8",
   "activity": "#8BDA92",
   "game": "#FF5C00",
-  "book": "#8BDA92"
+  "book": "#A084E1"
 };
 
 const typeIcons = {
@@ -106,16 +82,28 @@ const typeIcons = {
 
 const DataBox = ({ data }: any) => {
   const router = useRouter();
-  const { data: contents } = useContents(_.map(data, "content"));
+  const { data: contents } = useContents(_.map(data, i => i.attributes?.content));
 
   if (!data[0]) return null;
 
-  const duration = _.sumBy(data, (i: any) => i.duration)
+  const duration = _.sumBy(data, (i: any) => i.attributes?.duration);
 
-  const content1 = { activity: data[0], ...(contents?.data?.find((c: any) => c.id === parseInt(data[0].content)) || {}) };
+  const content1 = {
+    activity: {
+      id: data[0].id,
+      ...data[0].attributes
+    },
+    ...(contents?.data?.find((c: any) => c.id === parseInt(data[0].attributes?.content)) || {})
+  };
   const source1 = content1?.attributes?.meta?.source && content1?.attributes?.meta?.source[0].src;
 
-  const content2 = { activity: data[1], ...(contents?.data?.find((c: any) => c.id === parseInt(data[1].content)) || {}) };
+  const content2 = {
+    activity: {
+      id: data[0].id,
+      ...data[0].attributes
+    },
+    ...(contents?.data?.find((c: any) => c.id === parseInt(data[1].attributes?.content)) || {})
+  };
   const source2 = content2?.attributes?.meta?.source && content2?.attributes?.meta?.source[0].src;
 
   // @ts-ignore
@@ -172,16 +160,12 @@ const DataBox = ({ data }: any) => {
   </Box>;
 };
 
-const mediaUrlType = {
-  video: "video",
-  book: "pdf",
-  audio: "audio"
-};
-
 const Dashboard = () => {
   const [showUserSelect, setShowUseSelect] = useState(false);
   const { ctx, selectChild } = useApp();
-  const { data: result } = useDashboard(ctx?.child?.id);
+  const { data } = useDashboard(ctx?.child?.id);
+
+  const result = _.groupBy(data?.data, (i: any) => i.attributes?.type);
 
   return <BaseLayout>
     <>
@@ -242,11 +226,13 @@ const Dashboard = () => {
 
         <Box sx={{ position: "relative", zIndex: 12 }}>
           <Box sx={{ maxWidth: 800, m: "300px auto 0" }}>
-            {result?.activity?.length > 0 && <DataBox data={result?.activity} />}
-            {result?.video?.length > 0 && <DataBox data={result?.video} />}
-            {result?.game?.length > 0 && <DataBox data={result?.game} />}
-            {result?.book?.length > 0 && <DataBox data={result?.book} />}
-            {result?.audio?.length > 0 && <DataBox data={result?.audio} />}
+            {_.map(result, (items, type) => {
+              const dataItems = _.chunk(items, 2);
+
+              return _.map(dataItems, item => (
+                <DataBox data={item} />
+              ))
+            })}
           </Box>
         </Box>
       </Box>
@@ -357,7 +343,7 @@ const Clock = () => {
 
 const LoginDialog = ({ open, onClose }: any) => {
   const [inputValue, setInputValue] = useState("");
-  const [numbers, setNumbers] = useState([Math.floor(Math.random() * 10) + 1, Math.floor(Math.random() * 10) + 1]);
+  const [numbers] = useState([Math.floor(Math.random() * 10) + 1, Math.floor(Math.random() * 10) + 1]);
 
   const onSubmit = () => {
     if (inputValue === eval(numbers.join("*")).toString()) {
