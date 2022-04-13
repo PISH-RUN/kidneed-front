@@ -1,4 +1,6 @@
 import ParentDashboardLayout from "layouts/parent-dashboard-layout";
+import _ from "lodash";
+import Image from "next/image";
 import { Guard } from "@kidneed/types";
 import { ActivityStats, BarChart, MonthPicker, PieChart, PolarAreaChart } from "core-team/components";
 import { useState } from "react";
@@ -8,7 +10,7 @@ import { Button, Divider } from "antd";
 import { useStats } from "../../core-team/api/dashboard";
 import { useApp } from "@kidneed/hooks";
 import { useGrowthFields, useGrowthSubFields, useQuizProgression, useQuizResult } from "../../core-team/api/question";
-import _ from "lodash";
+import pattern from "public/images/pattern.png"
 
 const today = jMoment();
 
@@ -143,15 +145,17 @@ const WorkView = () => {
                 <div className="tw-flex tw-ml-6">
                   <span className="tw-w-6 tw-h-6 tw-bg-blue-600 tw-ml-3" />
                   <div>
-                    <Typography variant="body1" className="!tw-text-sm">نتایج آزمون اول</Typography>
-                    <Typography variant="caption" className="!tw-text-gray-400">آزمون دوره اول</Typography>
+                    <Typography variant="body1" className="!tw-text-sm">نتایج آزمون اول ماه</Typography>
+                    <Typography variant="caption" className="tw-text-sm !tw-text-gray-400">آزمون دوره اول</Typography>
                   </div>
                 </div>
                 <div className="tw-flex">
-                  <span className="tw-w-6 tw-h-6 tw-bg-pink-600 tw-ml-3" />
+                  <div className="tw-w-6 tw-h-6 tw-ml-3">
+                    <Image src={pattern} className="tw-flex" />
+                  </div>
                   <div>
-                    <Typography variant="body1" className="tw-text-sm">نتایج آزمون اول</Typography>
-                    <Typography variant="caption" className="tw-text-sm">آزمون دوره اول</Typography>
+                    <Typography variant="body1" className="!tw-text-sm">نتایج آزمون آخر ماه</Typography>
+                    <Typography variant="caption" className="tw-text-sm !tw-text-gray-400">آزمون دوره اول</Typography>
                   </div>
                 </div>
               </div>
