@@ -6,9 +6,8 @@ import VideoIcon from "layouts/icons/video";
 import MusicIcon from "layouts/icons/music";
 import ActivityIcon from "layouts/icons/activity";
 import GameIcon from "layouts/icons/game";
-import { HiOutlineBookOpen } from "react-icons/hi";
+import BookIcon from "../../layouts/icons/book";
 import LoginIcon from "layouts/icons/login";
-import LockIcon from "layouts/icons/lock";
 import { useApp } from "@kidneed/hooks";
 import Link from "next/link";
 import { Guard, Models } from "@kidneed/types";
@@ -18,7 +17,6 @@ import { useContents } from "../../core-team/api/activity";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import { POSTER_ORIGIN } from "../../core-team/constants";
-import { IoGameControllerOutline } from "react-icons/io5";
 import { Input, Tabs } from "antd";
 import { useVerifyPassword } from "../../core-team/api/user";
 
@@ -81,7 +79,7 @@ const typeIcons: any = {
   "audio": MusicIcon,
   "activity": ActivityIcon,
   "game": GameIcon,
-  "book": HiOutlineBookOpen
+  "book": BookIcon
 };
 
 const ItemPic = ({ content }: any) => {

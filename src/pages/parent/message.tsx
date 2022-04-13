@@ -8,6 +8,7 @@ import { useNotification, useNotificationRead } from "../../core-team/api/notifi
 import { ApproachModal } from "../../core-team/components";
 import { useApproaches } from "../../core-team/api/approach";
 import { useApp } from "@kidneed/hooks";
+import { useRouter } from "next/router";
 
 const types: any = {
   rahche: {
@@ -30,6 +31,7 @@ const types: any = {
 const Message = () => {
   const [rahche, setRahche] = useState();
   const { data: rahcheData } = useApproaches(rahche);
+  const router = useRouter();
   const { fetchUser } = useApp();
   const { data } = useNotification();
   const { mutateAsync: readAll } = useNotificationRead();
@@ -86,6 +88,9 @@ const Message = () => {
                     onClick={() => {
                       if (notif?.attributes?.type === "rahche") {
                         setRahche(notif?.attributes?.payload?.id);
+                      }
+                      if (notif?.attributes?.type === "endOfMonthQuiz") {
+                        router.push('/parent/quiz')
                       }
                     }}
                   >

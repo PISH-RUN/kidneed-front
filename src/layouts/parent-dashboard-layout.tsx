@@ -83,10 +83,6 @@ const menu = [
     link: "/parent/workView",
     icon: <TelescopeIcon />
   }, {
-    title: "بچه زرنگ",
-    link: "/parent/dashboard3",
-    icon: <GiftIcon />
-  }, {
     title: "راه چه",
     link: "/parent/rahche",
     icon: <BulbIcon />

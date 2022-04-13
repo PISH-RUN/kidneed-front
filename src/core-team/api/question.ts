@@ -38,3 +38,34 @@ export const useSubmitSystemQuiz = () =>
       }
     }
   }));
+
+export const useGrowthFields = () =>
+  useQuery(["growth-fields"], () =>
+    strapi
+      .request<any>("get", `/growth-fields`)
+  );
+
+
+export const useGrowthSubFields = () =>
+  useQuery(["growth-subfields"], () =>
+    strapi
+      .request<any>("get", `/growth-subfields`)
+  );
+
+export const useQuizResult = (childId?: number) =>
+  useQuery(["quiz-result", childId], () =>
+      strapi
+        .request<any>("get", `/children/${childId}/growth-field-result`),
+    {
+      enabled: !!childId
+    }
+  );
+
+export const useQuizProgression = (childId?: number) =>
+  useQuery(["quiz-progression", childId], () =>
+      strapi
+        .request<any>("get", `/children/${childId}/growth-progression`),
+    {
+      enabled: !!childId
+    }
+  );

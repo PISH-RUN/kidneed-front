@@ -12,22 +12,11 @@ import {
 } from "@mui/material";
 import _ from "lodash";
 import ParentDashboardLayout from "layouts/parent-dashboard-layout";
-import Image from "next/image";
-import ImageCard1 from "public/images/parentCard/img1.png";
-import ImageCard2 from "public/images/parentCard/img2.png";
-import ImageCard3 from "public/images/parentCard/img3.png";
 import EditIcon from "layouts/icons/edit";
-import PsImage1 from "public/images/temp/ps1.png";
-import PsImage2 from "public/images/temp/ps2.png";
-import PsImage3 from "public/images/temp/ps3.png";
-import AddIcon from "layouts/icons/add";
-import AvatarWoman from "public/images/avatar-woman.png";
-import ArrowDown from "layouts/icons/arrow-down";
 import { Guard } from "@kidneed/types";
 import React, { useEffect, useState } from "react";
 import { DateRange } from "@mui/lab";
 import { useActivity, useActivityStats, useContents } from "../../core-team/api/activity";
-import jMoment from "moment-jalaali";
 import { useDashboard, useStats } from "../../core-team/api/dashboard";
 import { ActivityStats } from "../../core-team/components";
 import moment from "moment";
@@ -37,7 +26,7 @@ import VideoIcon from "../../layouts/icons/video";
 import MusicIcon from "../../layouts/icons/music";
 import ActivityIcon from "../../layouts/icons/activity";
 import GameIcon from "../../layouts/icons/game";
-import { HiOutlineBookOpen } from "react-icons/hi";
+import BookIcon from "../../layouts/icons/book";
 
 const titles: any = {
   "video": "تماشای فیلم",
@@ -118,7 +107,7 @@ const typeIcons: any = {
   "audio": MusicIcon,
   "activity": ActivityIcon,
   "game": GameIcon,
-  "book": HiOutlineBookOpen
+  "book": BookIcon
 };
 
 const styles = {

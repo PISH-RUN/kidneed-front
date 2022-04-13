@@ -38,10 +38,10 @@ export const useStats = (date: [Date | Moment | null, Date | Moment | null], chi
   const end = jMoment(date[1]).endOf("day").format("YYYY-MM-DD");
 
   return useQuery(["stats", child, start, end], () =>
-      strapi.request<any>("post", `/dashboard/${child}/stats`, {
-        data: {
-          start,
-          end
+      strapi.request<any>("get", `/children/${child}/stats`, {
+        params: {
+          from: start,
+          to: end
         }
       }),
     {

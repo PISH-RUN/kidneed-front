@@ -22,7 +22,7 @@ import VideoIcon from "../../layouts/icons/video";
 import MusicIcon from "../../layouts/icons/music";
 import ActivityIcon from "../../layouts/icons/activity";
 import GameIcon from "../../layouts/icons/game";
-import { HiOutlineBookOpen } from "react-icons/hi";
+import BookIcon from "../../layouts/icons/book";
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
 
@@ -136,7 +136,7 @@ const typeIcons: any = {
   "audio": MusicIcon,
   "activity": ActivityIcon,
   "game": GameIcon,
-  "book": HiOutlineBookOpen
+  "book": BookIcon
 };
 
 const ItemPic = ({ content, type }: any) => {
