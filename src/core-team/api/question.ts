@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from "react-query";
 import { strapi } from "@kidneed/services";
 
-export const useQuiz = (way?: string, childId?: number) =>
+export const useQuiz = (way?: string, childId?: number, type: string = "startOfMonth") =>
   useQuery(["questions", childId], () =>
       strapi
-        .request<any>("get", `/children/${childId}/quiz?type=startOfMonth`),
+        .request<any>("get", `/children/${childId}/quiz?type=${type}`),
     {
       enabled: way !== undefined && !!childId
     }

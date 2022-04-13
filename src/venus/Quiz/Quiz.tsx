@@ -9,11 +9,11 @@ import styles from "./Quiz.module.css";
 import { useQuestions, useQuiz, useSubmitQuiz, useSubmitSystemQuiz } from "core-team/api/question";
 import _ from "lodash";
 
-export const Quiz: React.FC<{ way?: string, childId?: number }> = (props) => {
+export const Quiz: React.FC<{ way?: string, childId?: number, type?: string }> = (props) => {
   const router = useRouter();
   const { mutateAsync: submitQuiz } = useSubmitQuiz();
   const { mutateAsync: submitSystemQuiz } = useSubmitSystemQuiz();
-  const { data: quiz } = useQuiz(props.way, props.childId);
+  const { data: quiz } = useQuiz(props.way, props.childId, props.type);
   const { data: questions } = useQuestions(props.way, props.childId);
 
   const data = props.way ? quiz : questions;
@@ -23,7 +23,7 @@ export const Quiz: React.FC<{ way?: string, childId?: number }> = (props) => {
       const request = props.way === undefined ? submitSystemQuiz : submitQuiz;
       request({
         childId: props.childId,
-        type: "startOfMonth",
+        type: props.type || "startOfMonth",
         data: _.map(values, (val: string, key: string) => ({
           question: parseInt(key),
           value: val

@@ -2,7 +2,7 @@ import { useSelector } from "@xstate/react";
 import { Api } from "@kidneed/services";
 import { AppContext } from "@kidneed/context";
 import { Models } from "@kidneed/types";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useEffect } from "react";
 
 export default function useApp() {
   const { appService } = useContext(AppContext);
@@ -47,6 +47,12 @@ export default function useApp() {
     },
     [send]
   );
+
+  useEffect(() => {
+    if (!ctx.child && ctx.children) {
+      selectChild(ctx.children[0]);
+    }
+  }, [ctx]);
 
   return {
     ctx,

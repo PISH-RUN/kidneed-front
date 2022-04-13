@@ -19,6 +19,11 @@ const types: any = {
     color: "tw-bg-green-500",
     icon: <FiCompass />,
     label: "پاس گل"
+  },
+  endOfMonthQuiz: {
+    color: "tw-bg-orange-500",
+    icon: <FiCompass />,
+    label: "آزمون آخر ماه"
   }
 };
 

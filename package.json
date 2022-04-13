@@ -26,6 +26,8 @@
     "react-dom": "17.0.2",
     "react-hook-form": "^7.25.3",
     "react-icons": "^4.3.1",
+    "react-player": "^2.10.0",
+    "react-player-circle-controls": "^0.3.0",
     "react-query": "^3.34.12",
     "recoil": "^0.6.1",
     "strapi-sdk-js": "^2.1.5",

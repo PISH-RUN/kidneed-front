@@ -132,7 +132,7 @@ const NavBar = () => {
             >
               {m.title}
               {(m.type === "notification" && !!ctx?.user?.unreadNotifications && ctx?.user?.unreadNotifications > 0) &&
-                <span className="tw-text-sm tw-rounded-full tw-bg-orange-500 tw-w-8 tw-h-8 tw-flex tw-items-center tw-justify-center tw-mr-4">{ctx?.user?.unreadNotifications}</span>}
+                <span className="tw-text-sm tw-rounded-full tw-text-white tw-bg-orange-500 tw-w-8 tw-h-8 tw-flex tw-items-center tw-justify-center tw-mr-4">{ctx?.user?.unreadNotifications}</span>}
             </Button>
           </Link>)}
       </Box>
@@ -226,16 +226,7 @@ const ChildSelector = () => {
 export default function ParentDashboardLayout(props: ParentDashboardLayoutProps) {
   const { children, SideComponent, showChild, showRange, onRangeChange, Header, bp, bd } = props;
   const [range, setRange] = useState<DateRange<Date>>(today);
-
-  const { ctx, selectChild } = useApp();
-
-  console.log(ctx.children);
-
-  useEffect(() => {
-    if (!ctx.child && ctx.children) {
-      selectChild(ctx.children[0]);
-    }
-  }, [ctx]);
+  const { ctx } = useApp();
 
   useEffect(() => {
     if (range[0] !== null && range[1] !== null) {
