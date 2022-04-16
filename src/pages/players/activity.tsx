@@ -7,16 +7,20 @@ import { useContent, useUpdateProgress } from "core-team/api/activity";
 
 const Activity = () => {
   const { query, push } = useRouter();
-  const id = query.id;
+  const { id, child } = query;
   const { data: content, isLoading } = useContent(parseInt(id as string));
   const { mutateAsync: updateProgressRequest } = useUpdateProgress();
 
   const poster = content?.data?.attributes?.meta?.poster;
 
   const handleFinish = () => {
-    updateProgressRequest({ id, duration: content?.data?.attributes?.duration }).then(() => {
+    if (content?.data?.attributes?.duration && content?.data?.attributes?.duration > 0) {
+      updateProgressRequest({ id, duration: content?.data?.attributes?.duration }).then(() => {
+        push("/child/dashboard");
+      });
+    } else {
       push("/child/dashboard");
-    })
+    }
   };
 
   return (
@@ -44,16 +48,25 @@ const Activity = () => {
             </div>
             <div>
               <video controls className="tw-w-full tw-h-96">
-                <source src={content?.data?.attributes?.attachments?.data && `https://${content?.data?.attributes?.attachments?.data[0].attributes?.url}`} type="video/mp4" />
+                <source
+                  src={content?.data?.attributes?.attachments?.data && `https://${content?.data?.attributes?.attachments?.data[0].attributes?.url}`}
+                  type="video/mp4"
+                />
                 Your browser does not support the video tag.
               </video>
             </div>
-            <br/>
-            <br/>
-            <div className="tw-flex tw-justify-center tw-w-full">
-              <Button variant="outlined" className="!tw-rounded-full tw-w-40 !tw-ml-5" onClick={() => push('/child/dashboard')}>علاقه ندارم</Button>
-              <Button variant="contained" className="!tw-rounded-full tw-w-40" onClick={handleFinish}>بازی کردم</Button>
-            </div>
+            <br />
+            <br />
+            {child === "true" &&
+              <div className="tw-flex tw-justify-center tw-w-full">
+                <Button
+                  variant="outlined"
+                  className="!tw-rounded-full tw-w-40 !tw-ml-5"
+                  onClick={() => push("/child/dashboard")}
+                >علاقه ندارم</Button>
+                <Button variant="contained" className="!tw-rounded-full tw-w-40" onClick={handleFinish}>بازی
+                  کردم</Button>
+              </div>}
           </Box>
         </Box>
       )}

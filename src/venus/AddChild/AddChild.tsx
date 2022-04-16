@@ -21,9 +21,6 @@ export const AddChild: React.FC<{
 
   const onFinish = (values: any) => {
     setLoading(true);
-    console.log(values);
-    setLoading(false)
-    return;
     addChildRequest({
       data: values,
       age: values.age

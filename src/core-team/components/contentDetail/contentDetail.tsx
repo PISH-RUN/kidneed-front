@@ -33,13 +33,13 @@ export const ContentDetail = (props: any) => {
     source = source ? source : content?.attributes?.srcFile;
 
     if (playerType === "video" && content?.attributes?.attachments?.data)
-      router.push(`/players/video?url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`);
+      window.open(`${location.origin}/players/video?url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, '_blank');
     else if (playerType === "activity")
-      router.push(`/players/activity?id=${content.id}`);
+      window.open(`/players/activity?id=${content.id}`, '_blank');
     else if (playerType === "game")
-      router.push(`/players/${playerType}?url=${encodeURIComponent(content?.attributes?.sourceUrl)}`);
+      window.open(`/players/${playerType}?url=${encodeURIComponent(content?.attributes?.sourceUrl)}`, '_blank');
     else if (source)
-      router.push(`/players/${playerType}?url=${encodeURIComponent(source)}`);
+      window.open(`/players/${playerType}?url=${encodeURIComponent(source)}`, '_blank');
   };
 
   return (

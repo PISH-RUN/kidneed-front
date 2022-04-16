@@ -28,7 +28,7 @@ strapi.axios.interceptors.request.use(
 strapi.axios.interceptors.response.use(
   (response) => Promise.resolve(response),
   (error) => {
-    if ((error?.request && !error?.request?.headers?.Authorization) || (error?.response?.status === 401 && error?.response?.status === 403)) {
+    if ((error?.config && !error?.config?.headers?.Authorization) || (error?.response?.status === 401 && error?.response?.status === 403)) {
       if(!location.href.includes("/login")) {
         return location.href = "/login";
       }

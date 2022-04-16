@@ -1,10 +1,11 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import moment, { Moment } from "moment";
 import { strapi } from "@kidneed/services";
 import jMoment from "moment-jalaali";
 import axios from "axios";
 import qs from "qs";
 import { DAPI_URL } from "../constants";
+import { useApp } from "@kidneed/hooks";
 
 export const useTodayActivity = (child?: number, date = moment()) =>
   useQuery(["activity", child, date.startOf("day").format("YYYY-MM-DD")], () =>
@@ -87,7 +88,7 @@ export const useContents = (ids?: number[]) => {
 export const useSearchContents = () => useMutation(["contents-search"], ({ search, type }: any) => {
     const query = qs.stringify({
       populate: "*",
-      sort: ['title:asc'],
+      sort: ["title:asc"],
       filters: {
         type,
         title: {
@@ -133,26 +134,49 @@ export const useActivity = (date: [Date | Moment | null, Date | Moment | null], 
   );
 };
 
-export const useAddActivity = (childId?: number) =>
-  useMutation(["create-activity", childId], (data: any) =>
-    strapi.request<any>("post", `/children/${childId}/activities`, {
-      data: { data }
-    })
-  );
-
-export const useEditActivity = () =>
-  useMutation(["edit-activity"], (data: any) =>
-    strapi.request<any>("put", `/activities/${data.id}`, {
-      data: {
-        data: {
-          ...data,
-          id: undefined
-        }
+export const useAddActivity = (childId?: number) => {
+  const queryClient = useQueryClient();
+  return useMutation(["create-activity", childId], (data: any) =>
+      strapi.request<any>("post", `/children/${childId}/activities`, {
+        data: { data }
+      }),
+    {
+      onSuccess: () => {
+        queryClient.refetchQueries(["activity-glance", childId]);
       }
-    })
+    }
   );
+};
 
-export const useDeleteActivity = () =>
-  useMutation(["delete-activity"], (id: number) =>
-    strapi.request<any>("delete", `/activities/${id}`)
+export const useEditActivity = () => {
+  const { ctx } = useApp();
+  const queryClient = useQueryClient();
+  return useMutation(["edit-activity"], (data: any) =>
+      strapi.request<any>("put", `/activities/${data.id}`, {
+        data: {
+          data: {
+            ...data,
+            id: undefined
+          }
+        }
+      }),
+    {
+      onSuccess: () => {
+        queryClient.refetchQueries(["activity-glance", ctx?.child?.id]);
+      }
+    }
   );
+};
+
+export const useDeleteActivity = () => {
+  const { ctx } = useApp();
+  const queryClient = useQueryClient();
+  return useMutation(["delete-activity"], (id: number) =>
+      strapi.request<any>("delete", `/activities/${id}`),
+    {
+      onSuccess: () => {
+        queryClient.refetchQueries(["activity-glance", ctx?.child?.id]);
+      }
+    }
+  );
+};

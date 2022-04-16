@@ -19,7 +19,7 @@ const TokenForm: FC<MobileFormProp> = ({ onSubmit, requestOtp, loading, otpLoadi
         لطفا کد ارسالی را وارد نمایید
       </div>
       <Form.Item name="token" className="tw-mb-12">
-        <Input className={styles.mobileInput} />
+        <Input className={styles.mobileInput} autoFocus />
       </Form.Item>
 
       <Row gutter={15}>

@@ -53,6 +53,7 @@ export interface User extends Model {
   mobile: string;
   name?: string;
   email?: string;
+  hasLockPassword?: boolean;
   unreadNotifications?: number
 }
 

@@ -102,7 +102,7 @@ const SideComponent = (props: any) => {
                 <Typography
                   variant="caption"
                   className="tw-text-gray-400"
-                >مجموع {durationText}</Typography>
+                >{activities.duration === 0 ? '-' : `مجموع ${durationText}`}</Typography>
               </div>
             </div>
           );

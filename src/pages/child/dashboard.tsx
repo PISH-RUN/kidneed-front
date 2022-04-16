@@ -277,13 +277,14 @@ const Dashboard = () => {
 };
 
 const Footer = () => {
+  const { ctx } = useApp();
   const [showLogin, setShowLogin] = useState(false);
 
   return <Box sx={{ p: 8, mt: 8, background: "linear-gradient(0deg, #E2F0FD 57.29%, rgba(226, 241, 254, 0) 100%);" }}>
     <Stack direction="row" justifyContent="space-between" alignItems="flex-end">
       <Box component="img" src="/images/logo.png" alt="logo" sx={{ width: 90, maxWidth: 80 }} />
       <Box sx={{ textAlign: "center" }}>
-        <Badge badgeContent={4} color="secondary" sx={{}}>
+        <Badge badgeContent={ctx?.user?.unreadNotifications} color="secondary" sx={{}}>
           <Button
             onClick={() => setShowLogin(true)} size="large" startIcon={<LoginIcon />} sx={{
             background: "#fff",
@@ -375,15 +376,15 @@ const Clock = () => {
 };
 
 const LoginDialog = ({ open, onClose }: any) => {
-  const [tab, setTab] = useState("question");
+  const { ctx } = useApp();
   const [inputValue, setInputValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [numbers] = useState([Math.floor(Math.random() * 10) + 1, Math.floor(Math.random() * 10) + 1]);
   const { mutateAsync: verifyPassword } = useVerifyPassword();
 
   const onSubmit = () => {
-    if (tab === "question") {
-      if (inputValue === eval(numbers.join("*")).toString()) {
+    if (!ctx.user?.hasLockPassword) {
+      if (inputValue === (numbers[0] * numbers[1]).toString()) {
         location.href = "/parent/dashboard";
       } else {
         alert("کد وارد شده اشتباه است.");
@@ -426,20 +427,19 @@ const LoginDialog = ({ open, onClose }: any) => {
           mt: 3
         }}
       >
-        <Tabs activeKey={tab} onChange={(value) => setTab(value)}>
-          <Tabs.TabPane key="question" tab="ورود با سوال ساده">
-            <div className="tw-pt-3">
-              <Typography variant="h6">{numbers[0]} * {numbers[1]} چند می شود</Typography>
-              <Input
-                className="tw-mt-4 tw-py-3"
-                size="large"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="پاسخ سوال را وارد کنید"
-              />
-            </div>
-          </Tabs.TabPane>
-          <Tabs.TabPane key="password" tab="ورود با رمز">
+        {!ctx.user?.hasLockPassword &&
+          <div className="tw-pt-3">
+            <Typography variant="h6">{numbers[0]} * {numbers[1]} چند می شود</Typography>
+            <Input
+              className="tw-mt-4 tw-py-3"
+              size="large"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder="پاسخ سوال را وارد کنید"
+            />
+          </div>}
+        {ctx.user?.hasLockPassword &&
+          <>
             <Typography variant="h6">رمز ورود خود را وارد کنید</Typography>
             <Input.Password
               size="large"
@@ -447,8 +447,8 @@ const LoginDialog = ({ open, onClose }: any) => {
               value={passwordValue}
               onChange={(e) => setPasswordValue(e.target.value)}
             />
-          </Tabs.TabPane>
-        </Tabs>
+          </>
+        }
         <Stack
           direction="row"
           spacing={2}

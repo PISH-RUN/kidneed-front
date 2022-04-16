@@ -1,9 +1,7 @@
 import { Guard } from "@kidneed/types";
-import { Button, Card, Col, Form, Input, Row } from "antd";
-import { useApp } from "@kidneed/hooks";
+import { Card } from "antd";
 import MobileForm from "core-team/components/loginForm/mobileForm";
 import Logo from "core-team/components/logo/logo";
-import { useState } from "react";
 import { useRouter } from "next/router";
 import { useSendOtp } from "core-team/api";
 
