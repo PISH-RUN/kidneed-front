@@ -12,7 +12,7 @@ import { useRegister } from "../../core-team/api/register";
 
 export const AddChild: React.FC<{
   setPage: React.Dispatch<React.SetStateAction<string>>;
-  setChildId: React.Dispatch<React.SetStateAction<number | undefined>>;
+  setChildId: (id: number) => void;
 }> = (props) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);

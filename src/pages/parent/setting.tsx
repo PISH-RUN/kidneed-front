@@ -10,10 +10,10 @@ import { useApp } from "@kidneed/hooks";
 import jMoment from "moment-jalaali";
 
 const Setting = () => {
-  const [loginType, setLoginType] = useState("question");
   const { ctx, editChild } = useApp();
   const { mutateAsync: updateMe } = useUpdateMe();
   const { mutateAsync: updateChild } = useUpdateChild(ctx?.child?.id);
+  const [loginType, setLoginType] = useState(ctx?.user?.hasLockPassword ? "password" : "question");
 
   const handleSubmit = (values: any) => {
     const userParams = {
@@ -98,7 +98,7 @@ const Setting = () => {
 
             <Typography variant="body1">نحوه ورود به محیط والدین</Typography>
             <div className="tw-mt-6">
-              <Radio.Group defaultValue="question" onChange={(event) => setLoginType(event.target.value)}>
+              <Radio.Group defaultValue={ctx?.user?.hasLockPassword ? "password" : "question"} onChange={(event) => setLoginType(event.target.value)}>
                 <Radio value={"question"}>ورود با سوال ساده</Radio>
                 <Radio value={"password"}>ورود با رمز</Radio>
               </Radio.Group>

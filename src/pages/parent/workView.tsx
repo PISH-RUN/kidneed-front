@@ -46,8 +46,8 @@ const WorkView = () => {
     const polarLabels: string[] = [];
 
     _.map(subFieldData, field => {
-      polarData.push(result?.data?.startOfMonth?.result[field.id]);
-      polarData.push(result?.data?.endOfMonth?.result[field.id]);
+      result?.data?.startOfMonth && polarData.push(result?.data?.startOfMonth?.result[field.id]);
+      result?.data?.endOfMonth && polarData.push(result?.data?.endOfMonth?.result[field.id]);
 
       polarLabels.push(field.attributes?.name);
       polarLabels.push(field.attributes?.name);
