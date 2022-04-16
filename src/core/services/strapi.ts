@@ -1,9 +1,41 @@
 import Strapi from "strapi-sdk-js";
 
 export const strapi = new Strapi({
-  url: process.env.NEXT_PUBLIC_STRAPI_URL || "https://api.yekodo.net",
+  url: process.env.NEXT_PUBLIC_STRAPI_URL || "https://api.yekodo.ir",
   store: {
     key: "access_token",
-    useLocalStorage: true,
-  },
+    useLocalStorage: true
+  }
 });
+
+strapi.axios.interceptors.request.use(
+  (config) => {
+    // @ts-ignore
+    const header = config?.headers?.common?.Authorization;
+    if (
+      (
+        location.href.includes("/login") &&
+        (!config.url?.includes("core/login") && !config.url?.includes("core/otp"))
+      )
+      && !header) {
+      return false;
+    }
+
+    return config;
+  }
+);
+
+strapi.axios.interceptors.response.use(
+  (response) => Promise.resolve(response),
+  (error) => {
+    if ((error?.request && !error?.request?.headers?.Authorization) || (error?.response?.status === 401 && error?.response?.status === 403)) {
+      if(!location.href.includes("/login")) {
+        return location.href = "/login";
+      }
+
+      return strapi.removeToken();
+    }
+
+    return Promise.reject(error);
+  }
+);

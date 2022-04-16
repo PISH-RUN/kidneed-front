@@ -3,14 +3,21 @@ import { Guard } from "@kidneed/types";
 import { Box, Button, Typography } from "@mui/material";
 import BaseLayout from "layouts/baseLayout";
 import { useRouter } from "next/router";
-import { useContent } from "core-team/api/activity";
+import { useContent, useUpdateProgress } from "core-team/api/activity";
 
 const Activity = () => {
-  const { query } = useRouter();
+  const { query, push } = useRouter();
   const id = query.id;
   const { data: content, isLoading } = useContent(parseInt(id as string));
+  const { mutateAsync: updateProgressRequest } = useUpdateProgress();
 
   const poster = content?.data?.attributes?.meta?.poster;
+
+  const handleFinish = () => {
+    updateProgressRequest({ id, duration: content?.data?.attributes?.duration }).then(() => {
+      push("/child/dashboard");
+    })
+  };
 
   return (
     <div className="tw-min-h-screen tw-flex tw-full tw-items-center tw-justify-center tw-bg-sky-100 tw-py-10">
@@ -44,8 +51,8 @@ const Activity = () => {
             <br/>
             <br/>
             <div className="tw-flex tw-justify-center tw-w-full">
-              <Button variant="outlined" className="!tw-rounded-full tw-w-40 !tw-ml-5">علاقه ندارم</Button>
-              <Button variant="contained" className="!tw-rounded-full tw-w-40">بازی کردم</Button>
+              <Button variant="outlined" className="!tw-rounded-full tw-w-40 !tw-ml-5" onClick={() => push('/child/dashboard')}>علاقه ندارم</Button>
+              <Button variant="contained" className="!tw-rounded-full tw-w-40" onClick={handleFinish}>بازی کردم</Button>
             </div>
           </Box>
         </Box>
