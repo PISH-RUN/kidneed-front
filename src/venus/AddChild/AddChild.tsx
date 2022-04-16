@@ -21,6 +21,9 @@ export const AddChild: React.FC<{
 
   const onFinish = (values: any) => {
     setLoading(true);
+    console.log(values);
+    setLoading(false)
+    return;
     addChildRequest({
       data: values,
       age: values.age
@@ -53,7 +56,7 @@ export const AddChild: React.FC<{
         </Text>
         <Form.Item
           rules={[{ required: true, message: "این فیلد الزامی است" }]}
-          name="parentName"
+          name="name"
         >
           <Input
             size="large"
