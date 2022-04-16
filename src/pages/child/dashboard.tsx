@@ -174,7 +174,7 @@ const DataBox = ({ data }: any) => {
             <Button
               variant="contained" color="primary" sx={{ width: 220, height: 70, borderRadius: 6, marginTop: -5 }}
               size="large"
-              onClick={() => router.push(`/players/${content1.activity.type}?child=true&id=${content1.activity.id}&url=${encodeURIComponent(source1)}`)}
+              onClick={() => window.open(`${location.origin}/players/${content1.activity.type}?child=true&id=${content1.activity.id}&url=${encodeURIComponent(source1)}`, "_blank")}
             ><PlayIcon /></Button>
           </Box>
         </Link>
@@ -185,7 +185,7 @@ const DataBox = ({ data }: any) => {
           <Button
             variant="contained" color="primary" sx={{ width: 220, height: 70, borderRadius: 6, marginTop: -5 }}
             size="large"
-            onClick={() => router.push(`/players/${content2.activity.type}?child=true&id=${content2.activity.id}&url=${encodeURIComponent(source2)}`)}
+            onClick={() => window.open(`${location.origin}/players/${content2.activity.type}?child=true&id=${content2.activity.id}&url=${encodeURIComponent(source2)}`, "_blank")}
           ><PlayIcon /></Button>
         </Box>
       </Grid>
