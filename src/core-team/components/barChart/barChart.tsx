@@ -1,7 +1,7 @@
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, LinearScale, BarElement, Tooltip, PolarAreaController, CategoryScale } from "chart.js";
+import { Chart as ChartJS, LinearScale, BarElement, Tooltip, PolarAreaController, CategoryScale, Legend } from "chart.js";
 
-ChartJS.register(LinearScale, BarElement, Tooltip, PolarAreaController, CategoryScale);
+ChartJS.register(LinearScale, BarElement, Tooltip, PolarAreaController, CategoryScale, Legend);
 
 const bg = [
   "#1890FF",
@@ -25,18 +25,35 @@ export const BarChart = ({ data, labels }: any) => {
         scales: {
           x: {
             stacked: true,
+            ticks: {
+              font: {
+                family: "IRANSans",
+              }
+            }
           },
           y: {
             stacked: true
           }
         },
         plugins: {
-          legend: {
-            position: "top"
+          tooltip: {
+            padding: 10,
+            boxPadding: 4,
+            rtl: true,
+            titleFont: {
+              family: "IRANSans",
+            },
+            bodyFont: {
+              family: "IRANSans",
+            }
           },
-          title: {
-            display: true,
-            text: "Chart.js Polar Area Chart"
+          legend: {
+            position: "left",
+            labels: {
+              font: {
+                family: "IRANSans",
+              }
+            }
           }
         }
       }}

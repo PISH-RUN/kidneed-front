@@ -40,8 +40,19 @@ export const PolarAreaChart = ({ data, labels }: any) => {
       options={{
         responsive: true,
         plugins: {
+          tooltip: {
+            padding: 10,
+            boxPadding: 4,
+            rtl: true,
+            titleFont: {
+              family: "IRANSans",
+            },
+            bodyFont: {
+              family: "IRANSans",
+            }
+          },
           legend: {
-            position: "top"
+            display: false,
           },
           title: {
             display: true,

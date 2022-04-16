@@ -3,17 +3,24 @@ import React, { useState, useRef, ReactElement, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Guard } from "@kidneed/types";
 import BaseLayout from "../../layouts/baseLayout";
-import { useUpdateProgress } from "../../core-team/api/activity";
+import { useContent, useUpdateProgress } from "../../core-team/api/activity";
+import { Result } from "antd";
+import { useApp } from "@kidneed/hooks";
 
 const Game = () => {
   const { query } = useRouter();
   const interval = useRef<any>();
   const { url, child, id } = query;
-  const { mutate: updateProgressRequest } = useUpdateProgress();
+  const { ctx } = useApp();
+  const [remained, setRemained] = useState(0);
+  const { data: content } = useContent(parseInt(id as string));
+  const { mutateAsync: updateProgressRequest } = useUpdateProgress();
 
   const updateProgress = () => {
     interval.current = setInterval(() => {
-      updateProgressRequest({ id, duration: 1 });
+      updateProgressRequest({ id, duration: 1 }).then((resp: any) => {
+        setRemained(resp?.data?.duration - resp?.data?.progress);
+      });
     }, 60000);
   };
 
@@ -24,10 +31,28 @@ const Game = () => {
   }, [child]);
 
   useEffect(() => {
+    if (content?.data) {
+      setRemained(content?.data?.attributes?.duration - content?.data?.attributes?.progress);
+    }
+  }, [content]);
+
+  useEffect(() => {
     return () => {
       clearInterval(interval.current);
     };
   }, []);
+
+  if (remained < 0) {
+    return (
+      <div className="tw-flex tw-items-center tw-justify-center tw-h-screen">
+        <Result
+          status="404"
+          title={`${ctx?.child?.name} عزیز`}
+          subTitle="زمان شما به پایان رسیده است"
+        />
+      </div>
+    );
+  }
 
   return (
     <iframe src={url as string} className='tw-w-full tw-h-screen' />

@@ -36,13 +36,6 @@ const typeNames: any = {
   audio: "صوت"
 };
 
-const tags: any = {
-  A: "رشدی حرکتی",
-  B: "رشدی شناختی",
-  C: "رشدی هیجانی",
-  D: "رشد اجتماعی-اخلاقی"
-};
-
 const SideComponent = (props: any) => {
   const [month, setMonth] = useState(today);
   const [selectedDate, setDate] = useState(today);
