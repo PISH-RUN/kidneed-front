@@ -9,7 +9,7 @@ import { assign, createMachine } from "xstate";
 import {
   bootstrap,
   bootstrapDone,
-  childAdded, childEdited,
+  childAdded, childDeleted, childEdited,
   childrenFetched,
   childSelected,
   fetchChildren, fetchUser,
@@ -97,6 +97,7 @@ export const appMachine = createMachine<PartialAppContext, AppEvent, AppState>({
         LOGGED_OUT: { target: "guest", actions: logout },
         ADD_CHILD: { target: ".child", actions: childAdded },
         EDIT_CHILD: { target: ".parent", actions: childEdited },
+        DELETE_CHILD: { target: ".parent", actions: childDeleted },
         FETCH_USER: { target: ".parent", actions: fetchUser },
         PARENT_PASS: { target: ".parent" },
       },

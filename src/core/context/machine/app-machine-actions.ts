@@ -3,7 +3,7 @@ import { Api, strapi } from "@kidneed/services";
 import {
   AddChildEvent,
   BootstrapDone,
-  ChildrenFetchDone, EditChildEvent,
+  ChildrenFetchDone, DeleteChildEvent, EditChildEvent,
   FetchUserEvent,
   LoggedInContext,
   PartialAppContext,
@@ -59,6 +59,13 @@ export const childEdited = assign(
   (ctx: PartialAppContext, event: EditChildEvent) => ({
     children: [event.child],
     child: event.child
+  })
+);
+
+export const childDeleted = assign(
+  (ctx: PartialAppContext, event: DeleteChildEvent) => ({
+    children: ctx.children?.filter(c => c.id !== event.child),
+    child: event.child === ctx?.child?.id ? ctx.children?.filter(c => c.id !== event.child)[0] : ctx.child
   })
 );
 

@@ -39,6 +39,11 @@ export type EditChildEvent = {
   child: Models.Child;
 };
 
+export type DeleteChildEvent = {
+  type: "DELETE_CHILD";
+  child: number;
+};
+
 export type FetchUserEvent = {
   type: "FETCH_USER";
   user: Models.User;
@@ -62,6 +67,7 @@ export type AppEvent =
   | SelectChildEvent
   | AddChildEvent
   | EditChildEvent
+  | DeleteChildEvent
   | FetchUserEvent
   | ParentPassEvent
   | RetryEvent

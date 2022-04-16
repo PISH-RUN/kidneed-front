@@ -4,8 +4,8 @@ import {
   Box,
   Button,
   Divider,
-  Grid,
-  ListItemIcon,
+  Grid, IconButton, ListItem,
+  ListItemIcon, ListItemText,
   Menu,
   MenuItem,
   Stack,
@@ -31,6 +31,9 @@ import { DateRange, LocalizationProvider, StaticDateRangePicker } from "@mui/lab
 import JalaliUtils from "@date-io/jalaali";
 import jMoment from "moment-jalaali";
 import { FaPlus, FaSignOutAlt } from "react-icons/fa";
+import { FiX } from "react-icons/fi";
+import { Modal, notification, Popconfirm } from "antd";
+import { useDeleteChild } from "../core-team/api/user";
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
 
@@ -138,9 +141,9 @@ const NavBar = () => {
 
 const ChildSelector = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { ctx, selectChild } = useApp();
+  const { ctx, selectChild, deleteChild } = useApp();
+  const { mutateAsync: deleteChildRequest } = useDeleteChild();
   const router = useRouter();
-
 
   const handleOpen = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -153,6 +156,26 @@ const ChildSelector = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleDeleteChild = (child: Models.Child) => {
+    setAnchorEl(null);
+    Modal.confirm({
+      title: `حذف ${child?.name}`,
+      content: `آیا از حذف ${child?.name} مطمئن هستید؟`,
+      direction: "rtl",
+      okButtonProps: {
+        className: "tw-bg-blue-500"
+      },
+      onOk: async () => {
+        deleteChildRequest(child.id).then(() => {
+          notification.success({
+            message: "حذف با موفقیت انجام شد"
+          });
+          deleteChild(child.id);
+        });
+      }
+    });
   };
 
   return (
@@ -194,8 +217,27 @@ const ChildSelector = () => {
           <MenuItem
             key={c.id}
             selected={ctx.child?.id === c.id}
-            onClick={() => handleSelectChild(c)}
-          >{c.name}</MenuItem>
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSelectChild(c);
+            }}
+          >
+            <ListItem
+              secondaryAction={
+                <IconButton
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteChild(c);
+                  }}
+                  size="small" edge="end" aria-label="حذف"
+                >
+                  {/*<FiX />*/}
+                </IconButton>
+              }
+            >
+              {c.name}
+            </ListItem>
+          </MenuItem>
         ))}
         <MenuItem
           onClick={() => router.push("/add-child")}
@@ -231,7 +273,7 @@ export default function ParentDashboardLayout(props: ParentDashboardLayoutProps)
   }, [range]);
 
   if (!ctx.child && ctx.children) {
-    return <></>
+    return <></>;
   }
 
   return <BaseLayout>
@@ -240,10 +282,11 @@ export default function ParentDashboardLayout(props: ParentDashboardLayoutProps)
         <NavBar />
       </Grid>
       <Grid item xs>
-        {(Header || showChild === "header") && <Box className={`tw-flex tw-pt-5 tw-items-center ${!!Header && showChild === 'header' ? 'tw-justify-between' : 'tw-justify-end'}`}>
-          {Header && Header}
-          {showChild === "header" && <Box sx={{ minWidth: 250 }}><ChildSelector /></Box>}
-        </Box>}
+        {(Header || showChild === "header") &&
+          <Box className={`tw-flex tw-pt-5 tw-items-center ${!!Header && showChild === "header" ? "tw-justify-between" : "tw-justify-end"}`}>
+            {Header && Header}
+            {showChild === "header" && <Box sx={{ minWidth: 250 }}><ChildSelector /></Box>}
+          </Box>}
         <Box
           sx={{
             display: bd,

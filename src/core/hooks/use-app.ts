@@ -40,6 +40,11 @@ export default function useApp() {
     [send]
   );
 
+  const deleteChild = useCallback(
+    (child: number) => send("DELETE_CHILD", { child }),
+    [send]
+  );
+
   const fetchUser = useCallback(
     async () => {
       const user = await Api.me();
@@ -62,6 +67,7 @@ export default function useApp() {
     selectChild,
     addChild,
     editChild,
+    deleteChild,
     fetchUser
   };
 }
