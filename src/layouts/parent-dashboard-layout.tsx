@@ -189,7 +189,7 @@ const ChildSelector = () => {
       >
         <Avatar
           sx={{ width: 80, height: 80, p: 2, background: "#E2F1FD" }}
-          src="/images/avatar-woman.png"
+          src={ctx?.child?.gender === "boy" ? "/images/avatar-man.png" : "/images/avatar-woman.png"}
         />
         <Box flexGrow={1}>
           {ctx.child &&
