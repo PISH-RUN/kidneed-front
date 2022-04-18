@@ -11,6 +11,7 @@ import { useStats } from "../../core-team/api/dashboard";
 import { useApp } from "@kidneed/hooks";
 import { useGrowthFields, useGrowthSubFields, useQuizProgression, useQuizResult } from "../../core-team/api/question";
 import pattern from "public/images/pattern.png"
+import Link from "next/link";
 
 const today = jMoment();
 
@@ -174,9 +175,11 @@ const WorkView = () => {
                 <Button type="primary" className="tw-h-10 tw-w-40 tw-ml-5 tw-rounded-full tw-bg-blue-400">
                   آزمون اول ماه
                 </Button>
-                <Button className="tw-h-10 tw-w-40 tw-ml-5 tw-rounded-full tw-bg-gray-400 tw-border-gray-500 tw-text-white">
-                  آزمون آخر ماه
-                </Button>
+                <Link href="/parent/quiz">
+                  <Button className="tw-h-10 tw-w-40 tw-ml-5 tw-rounded-full tw-bg-gray-400 tw-border-gray-500 tw-text-white">
+                    آزمون آخر ماه
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

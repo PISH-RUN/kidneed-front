@@ -17,6 +17,7 @@ const ContentForm = ({ time, activity, onClose }: any) => {
 
   const handleSubmit = () => {
     form.validateFields().then(values => {
+      console.log(values);
       if (isEdit) {
         const promises = [
           editActivity({
@@ -88,13 +89,19 @@ const ContentForm = ({ time, activity, onClose }: any) => {
           <Form.Item label="زمان">
             <span className="tw-py-1 tw-px-2 tw-rounded-md tw-bg-gray-100">{jMoment(time).format("dddd jDD jMMMM")}</span>
           </Form.Item>
-          <Form.Item label="محتوا اول" name="content1" initialValue={isEdit && activity[0].attributes?.content}>
+          <Form.Item
+            label="محتوا اول"
+            rules={[{ required: true }]}
+            name="content1"
+            initialValue={isEdit && activity[0].attributes?.content || null}
+          >
             <ContentSearch type={!isEdit ? tab : activity[0].attributes?.type} />
           </Form.Item>
           <Form.Item
             label="محتوا دوم"
+            rules={[{ required: true }]}
             name="content2"
-            initialValue={isEdit && activity[1] && activity[1].attributes?.content}
+            initialValue={isEdit && activity[1] && activity[1].attributes?.content || null}
           >
             <ContentSearch type={!isEdit ? tab : activity[0].attributes?.type} />
           </Form.Item>

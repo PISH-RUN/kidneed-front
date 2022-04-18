@@ -78,16 +78,16 @@ const SideComponent = (props: any) => {
               } else {
                 setDate(jMoment(jMoment(month).add("month", -1)).startOf("jMonth"));
                 props.onChangeDate(jMoment(jMoment(month).add("month", -1)).startOf("jMonth"));
-                setMonth(jMoment(jMoment(month).add("month", -1)).startOf("jMonth"));
+                setMonth(jMoment(jMoment(month).add("month", -1)));
               }
             }}
             className={`tw-cursor-pointer tw-w-8 tw-h-8 tw-text-gray-500 tw-border-gray-500 tw-border-2 tw-rounded-full tw-p-2 tw-ml-2 ${jMoment().jMonth() === jMoment(month).jMonth() ? "!tw-cursor-not-allowed !tw-border-gray-300 !tw-text-gray-300" : ""}`}
           />
           <FaChevronLeft
             onClick={() => {
-              setDate(jMoment(jMoment(month).add("month", 1)).startOf("jMonth"));
-              props.onChangeDate(jMoment(jMoment(month).add("month", 1)).startOf("jMonth"));
-              setMonth(jMoment(jMoment(month).add("month", 1)).startOf("jMonth"));
+              setDate(jMoment(jMoment(month).add("month", 1)).startOf('jMonth'));
+              props.onChangeDate(jMoment(jMoment(month).add("month", 1)).startOf('jMonth'));
+              setMonth(jMoment(jMoment(month).add("month", 1)));
             }}
             className="tw-cursor-pointer tw-w-8 tw-h-8 tw-text-gray-500 tw-border-gray-500 tw-border-2 tw-rounded-full tw-p-2"
           />
