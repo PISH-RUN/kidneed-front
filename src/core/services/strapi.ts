@@ -15,7 +15,7 @@ strapi.axios.interceptors.request.use(
     if (
       (
         location.href.includes("/login") &&
-        (!config.url?.includes("core/login") && !config.url?.includes("core/otp"))
+        (!config.url?.includes("core/login") && !config.url?.includes("/children") && !config.url?.includes("core/otp"))
       )
       && !header
     ) {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Guard } from "@kidneed/types";
 import ParentDashboardLayout from "layouts/parent-dashboard-layout";
-import { Avatar, Col, Input, Row, Select, Typography } from "antd";
+import { Avatar, Col, Input, Pagination, Row, Select, Typography } from "antd";
 import { FiClock, FiCompass, FiInfo } from "react-icons/fi";
 import jMoment from "moment-jalaali";
 import { useNotification, useNotificationRead } from "../../core-team/api/notification";
@@ -30,10 +30,13 @@ const types: any = {
 
 const Message = () => {
   const [rahche, setRahche] = useState();
+  const [sort, setSort] = useState("desc");
+  const [search, setSearch] = useState("");
+  const [pagination, setPagination] = useState({ page: 1, pageSize: 25 });
   const { data: rahcheData } = useApproaches(rahche);
   const router = useRouter();
   const { fetchUser } = useApp();
-  const { data } = useNotification();
+  const { data } = useNotification(search, sort, pagination);
   const { mutateAsync: readAll } = useNotificationRead();
 
   useEffect(() => {
@@ -47,17 +50,12 @@ const Message = () => {
       <div className="tw-py-5 tw-px-6">
         <Row justify="space-between">
           <Col>
-            <Input.Search placeholder="جستجو پیام ها" />
+            <Input.Search placeholder="جستجو پیام ها" onSearch={value => setSearch(value)} />
           </Col>
           <Col>
-            <Select placeholder="بر اساس تاریخ" className="tw-ml-3">
-              <Select.Option value="1">جدید ترین</Select.Option>
-              <Select.Option value="1">قدیمی ترین</Select.Option>
-            </Select>
-            <Select placeholder="تمام پیام ها">
-              <Select.Option value="1">خوانده شده</Select.Option>
-              <Select.Option value="1">خوانده نشده</Select.Option>
-              <Select.Option value="1">تمام پیام ها</Select.Option>
+            <Select placeholder="بر اساس تاریخ" className="tw-ml-3" value={sort} onChange={value => setSort(value)}>
+              <Select.Option value="desc">جدید ترین</Select.Option>
+              <Select.Option value="asc">قدیمی ترین</Select.Option>
             </Select>
           </Col>
         </Row>
@@ -68,10 +66,11 @@ const Message = () => {
             return (
               <Col span={24} key={notif.id}>
                 <div className="tw-bg-white tw-flex tw-rounded-xl tw-overflow-hidden">
-                  <div className="tw-p-5 tw-self-center">
-                    <Avatar shape="square" className="tw-w-20 tw-h-16 tw-rounded-xl" />
-                  </div>
-                  <div className="tw-p-3 tw-pr-0 tw-flex-1">
+                  {notif?.attributes?.type !== "rahche" &&
+                    <div className="tw-p-5 tw-self-center">
+                      <Avatar shape="square" className="tw-w-20 tw-h-16 tw-rounded-xl" />
+                    </div>}
+                  <div className={`tw-p-3 tw-pr-0 tw-flex-1 ${notif?.attributes?.type === 'rahche' && 'tw-mr-5'}`}>
                     <Typography.Title level={5} className="description">
                       {notif?.attributes?.title}
                     </Typography.Title>
@@ -90,7 +89,7 @@ const Message = () => {
                         setRahche(notif?.attributes?.payload?.id);
                       }
                       if (notif?.attributes?.type === "endOfMonthQuiz") {
-                        router.push('/parent/quiz?redirectUrl=/parent/message')
+                        router.push("/parent/quiz?redirectUrl=/parent/message");
                       }
                     }}
                   >
@@ -102,6 +101,15 @@ const Message = () => {
             );
           })}
         </Row>
+        <div className="tw-flex tw-justify-end">
+          <Pagination
+            className="tw-mt-8"
+            current={pagination.page}
+            pageSize={pagination.pageSize}
+            total={50}
+            onChange={(page, pageSize) => setPagination({ ...pagination, page, pageSize })}
+          />
+        </div>
       </div>
 
       <ApproachModal

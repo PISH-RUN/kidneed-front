@@ -1,6 +1,6 @@
 import styles from "../../../earth/styles/earth.module.css";
 import { Modal } from "antd";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 // @ts-ignore
 import CircleControls from "react-player-circle-controls";
@@ -9,7 +9,7 @@ import { API } from "../../constants";
 import { Typography } from "@mui/material";
 import { IoPause, IoPlay } from "react-icons/io5";
 
-const Player = ({ item }: any) => {
+const Player = ({ item, isPlaying, onPlay }: any) => {
   const player = useRef<any>(null);
   const [playing, setPlaying] = useState(false);
   const [playerState, setPlayerState] = useState({
@@ -22,6 +22,12 @@ const Player = ({ item }: any) => {
       player.current.seekTo(amount, "fraction");
     }
   };
+
+  useEffect(() => {
+    if(!isPlaying && playing) {
+       setPlaying(false);
+    }
+  }, [isPlaying, playing])
 
   return (
     <>
@@ -44,13 +50,18 @@ const Player = ({ item }: any) => {
         icon={playing ? <IoPause className="tw-text-white tw-text-3xl tw-m-3" /> : <IoPlay className="tw-text-white tw-text-3xl tw-m-3" />}
         iconColor="#fff"
         color="#C4C4C4"
-        onTogglePlaying={() => setPlaying(!playing)}
+        onTogglePlaying={() => {
+          setPlaying(!playing)
+          !playing && onPlay()
+        }}
       />
     </>
   );
 };
 
 export const ApproachModal = ({ data, ...rest }: any) => {
+  const [playing, setPlay] = useState<boolean | number>(false);
+
   return (
     <Modal
       footer={false}
@@ -81,7 +92,7 @@ export const ApproachModal = ({ data, ...rest }: any) => {
             {data?.data && data?.data.map((item: any) => (
               <div className="tw-flex tw-items-center tw-mb-5" key={item.id}>
                 <div key={item.id} className="tw-ml-4">
-                  <Player item={item} />
+                  <Player item={item} isPlaying={playing === item.id} onPlay={() => setPlay(item.id)} />
                 </div>
                 <div>
                   <Typography variant="body1">

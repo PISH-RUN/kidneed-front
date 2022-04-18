@@ -1,4 +1,4 @@
-import { Form, Typography } from "antd";
+import { Button, Form, notification, Typography } from "antd";
 import Text from "antd/lib/typography/Text";
 import { useRouter } from "next/router";
 import React from "react";
@@ -8,6 +8,7 @@ import { QuestionSlider } from "../QuestionSlider/QuestionSlider";
 import styles from "./Quiz.module.css";
 import { useQuestions, useQuiz, useSubmitQuiz, useSubmitSystemQuiz } from "core-team/api/question";
 import _ from "lodash";
+import Link from "next/link";
 
 export const Quiz: React.FC<{ way?: string, childId?: number, type?: string }> = (props) => {
   const router = useRouter();
@@ -31,6 +32,10 @@ export const Quiz: React.FC<{ way?: string, childId?: number, type?: string }> =
         }))
       }).then(() => {
         router.push(redirectUrl as string || "/parent/dashboard");
+      }).catch(() => {
+        notification.error({
+          message: "شما قبلا به این آزمون پاسخ داده اید."
+        })
       });
     }
   };
@@ -66,6 +71,16 @@ export const Quiz: React.FC<{ way?: string, childId?: number, type?: string }> =
           >
             تایید
           </PrimaryButton>
+          {props.type &&
+            <Link href="/parent/dashboard">
+              <Button
+                ghost
+                className="tw-mt-14 tw-w-52 tw-mr-4 !tw-text-blue-500 !tw-border-blue-500 !tw-rounded-full tw-h-10"
+              >
+                بازگشت
+              </Button>
+            </Link>
+          }
         </div>
       </Form>
     </ContentWrapper>
