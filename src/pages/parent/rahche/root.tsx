@@ -33,7 +33,7 @@ const RootStep = () => {
       <Typography variant="h5">لطفا موارد زیر را برای فرزندتان مشخص نمایید</Typography>
       <div className="tw-mt-8">
         <Form layout="vertical" onFinish={handleSubmit}>
-          {roots?.data?.map((s: any) => (
+          {roots?.data && _.map(_.uniqBy(roots?.data, "id"), (s: any) => (
             <Form.Item label={s.body} key={s.id} name={s.id} className="!tw-mt-10" initialValue="no">
               <Radio.Group>
                 <Radio value="yes" className="tw-w-32">بله</Radio>
