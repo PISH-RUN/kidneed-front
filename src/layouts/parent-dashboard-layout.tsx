@@ -133,7 +133,7 @@ const NavBar = () => {
               sx={{ ...styles.navButton, ...(isSelectedMenu(m.link) ? styles.activeNavButton : {}) }}
               variant={isSelectedMenu(m.link) ? "contained" : "text"}
               startIcon={m.icon}
-              onClick={() => logout()}
+              onClick={() => m.type === "logout" && logout()}
             >
               {m.title}
               {(m.type === "notification" && !!ctx?.user?.unreadNotifications && ctx?.user?.unreadNotifications > 0) &&
