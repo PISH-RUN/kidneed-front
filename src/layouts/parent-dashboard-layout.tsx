@@ -31,7 +31,7 @@ import { DateRange, LocalizationProvider, StaticDateRangePicker } from "@mui/lab
 import JalaliUtils from "@date-io/jalaali";
 import jMoment from "moment-jalaali";
 import { FaPlus, FaSignOutAlt } from "react-icons/fa";
-import { FiX } from "react-icons/fi";
+import { FiLogOut, FiX } from "react-icons/fi";
 import { Modal, notification, Popconfirm } from "antd";
 import { useDeleteChild } from "../core-team/api/user";
 
@@ -98,12 +98,17 @@ const menu = [
     title: "تنظیمات",
     link: "/parent/setting",
     icon: <SettingIcon />
+  }, {
+    title: "خروج",
+    type: "logout",
+    link: "/login",
+    icon: <FiLogOut />
   }
 ];
 
 const NavBar = () => {
   const { pathname, ...router } = useRouter();
-  const { ctx } = useApp();
+  const { ctx, logout } = useApp();
 
   // @ts-ignore
   const isSelectedMenu = (link) => {
@@ -128,10 +133,11 @@ const NavBar = () => {
               sx={{ ...styles.navButton, ...(isSelectedMenu(m.link) ? styles.activeNavButton : {}) }}
               variant={isSelectedMenu(m.link) ? "contained" : "text"}
               startIcon={m.icon}
+              onClick={() => logout()}
             >
               {m.title}
               {(m.type === "notification" && !!ctx?.user?.unreadNotifications && ctx?.user?.unreadNotifications > 0) &&
-                <span className="tw-text-sm tw-rounded-full tw-text-white tw-bg-orange-500 tw-w-8 tw-h-8 tw-flex tw-items-center tw-justify-center tw-mr-4">{ctx?.user?.unreadNotifications}</span>}
+                <span className={`tw-text-sm tw-rounded-full tw-text-white tw-bg-orange-500 tw-w-8 tw-h-8 tw-flex tw-items-center tw-justify-center tw-mr-4`}>{ctx?.user?.unreadNotifications}</span>}
             </Button>
           </Link>)}
       </Box>
