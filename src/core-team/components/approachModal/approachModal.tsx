@@ -1,15 +1,15 @@
 import styles from "../../../earth/styles/earth.module.css";
 import { Modal } from "antd";
 import { useRef, useState } from "react";
-import ReactPlayer from 'react-player';
+import ReactPlayer from "react-player";
 // @ts-ignore
-import CircleControls from 'react-player-circle-controls';
-import 'react-player-circle-controls/dist/styles.css';
+import CircleControls from "react-player-circle-controls";
+import "react-player-circle-controls/dist/styles.css";
 import { API } from "../../constants";
 import { Typography } from "@mui/material";
-import { IoPlay } from "react-icons/io5";
+import { IoPause, IoPlay } from "react-icons/io5";
 
-export const ApproachModal = ({ data, ...rest }: any) => {
+const Player = ({ item }: any) => {
   const player = useRef<any>(null);
   const [playing, setPlaying] = useState(false);
   const [playerState, setPlayerState] = useState({
@@ -19,11 +19,38 @@ export const ApproachModal = ({ data, ...rest }: any) => {
 
   const onSeek = (amount: any) => {
     if (player.current) {
-      player.current.seekTo(amount, 'fraction');
+      player.current.seekTo(amount, "fraction");
     }
   };
 
+  return (
+    <>
+      <ReactPlayer
+        ref={player}
+        url={`${API}${item.voice?.url}`}
+        playing={playing}
+        height="0"
+        width="0"
+        onProgress={setPlayerState}
+        onEnded={() => setPlaying(false)}
+      />
+      <CircleControls
+        className={styles.voiceControls}
+        size={80}
+        played={playerState.played}
+        loaded={playerState.loaded}
+        playing={playing}
+        onSeek={onSeek}
+        icon={playing ? <IoPause className="tw-text-white tw-text-3xl tw-m-3" /> : <IoPlay className="tw-text-white tw-text-3xl tw-m-3" />}
+        iconColor="#fff"
+        color="#C4C4C4"
+        onTogglePlaying={() => setPlaying(!playing)}
+      />
+    </>
+  );
+};
 
+export const ApproachModal = ({ data, ...rest }: any) => {
   return (
     <Modal
       footer={false}
@@ -54,27 +81,7 @@ export const ApproachModal = ({ data, ...rest }: any) => {
             {data?.data && data?.data.map((item: any) => (
               <div className="tw-flex tw-items-center tw-mb-5" key={item.id}>
                 <div key={item.id} className="tw-ml-4">
-                  <ReactPlayer
-                    ref={player}
-                    url={`${API}${item.voice?.url}`}
-                    playing={playing}
-                    height="0"
-                    width="0"
-                    onProgress={setPlayerState}
-                    onEnded={() => setPlaying(false)}
-                  />
-                  <CircleControls
-                    className={styles.voiceControls}
-                    size={80}
-                    played={playerState.played}
-                    loaded={playerState.loaded}
-                    playing={playing}
-                    onSeek={onSeek}
-                    icon={<IoPlay className="tw-text-white tw-text-3xl tw-m-3" />}
-                    iconColor="#fff"
-                    color="#C4C4C4"
-                    onTogglePlaying={() => setPlaying(!playing)}
-                  />
+                  <Player item={item} />
                 </div>
                 <div>
                   <Typography variant="body1">
@@ -90,5 +97,5 @@ export const ApproachModal = ({ data, ...rest }: any) => {
         </div>
       </div>
     </Modal>
-  )
+  );
 };
