@@ -48,7 +48,7 @@ const SideComponent = (props: any) => {
 
   const monthDays = () => {
     const days = [];
-    let day = jMoment(month);
+    let day = jMoment().jMonth() === month.jMonth() ? jMoment(month) : jMoment(month).startOf("jMonth");
     while (day.jMonth() === month.jMonth()) {
       days.push(jMoment(day));
       day = day.add("day", 1);
@@ -56,6 +56,8 @@ const SideComponent = (props: any) => {
 
     return days;
   };
+
+  console.log(jMoment().jMonth() === jMoment(month).jMonth());
 
   return (
     <div>
@@ -66,11 +68,27 @@ const SideComponent = (props: any) => {
         </Typography>
         <div className="tw-flex">
           <FaChevronRight
-            onClick={() => setMonth(jMoment(month).add("month", -1))}
-            className="tw-cursor-pointer tw-w-8 tw-h-8 tw-text-gray-500 tw-border-gray-500 tw-border-2 tw-rounded-full tw-p-2 tw-ml-2"
+            onClick={() => {
+              if (jMoment().jMonth() === jMoment(month).jMonth()) return;
+
+              if (jMoment().jMonth() === jMoment(month).add("month", -1).jMonth()) {
+                setDate(jMoment());
+                props.onChangeDate(jMoment());
+                setMonth(jMoment());
+              } else {
+                setDate(jMoment(jMoment(month).add("month", -1)).startOf("jMonth"));
+                props.onChangeDate(jMoment(jMoment(month).add("month", -1)).startOf("jMonth"));
+                setMonth(jMoment(jMoment(month).add("month", -1)).startOf("jMonth"));
+              }
+            }}
+            className={`tw-cursor-pointer tw-w-8 tw-h-8 tw-text-gray-500 tw-border-gray-500 tw-border-2 tw-rounded-full tw-p-2 tw-ml-2 ${jMoment().jMonth() === jMoment(month).jMonth() ? "!tw-cursor-not-allowed !tw-border-gray-300 !tw-text-gray-300" : ""}`}
           />
           <FaChevronLeft
-            onClick={() => setMonth(jMoment(month).add("month", 1))}
+            onClick={() => {
+              setDate(jMoment(jMoment(month).add("month", 1)).startOf("jMonth"));
+              props.onChangeDate(jMoment(jMoment(month).add("month", 1)).startOf("jMonth"));
+              setMonth(jMoment(jMoment(month).add("month", 1)).startOf("jMonth"));
+            }}
             className="tw-cursor-pointer tw-w-8 tw-h-8 tw-text-gray-500 tw-border-gray-500 tw-border-2 tw-rounded-full tw-p-2"
           />
         </div>
@@ -102,7 +120,7 @@ const SideComponent = (props: any) => {
                 <Typography
                   variant="caption"
                   className="tw-text-gray-400"
-                >{activities.duration === 0 ? '-' : `مجموع ${durationText}`}</Typography>
+                >{activities.duration === 0 ? "-" : `مجموع ${durationText}`}</Typography>
               </div>
             </div>
           );
@@ -180,7 +198,7 @@ const DayPlan = () => {
       Header={
         <div className="tw-flex tw-justify-between tw-mt-4 tw-mb-3 tw-w-full">
           <Typography variant="h5" className="!tw-font-bold tw-flex tw-items-center">تمام برنامه
-            های {jMoment(selectedDate).format("jDD jMMMM")} {jMoment().diff(selectedDate, "days") === 0 && "(امروز)"}</Typography>
+            های {jMoment(selectedDate).format("jDD jMMMM")} {jMoment().startOf("day").diff(selectedDate.startOf("day"), "days") === 0 && "(امروز)"}</Typography>
           <Button
             onClick={() => setSelectPlan(true)}
             className="tw-w-48 tw-h-12 tw-bg-blue-400 tw-text-white tw-rounded-full"
