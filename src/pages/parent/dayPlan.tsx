@@ -85,8 +85,8 @@ const SideComponent = (props: any) => {
           />
           <FaChevronLeft
             onClick={() => {
-              setDate(jMoment(jMoment(month).add("month", 1)).startOf('jMonth'));
-              props.onChangeDate(jMoment(jMoment(month).add("month", 1)).startOf('jMonth'));
+              setDate(jMoment(jMoment(month).add("month", 1)).startOf("jMonth"));
+              props.onChangeDate(jMoment(jMoment(month).add("month", 1)).startOf("jMonth"));
               setMonth(jMoment(jMoment(month).add("month", 1)));
             }}
             className="tw-cursor-pointer tw-w-8 tw-h-8 tw-text-gray-500 tw-border-gray-500 tw-border-2 tw-rounded-full tw-p-2"
@@ -224,15 +224,19 @@ const DayPlan = () => {
             const contentTags: string[] = [];
 
             content1?.attributes?.movies?.data?.map((tag: any) => {
-              if (contentTags.indexOf(tag?.attributes?.body) === -1 && tag?.attributes?.body) {
-                contentTags.push(tag?.attributes?.body);
-              }
+              tag?.attributes?.tags?.data?.map((tag: any) => {
+                if (contentTags.indexOf(tag?.attributes?.name) === -1 && tag?.attributes?.name) {
+                  contentTags.push(tag?.attributes?.name);
+                }
+              });
             });
 
             content2?.attributes?.movies?.data?.map((tag: any) => {
-              if (contentTags.indexOf(tag?.attributes?.body) === -1 && tag?.attributes?.body) {
-                contentTags.push(tag?.attributes?.body);
-              }
+              tag?.attributes?.tags?.data?.map((tag: any) => {
+                if (contentTags.indexOf(tag?.attributes?.name) === -1 && tag?.attributes?.name) {
+                  contentTags.push(tag?.attributes?.name);
+                }
+              });
             });
 
             return (

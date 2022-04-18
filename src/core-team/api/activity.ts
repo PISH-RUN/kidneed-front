@@ -67,7 +67,12 @@ export const useUpdateProgress = () =>
 
 export const useContents = (ids?: number[]) => {
   const query = qs.stringify({
-    populate: "*",
+    populate: {
+      movies: {
+        populate: ['tags'],
+      }
+    },
+    publicationState: "preview",
     filters: {
       id: {
         $in: ids
@@ -78,7 +83,7 @@ export const useContents = (ids?: number[]) => {
   });
 
   return useQuery(["content", ids], () =>
-      axios.get(`${DAPI_URL}/api/contents?publicationState=preview&${query}`).then(resp => Promise.resolve(resp.data)),
+      axios.get(`${DAPI_URL}/api/contents?${query}`).then(resp => Promise.resolve(resp.data)),
     {
       enabled: !!ids
     }
