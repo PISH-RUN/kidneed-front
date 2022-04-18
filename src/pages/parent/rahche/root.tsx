@@ -1,7 +1,7 @@
 import { useRoot, useSubmitRoot } from "core-team/api/approach";
 import { useRouter } from "next/router";
 import { Button, Typography } from "@mui/material";
-import { Form, Radio } from "antd";
+import { Form, Modal, Radio } from "antd";
 import _ from "lodash";
 
 const RootStep = () => {
@@ -17,6 +17,18 @@ const RootStep = () => {
         rootList.push(parseInt(id));
       }
     });
+
+    if(rootList.length === 0) {
+      return Modal.info({
+        direction: "rtl",
+        width: 550,
+        okButtonProps: {
+          className: "tw-bg-blue-500"
+        },
+        content: <span className="!tw-text-lg">برای ادامه باید حداقل به یکی از سوالات جواب بله بدهید.</span>
+      });
+    }
+
     submitRoot({ selected: rootList, rahche }).then(() => {
       router.push({
         pathname: "/parent/rahche",
