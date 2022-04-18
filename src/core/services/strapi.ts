@@ -17,7 +17,8 @@ strapi.axios.interceptors.request.use(
         location.href.includes("/login") &&
         (!config.url?.includes("core/login") && !config.url?.includes("core/otp"))
       )
-      && !header) {
+      && !header
+    ) {
       return false;
     }
 
@@ -29,7 +30,7 @@ strapi.axios.interceptors.response.use(
   (response) => Promise.resolve(response),
   (error) => {
     if ((error?.config && !error?.config?.headers?.Authorization) || (error?.response?.status === 401 || error?.response?.status === 403)) {
-      if(!location.href.includes("/login")) {
+      if(location.pathname !== "/" && !location.href.includes("/login")) {
         return location.href = "/login";
       }
 
