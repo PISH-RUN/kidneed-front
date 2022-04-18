@@ -13,17 +13,17 @@ import { useRouter } from "next/router";
 const types: any = {
   rahche: {
     color: "tw-bg-pink-500",
-    icon: <FiCompass />,
+    icon: FiCompass,
     label: "راه چه"
   },
   pass: {
     color: "tw-bg-green-500",
-    icon: <FiCompass />,
+    icon: FiCompass,
     label: "پاس گل"
   },
   endOfMonthQuiz: {
     color: "tw-bg-orange-500",
-    icon: <FiCompass />,
+    icon: FiInfo,
     label: "آزمون آخر ماه"
   }
 };
@@ -94,7 +94,7 @@ const Message = () => {
                       }
                     }}
                   >
-                    <FiCompass className="tw-text-4xl tw-mb-1" />
+                    <type.icon className="tw-text-4xl tw-mb-1" />
                     <span>{type?.label}</span>
                   </div>
                 </div>
