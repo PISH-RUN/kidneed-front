@@ -47,16 +47,16 @@ export const ApproachModal = ({ data, ...rest }: any) => {
           </div>
           <div className="tw-mt-6">
             <Typography variant="body1">
-              {data?.data && data?.data[0].body}
+              توضیحات
             </Typography>
           </div>
-          <div className="tw-mt-6">
+          <div className="tw-mt-6 tw-overflow-y-auto tw-max-h-96">
             {data?.data && data?.data.map((item: any) => (
-              <div className="tw-flex tw-items-center" key={item.id}>
+              <div className="tw-flex tw-items-center tw-mb-5" key={item.id}>
                 <div key={item.id} className="tw-ml-4">
                   <ReactPlayer
                     ref={player}
-                    url={`${API}${item.voice.url}`}
+                    url={`${API}${item.voice?.url}`}
                     playing={playing}
                     height="0"
                     width="0"
