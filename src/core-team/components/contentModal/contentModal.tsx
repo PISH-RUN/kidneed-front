@@ -21,15 +21,13 @@ const ContentForm = ({ time, activity, onClose }: any) => {
         const promises = [
           editActivity({
             id: activity[0].id,
-            content: values.content1.toString(),
-            duration: tab === "video" ? 30 : undefined,
+            content: values.content1.toString()
           }),
           editActivity({
             id: activity[1].id,
-            content: values.content2.toString(),
-            duration: tab === "video" ? 30 : undefined,
+            content: values.content2.toString()
           })
-        ]
+        ];
         Promise.all(promises).then(() => {
           notification.success({
             message: "برنامه با موفقیت ویرایش شد."
@@ -40,7 +38,6 @@ const ContentForm = ({ time, activity, onClose }: any) => {
       } else {
         addActivity({
           ...values,
-          duration: tab === "video" ? 30 : undefined,
           date: jMoment(time).format("YYYY-MM-DD")
         }).then(() => {
           notification.success({
@@ -57,7 +54,7 @@ const ContentForm = ({ time, activity, onClose }: any) => {
     const promises = [
       deleteActivity(activity[0].id),
       deleteActivity(activity[1].id)
-    ]
+    ];
 
     Promise.all(promises).then(() => {
       notification.success({
@@ -66,7 +63,7 @@ const ContentForm = ({ time, activity, onClose }: any) => {
       onClose(true);
       form.resetFields();
     });
-  }
+  };
 
   return (
     <>
@@ -94,7 +91,11 @@ const ContentForm = ({ time, activity, onClose }: any) => {
           <Form.Item label="محتوا اول" name="content1" initialValue={isEdit && activity[0].attributes?.content}>
             <ContentSearch type={!isEdit ? tab : activity[0].attributes?.type} />
           </Form.Item>
-          <Form.Item label="محتوا دوم" name="content2" initialValue={isEdit && activity[1] && activity[1].attributes?.content}>
+          <Form.Item
+            label="محتوا دوم"
+            name="content2"
+            initialValue={isEdit && activity[1] && activity[1].attributes?.content}
+          >
             <ContentSearch type={!isEdit ? tab : activity[0].attributes?.type} />
           </Form.Item>
         </div>
@@ -104,7 +105,7 @@ const ContentForm = ({ time, activity, onClose }: any) => {
             htmlType="submit"
             className="tw-h-10 tw-w-32 tw-ml-5 tw-rounded-full tw-bg-blue-400"
           >
-            {isEdit ? 'ویرایش' : 'افزودن'}
+            {isEdit ? "ویرایش" : "افزودن"}
           </Button>
           <Button
             className="tw-h-10 tw-w-32 tw-ml-5 tw-rounded-full"
@@ -114,7 +115,12 @@ const ContentForm = ({ time, activity, onClose }: any) => {
             }}
           >لغو</Button>
           {isEdit &&
-            <Button onClick={handleDelete} type="primary" danger className="tw-h-10 tw-w-32 tw-ml-5 tw-rounded-full">حذف</Button>}
+            <Button
+              onClick={handleDelete}
+              type="primary"
+              danger
+              className="tw-h-10 tw-w-32 tw-ml-5 tw-rounded-full"
+            >حذف</Button>}
         </div>
       </Form>
     </>
