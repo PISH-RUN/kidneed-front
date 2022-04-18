@@ -10,7 +10,7 @@ export const AddChildPage: React.FC = () => {
   const [page, setPage] = useState<string>("intro");
   const [way, setWay] = useState<string>();
   const router = useRouter();
-  const { id: childId } = router.query;
+  const { id: childId, step } = router.query;
 
   const setChildId = (id: number) => {
     router.push("/add-child?id=" + id);
@@ -26,6 +26,12 @@ export const AddChildPage: React.FC = () => {
   useEffect(() => {
     if (childId) {
       setPage("selectWay");
+    }
+  }, [childId]);
+
+  useEffect(() => {
+    if (step && step === "add") {
+      setPage("addChild");
     }
   }, [childId]);
 

@@ -175,7 +175,7 @@ const WorkView = () => {
                 <Button type="primary" className="tw-h-10 tw-w-40 tw-ml-5 tw-rounded-full tw-bg-blue-400">
                   آزمون اول ماه
                 </Button>
-                <Link href="/parent/quiz">
+                <Link href="/parent/quiz?redirectUrl=/parent/workView">
                   <Button className="tw-h-10 tw-w-40 tw-ml-5 tw-rounded-full tw-bg-gray-400 tw-border-gray-500 tw-text-white">
                     آزمون آخر ماه
                   </Button>

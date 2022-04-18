@@ -51,17 +51,17 @@ export default function Home() {
           <Image src={logo} alt="logo" />
         </div>
         <div className={styles.menuItems}>
-          <div>
+          <div className="!tw-text-gray-700">
             <Link href="/">صفحه اصلی</Link>
           </div>
-          <div>
-            <Link href="/">درباره ما</Link>
+          <div className="!tw-text-gray-700">
+            <Link href="#about-us">درباره ما</Link>
+          </div>
+          <div className="!tw-text-gray-700">
+            <Link href="#contact-us">تماس با ما</Link>
           </div>
           <div>
-            <Link href="/">تماس با ما</Link>
-          </div>
-          <div>
-            <Link href="/">بلاگ</Link>
+            <Link href="https://blog.yekodo.net">بلاگ</Link>
           </div>
         </div>
       </div>
@@ -81,7 +81,7 @@ export default function Home() {
         </h3>
       </div>
       <div className={styles.buttons}>
-        <Link href="" >
+        <Link href="/login" >
           <button type="button" className={styles.btnStartTrip}>سفر را شروع کنید</button>
         </Link>
         <Link href="">
@@ -93,7 +93,7 @@ export default function Home() {
       <div className={styles.movie}>
         <div className={styles.iframeDiv}><span style={{ display: "block", paddingTop: "57%" }}></span><iframe src="https://www.aparat.com/video/video/embed/videohash/7ZXqM/vt/frame" allowFullScreen={true} ></iframe></div>
       </div>
-      <div className={styles.descMovie}>
+      <div className={styles.descMovie} id="about-us">
         <div className={styles.title}>زمین بازی اختصاصی کودک شما</div>
         <div className={styles.desc}>
           کودکان از لابه‌لای سرگرمی‌ها و بازی‌هایشان بیشتر از آن چیزی که ما فکر می‌کنیم می‌آموزند و از آن تأثیر می‌گیرند. این سرگرمی‌ها می‌تواند محتوایِ مخرّب یا سازنده داشته باشد و این یکی از دغدغه‌های مهم اولیاست.
@@ -213,7 +213,7 @@ export default function Home() {
             متخصصان درباره اهمیت سرگرمی در کودکی چه می گویند
           </div>
           <div className={styles.desc}>
-            جملاتی از والدین و متخصصان حوزه کودک در مورد پلنت
+            جملاتی از والدین و متخصصان حوزه کودک در مورد یکودو
           </div>
         </div>
         <div className={styles.comments}>
@@ -299,9 +299,9 @@ export default function Home() {
         <div className={styles.top}>
           <div className={styles.aboutUs}>
             <div className={styles.title}>درباره ما</div>
-            <div className={styles.desc}>متن درباره سامانه پلنت و مشخصاتی و قابلیتهای آن متن درباره سامانه پلنت و مشخصاتی و قابلیتهای آن متن درباره سامانه پلنت و مشخصاتی و قابلیتهای آن متن درباره سامانه پلنت و مشخصاتی و قابلیتهای آن. متن درباره سامانه پلنت و مشخصاتی و قابلیتهای آن متن درباره سامانه پلنت و مشخصاتی و قابلیتهای آن متن درباره سامانه پلنت و مشخصاتی و قابلیتهای آن متن درباره سامانه پلنت و مشخصاتی و قابلیتهای آن متن درباره سامانه پلنت و مشخصاتی و قابلیتهای. </div>
+            <div className={styles.desc}>متن درباره سامانه یکودو و مشخصاتی و قابلیتهای آن متن درباره سامانه یکودو و مشخصاتی و قابلیتهای آن متن درباره سامانه یکودو و مشخصاتی و قابلیتهای آن متن درباره سامانه یکودو و مشخصاتی و قابلیتهای آن. متن درباره سامانه یکودو و مشخصاتی و قابلیتهای آن متن درباره سامانه یکودو و مشخصاتی و قابلیتهای آن متن درباره سامانه یکودو و مشخصاتی و قابلیتهای آن متن درباره سامانه یکودو و مشخصاتی و قابلیتهای آن متن درباره سامانه یکودو و مشخصاتی و قابلیتهای. </div>
           </div>
-          <div className={styles.contactUs}>
+          <div className={styles.contactUs} id="contact-us">
             <div className={styles.title}>تماس با ما</div>
             <div className={styles.emailMobile}>
               <input type="text" placeholder="ایمیل یا شماره تماس شما" />
@@ -324,16 +324,13 @@ export default function Home() {
             <div className={styles.title}>درباره ما بیشتر بدانید</div>
             <ul className={styles.links}>
               <li>
-                <a href="">توضیح ساختار سامانه</a>
+                <a href="#about-us">درباره ما</a>
               </li>
               <li>
                 <a href="">دانلود برنامه موبایل</a>
               </li>
-              <li>
-                <a href="">چرا ما به پلنت نیاز داریم</a>
-              </li>
             </ul>
-            <div className={styles.connectImageInfo}> برای ارتباط با ما از طریق ایمیل info@plannet.com اقدام نمایید و یا از طریق فرم زیر با در تماس باشید.</div>
+            <div className={styles.connectImageInfo}> برای ارتباط با ما از طریق ایمیل info@yekodo.ir اقدام نمایید و یا از طریق فرم زیر با در تماس باشید.</div>
           </div>
         </div>
         <div className={styles.bottom}>

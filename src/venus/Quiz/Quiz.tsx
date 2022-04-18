@@ -15,6 +15,7 @@ export const Quiz: React.FC<{ way?: string, childId?: number, type?: string }> =
   const { mutateAsync: submitSystemQuiz } = useSubmitSystemQuiz();
   const { data: quiz } = useQuiz(props.way, props.childId, props.type);
   const { data: questions } = useQuestions(props.way, props.childId);
+  const { redirectUrl } = router.query;
 
   const data = props.way ? quiz : questions;
 
@@ -29,7 +30,7 @@ export const Quiz: React.FC<{ way?: string, childId?: number, type?: string }> =
           value: val
         }))
       }).then(() => {
-        router.push("/parent/dashboard");
+        router.push(redirectUrl as string || "/parent/dashboard");
       });
     }
   };

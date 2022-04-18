@@ -47,10 +47,6 @@ const SubjectStep = () => {
                 >
                   {subject.attributes.description}
                 </Typography.Paragraph>
-                <div className="date tw-text-gray-400 tw-text-xs tw-mt-3 tw-flex tw-items-center">
-                  <FiClock className="tw-ml-2" />
-                  {subject.attributes.duration} ساعت برنامه
-                </div>
               </div>
               <div
                 onClick={() => handleSelect(subject.id)}

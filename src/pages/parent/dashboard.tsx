@@ -27,6 +27,7 @@ import MusicIcon from "../../layouts/icons/music";
 import ActivityIcon from "../../layouts/icons/activity";
 import GameIcon from "../../layouts/icons/game";
 import BookIcon from "../../layouts/icons/book";
+import Link from "next/link";
 
 const titles: any = {
   "video": "تماشای فیلم",
@@ -95,7 +96,9 @@ const Schedule = (props: any) => {
 const SideDashboard = () => {
   return (
     <Box>
-      <Box component="img" src="/images/pd-test.png" sx={{ px: 2 }} />
+      <Link href="/parent/workView">
+        <Box className="tw-cursor-pointer" component="img" src="/images/pd-test.png" sx={{ px: 2 }} />
+      </Link>
     </Box>
   );
 };

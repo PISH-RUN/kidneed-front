@@ -20,6 +20,7 @@ const Approach = () => {
   const [modal, setModal] = useState(false);
   const [step, setStep] = useState(0);
   const router = useRouter();
+  const rahcheModal = localStorage.getItem('rahcheModal');
 
   useEffect(() => {
     if (router.query.step === 'result') {
@@ -30,7 +31,8 @@ const Approach = () => {
       setStep(1);
     } else {
       setStep(0);
-      setModal(true);
+      rahcheModal === null && setModal(true);
+      localStorage.setItem("rahcheModal", "true");
     }
   }, [router.query]);
 

@@ -90,7 +90,7 @@ const Message = () => {
                         setRahche(notif?.attributes?.payload?.id);
                       }
                       if (notif?.attributes?.type === "endOfMonthQuiz") {
-                        router.push('/parent/quiz')
+                        router.push('/parent/quiz?redirectUrl=/parent/message')
                       }
                     }}
                   >

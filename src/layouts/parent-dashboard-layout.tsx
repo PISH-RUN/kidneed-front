@@ -246,7 +246,7 @@ const ChildSelector = () => {
           </MenuItem>
         ))}
         <MenuItem
-          onClick={() => router.push("/add-child")}
+          onClick={() => router.push("/add-child?step=add")}
         >
           <ListItemIcon>
             <FaPlus />
