@@ -53,7 +53,6 @@ export const ActivityStats = ({ stats, loading }: any) => {
             <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.book?.progress, 'minute').asHours().toString()) || 0)} ساعت</Typography>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body1">مطالعه</Typography>
-              <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
             </Stack>
           </Box>
         </Box>
@@ -68,7 +67,6 @@ export const ActivityStats = ({ stats, loading }: any) => {
             <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.game?.progress, 'minute').asHours().toString()) || 0)} ساعت</Typography>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body1">بازی</Typography>
-              <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
             </Stack>
           </Box>
         </Box>
@@ -83,7 +81,6 @@ export const ActivityStats = ({ stats, loading }: any) => {
             <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.video?.progress, 'minute').asHours().toString()) || 0)} ساعت</Typography>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body1">فیلم</Typography>
-              <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
             </Stack>
           </Box>
         </Box>
