@@ -78,7 +78,7 @@ export const useContents = (ids?: number[]) => {
   });
 
   return useQuery(["content", ids], () =>
-      axios.get(`${DAPI_URL}/api/contents?${query}`).then(resp => Promise.resolve(resp.data)),
+      axios.get(`${DAPI_URL}/api/contents?publicationState=preview&${query}`).then(resp => Promise.resolve(resp.data)),
     {
       enabled: !!ids
     }
