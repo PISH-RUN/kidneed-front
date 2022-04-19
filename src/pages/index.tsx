@@ -327,7 +327,7 @@ export default function Home() {
                 <a href="#about-us">درباره ما</a>
               </li>
               <li>
-                <a href="">دانلود برنامه موبایل</a>
+                <a href="https://www.dropbox.com/s/sej2lvz8hrwo7sh/yekodo.apk?dl=1">دانلود برنامه موبایل</a>
               </li>
             </ul>
             <div className={styles.connectImageInfo}> برای ارتباط با ما از طریق ایمیل info@yekodo.ir اقدام نمایید و یا از طریق فرم زیر با در تماس باشید.</div>
