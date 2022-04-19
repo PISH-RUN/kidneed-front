@@ -68,6 +68,7 @@ export const useUpdateProgress = () =>
 export const useContents = (ids?: number[]) => {
   const query = qs.stringify({
     populate: {
+      images: "*",
       movies: {
         populate: ['tags'],
       }

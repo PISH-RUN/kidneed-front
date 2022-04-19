@@ -1,3 +1,3 @@
 export default function Reload() {
-  return <div>reload...</div>;
+  return <div>بارگذاری مجدد...</div>;
 }

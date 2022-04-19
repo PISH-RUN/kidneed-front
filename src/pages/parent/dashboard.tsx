@@ -131,6 +131,7 @@ const ItemPic = ({ content, type }: any) => {
   const getPoster = (content: any) => {
     let poster = content?.attributes?.meta?.verticalPoster && `${POSTER_ORIGIN}${content?.attributes?.meta?.verticalPoster[0].url}`;
     poster = poster || content?.attributes?.meta?.img || content?.attributes?.meta?.poster;
+    poster = poster || (content?.attributes?.images?.data && content?.attributes?.images?.data[0]?.attributes?.url);
 
     return poster;
   };

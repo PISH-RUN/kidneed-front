@@ -89,6 +89,7 @@ const ItemPic = ({ content }: any) => {
   const getPoster = (content: any) => {
     let poster = content?.attributes?.meta?.verticalPoster && `${POSTER_ORIGIN}${content?.attributes?.meta?.verticalPoster[0].url}`;
     poster = poster || content?.attributes?.meta?.img || content?.attributes?.meta?.poster;
+    poster = poster || (content?.attributes?.images?.data && content?.attributes?.images?.data[0]?.attributes?.url);
 
     return poster;
   };
@@ -380,7 +381,7 @@ const LoginDialog = ({ open, onClose }: any) => {
   const [inputValue, setInputValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [numbers] = useState([Math.floor(Math.random() * 10) + 1, Math.floor(Math.random() * 10) + 1]);
-  const { mutateAsync: verifyPassword } = useVerifyPassword();
+  const { mutateAsync: verifyPassword, isLoading } = useVerifyPassword();
 
   const onSubmit = () => {
     if (!ctx.user?.hasLockPassword) {
@@ -434,6 +435,7 @@ const LoginDialog = ({ open, onClose }: any) => {
               className="tw-mt-4 tw-py-3"
               size="large"
               value={inputValue}
+              onPressEnter={onSubmit}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="پاسخ سوال را وارد کنید"
             />
@@ -445,6 +447,7 @@ const LoginDialog = ({ open, onClose }: any) => {
               size="large"
               className="tw-mt-4 tw-py-3"
               value={passwordValue}
+              onPressEnter={onSubmit}
               onChange={(e) => setPasswordValue(e.target.value)}
             />
           </>
@@ -454,7 +457,9 @@ const LoginDialog = ({ open, onClose }: any) => {
           spacing={2}
           sx={{ width: "100%", "& button": { flexGrow: 1, borderRadius: 5 }, mt: 4 }}
         >
-          <Button variant="contained" size="large" onClick={onSubmit}>ورود</Button>
+          <Button disabled={isLoading} variant="contained" size="large" onClick={onSubmit}>
+            ورود
+          </Button>
           <Button
             variant="outlined" size="large" sx={{ borderColor: "#D9D9D9", color: "rgba(0, 0, 0, 0.65)" }}
             onClick={onClose}

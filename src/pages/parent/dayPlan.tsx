@@ -156,6 +156,7 @@ const ItemPic = ({ content, type }: any) => {
   const getPoster = (content: any) => {
     let poster = content?.attributes?.meta?.verticalPoster && `${POSTER_ORIGIN}${content?.attributes?.meta?.verticalPoster[0].url}`;
     poster = poster || content?.attributes?.meta?.img || content?.attributes?.meta?.poster;
+    poster = poster || (content?.attributes?.images?.data && content?.attributes?.images?.data[0]?.attributes?.url);
 
     return poster;
   };
@@ -180,6 +181,98 @@ const ItemPic = ({ content, type }: any) => {
         style={{ stroke: "#8CA3A5" }}
       />}
     </Box>
+  );
+};
+
+const ActivityCard = ({ type, items, contents, onSelectContent, onEdit }: any) => {
+  const [showTags, setShowTags] = useState(false);
+  const dataItems = _.chunk(items, 2);
+
+  return (
+    <>
+      {_.map(dataItems, (items: any) => {
+        const content1 = _.find(contents?.data, i => i.id === parseInt(items[0].attributes.content));
+        const content2 = items[1] ? _.find(contents?.data, i => i.id === parseInt(items[1].attributes.content)) : {};
+        const contentTags: string[] = [];
+
+        content1?.attributes?.movies?.data?.map((tag: any) => {
+          tag?.attributes?.tags?.data?.map((tag: any) => {
+            if (contentTags.indexOf(tag?.attributes?.name) === -1 && tag?.attributes?.name) {
+              contentTags.push(tag?.attributes?.name);
+            }
+          });
+        });
+
+        content2?.attributes?.movies?.data?.map((tag: any) => {
+          tag?.attributes?.tags?.data?.map((tag: any) => {
+            if (contentTags.indexOf(tag?.attributes?.name) === -1 && tag?.attributes?.name) {
+              contentTags.push(tag?.attributes?.name);
+            }
+          });
+        });
+
+        return (
+          <Card key={type} className="tw-w-full tw-mb-4 tw-rounded-3xl">
+            <div className="tw-flex">
+              <div className="tw-flex tw-flex-nowrap">
+                <div
+                  className="tw-ml-4 tw-w-60 tw-h-72 tw-cursor-pointer"
+                  onClick={() => onSelectContent(items[0].attributes.content)}
+                >
+                  <ItemPic content={content1} type={items[0].attributes.type} />
+                </div>
+                <div
+                  className="tw-ml-4 tw-w-60 tw-h-72 tw-cursor-pointer"
+                  onClick={() => onSelectContent(items[1].attributes.content)}
+                >
+                  <ItemPic content={content2} type={items[1] && items[1].attributes.type} />
+                </div>
+              </div>
+              <div className="tw-flex-auto">
+                <div className="tw-pt-5 tw-pr-4">
+                  <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">نوع محتوا:</span>
+                  <span className="tw-text-xl tw-font-bold">{typeNames[items[0].attributes.type]}</span>
+                </div>
+                <div className="tw-pt-5 tw-pr-4">
+                  <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">مدت زمان:</span>
+                  <span className="tw-text-xl tw-font-bold">{items[0].attributes.duration}</span>
+                </div>
+                <div className="tw-mt-8 tw-pt-5 tw-pr-4">
+                  <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">تگ ها:</span>
+                  <span className="tw-text-xl tw-font-bold">
+                    {(showTags ? contentTags : contentTags.slice(0, 4)).map((tag: any) =>
+                      <Tag
+                        key={tag}
+                        className="tw-bg-gray-300 tw-text-white tw-px-3 tw-font-normal tw-rounded-full tw-text-base"
+                      >
+                        {tag}
+                      </Tag>
+                    )}
+                    {contentTags.length > 4 &&
+                      <div className="tw-mt-5">
+                        <span className="tw-text-blue-400 tw-cursor-pointer tw-text-base" onClick={() => setShowTags(!showTags)}>
+                          {showTags ? 'پنهان کردن تگ ها' : 'نمایش تگ ها'}
+                        </span>
+                      </div>
+                    }
+                  </span>
+                </div>
+                <div className="tw-mt-5 tw-mr-3">
+                  <Button
+                    onClick={() => onEdit(items)}
+                    size="large"
+                    className="hover:tw-bg-gray-200 hover:tw-text-gray-500 hover:tw-border-gray-100 tw-w-60 tw-h-14 tw-bg-gray-100 tw-border-gray-50 tw-text-gray-500 tw-rounded-full"
+                    block
+                  >
+                    ویرایش
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Card>
+        );
+      })}
+    </>
   );
 };
 
@@ -215,85 +308,15 @@ const DayPlan = () => {
         {isLoading && <div className="tw-text-center tw-py-10">
           <CircularProgress />
         </div>}
-        {activities && _.map(_.groupBy(activities?.data, i => i.attributes.type), (items: any, type: string) => {
-          const dataItems = _.chunk(items, 2);
-
-          return _.map(dataItems, (items: any) => {
-            const content1 = _.find(contents?.data, i => i.id === parseInt(items[0].attributes.content));
-            const content2 = items[1] ? _.find(contents?.data, i => i.id === parseInt(items[1].attributes.content)) : {};
-            const contentTags: string[] = [];
-
-            content1?.attributes?.movies?.data?.map((tag: any) => {
-              tag?.attributes?.tags?.data?.map((tag: any) => {
-                if (contentTags.indexOf(tag?.attributes?.name) === -1 && tag?.attributes?.name) {
-                  contentTags.push(tag?.attributes?.name);
-                }
-              });
-            });
-
-            content2?.attributes?.movies?.data?.map((tag: any) => {
-              tag?.attributes?.tags?.data?.map((tag: any) => {
-                if (contentTags.indexOf(tag?.attributes?.name) === -1 && tag?.attributes?.name) {
-                  contentTags.push(tag?.attributes?.name);
-                }
-              });
-            });
-
-            return (
-              <Card key={type} className="tw-w-full tw-mb-4 tw-rounded-3xl">
-                <div className="tw-flex">
-                  <div className="tw-flex tw-flex-nowrap">
-                    <div
-                      className="tw-ml-4 tw-w-60 tw-h-72 tw-cursor-pointer"
-                      onClick={() => setContent(items[0].attributes.content)}
-                    >
-                      <ItemPic content={content1} type={items[0].attributes.type} />
-                    </div>
-                    <div
-                      className="tw-ml-4 tw-w-60 tw-h-72 tw-cursor-pointer"
-                      onClick={() => setContent(items[1].attributes.content)}
-                    >
-                      <ItemPic content={content2} type={items[1] && items[1].attributes.type} />
-                    </div>
-                  </div>
-                  <div className="tw-flex-auto">
-                    <div className="tw-pt-5 tw-pr-4">
-                      <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">نوع محتوا:</span>
-                      <span className="tw-text-xl tw-font-bold">{typeNames[items[0].attributes.type]}</span>
-                    </div>
-                    <div className="tw-pt-5 tw-pr-4">
-                      <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">مدت زمان:</span>
-                      <span className="tw-text-xl tw-font-bold">{items[0].attributes.duration}</span>
-                    </div>
-                    <div className="tw-mt-8 tw-pt-5 tw-pr-4">
-                      <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">تگ ها:</span>
-                      <span className="tw-text-xl tw-font-bold">
-                        {contentTags.map((tag: any) =>
-                          <Tag
-                            key={tag}
-                            className="tw-bg-gray-300 tw-text-white tw-px-3 tw-font-normal tw-rounded-full tw-text-base"
-                          >
-                            {tag}
-                          </Tag>
-                        )}
-                      </span>
-                    </div>
-                    <div className="tw-mt-5 tw-mr-3">
-                      <Button
-                        onClick={() => setSelectPlan(items)}
-                        size="large"
-                        className="hover:tw-bg-gray-200 hover:tw-text-gray-500 hover:tw-border-gray-100 tw-w-60 tw-h-14 tw-bg-gray-100 tw-border-gray-50 tw-text-gray-500 tw-rounded-full"
-                        block
-                      >
-                        ویرایش
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            );
-          });
-        })}
+        {activities && _.map(_.groupBy(activities?.data, i => i.attributes.type), (items: any, type: string) => (
+          <ActivityCard
+            onSelectContent={setContent}
+            onEdit={setSelectPlan}
+            type={type}
+            items={items}
+            contents={contents}
+          />
+        ))}
         <ContentModal
           visible={selectPlan}
           activity={selectPlan}
