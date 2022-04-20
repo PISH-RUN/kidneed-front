@@ -184,8 +184,34 @@ const ItemPic = ({ content, type }: any) => {
   );
 };
 
-const ActivityCard = ({ type, items, contents, onSelectContent, onEdit }: any) => {
+const ActivityTags = ({ contentTags }: any) => {
   const [showTags, setShowTags] = useState(false);
+
+  return (
+    <>
+      {(showTags ? contentTags : contentTags.slice(0, 4)).map((tag: any) =>
+        <Tag
+          key={tag}
+          className="tw-bg-gray-300 tw-text-white tw-px-3 tw-font-normal tw-rounded-full tw-text-base"
+        >
+          {tag}
+        </Tag>
+      )}
+      {contentTags.length > 4 &&
+        <div className="tw-mt-5">
+          <span
+            className="tw-text-blue-400 tw-cursor-pointer tw-text-base"
+            onClick={() => setShowTags(!showTags)}
+          >
+            {showTags ? "پنهان کردن تگ ها" : "نمایش تگ ها"}
+          </span>
+        </div>
+      }
+    </>
+  );
+};
+
+const ActivityCard = ({ type, items, contents, onSelectContent, onEdit }: any) => {
   const dataItems = _.chunk(items, 2);
 
   return (
@@ -213,16 +239,16 @@ const ActivityCard = ({ type, items, contents, onSelectContent, onEdit }: any) =
 
         return (
           <Card key={type} className="tw-w-full tw-mb-4 tw-rounded-3xl">
-            <div className="tw-flex">
+            <div className="tw-flex" style={{ minHeight: 350 }}>
               <div className="tw-flex tw-flex-nowrap">
                 <div
-                  className="tw-ml-4 tw-w-60 tw-h-72 tw-cursor-pointer"
+                  className="tw-ml-4 tw-w-60 tw-min-h-full tw-max-h-96 tw-cursor-pointer tw-border tw-rounded-2xl"
                   onClick={() => onSelectContent(items[0].attributes.content)}
                 >
                   <ItemPic content={content1} type={items[0].attributes.type} />
                 </div>
                 <div
-                  className="tw-ml-4 tw-w-60 tw-h-72 tw-cursor-pointer"
+                  className="tw-ml-4 tw-w-60 tw-min-h-full tw-max-h-96 tw-cursor-pointer tw-border tw-rounded-2xl"
                   onClick={() => onSelectContent(items[1].attributes.content)}
                 >
                   <ItemPic content={content2} type={items[1] && items[1].attributes.type} />
@@ -240,21 +266,7 @@ const ActivityCard = ({ type, items, contents, onSelectContent, onEdit }: any) =
                 <div className="tw-mt-8 tw-pt-5 tw-pr-4">
                   <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">تگ ها:</span>
                   <span className="tw-text-xl tw-font-bold">
-                    {(showTags ? contentTags : contentTags.slice(0, 4)).map((tag: any) =>
-                      <Tag
-                        key={tag}
-                        className="tw-bg-gray-300 tw-text-white tw-px-3 tw-font-normal tw-rounded-full tw-text-base"
-                      >
-                        {tag}
-                      </Tag>
-                    )}
-                    {contentTags.length > 4 &&
-                      <div className="tw-mt-5">
-                        <span className="tw-text-blue-400 tw-cursor-pointer tw-text-base" onClick={() => setShowTags(!showTags)}>
-                          {showTags ? 'پنهان کردن تگ ها' : 'نمایش تگ ها'}
-                        </span>
-                      </div>
-                    }
+                    <ActivityTags contentTags={contentTags} />
                   </span>
                 </div>
                 <div className="tw-mt-5 tw-mr-3">

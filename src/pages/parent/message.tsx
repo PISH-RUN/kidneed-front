@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Guard } from "@kidneed/types";
 import ParentDashboardLayout from "layouts/parent-dashboard-layout";
-import { Avatar, Col, Input, Pagination, Row, Select, Typography } from "antd";
+import { Avatar, Col, Divider, Input, Pagination, Row, Select, Typography } from "antd";
 import { FiClock, FiCompass, FiInfo } from "react-icons/fi";
 import { AiFillInfoCircle } from "react-icons/ai";
 import jMoment from "moment-jalaali";
@@ -12,6 +12,7 @@ import { useApp } from "@kidneed/hooks";
 import { useRouter } from "next/router";
 import { useContent } from "../../core-team/api/activity";
 import { POSTER_ORIGIN } from "../../core-team/constants";
+import { Collapse } from "@mui/material";
 
 const types: any = {
   rahche: {
@@ -32,6 +33,7 @@ const types: any = {
 };
 
 const NotificationItem = ({ notif, setContent, setRahche }: any) => {
+  const [visible, setVisible] = useState(false);
   const router = useRouter();
   const type = types[notif?.attributes?.type];
   const { data: content } = useContent(notif?.attributes?.payload?.content, {
@@ -48,7 +50,7 @@ const NotificationItem = ({ notif, setContent, setRahche }: any) => {
 
   return (
     <Col span={24} key={notif.id}>
-      <div className="tw-bg-white tw-flex tw-rounded-xl tw-overflow-hidden">
+      <div className={`tw-bg-white tw-flex tw-rounded-xl tw-overflow-hidden tw-transition-all tw-duration-200 ${visible && 'tw-rounded-b-none'}`}>
         {notif?.attributes?.type === "goalAssist" &&
           <div className="tw-m-5 tw-self-center tw-relative">
             <Avatar shape="square" src={getPoster(content?.data)} className="tw-w-24 tw-h-24 tw-rounded-xl" />
@@ -61,7 +63,7 @@ const NotificationItem = ({ notif, setContent, setRahche }: any) => {
           </div>}
         <div className={`tw-p-3 tw-pr-0 tw-flex-1 ${notif?.attributes?.type !== "goalAssist" && "tw-mr-5"}`}>
           <Typography.Title level={5} className="description">
-            {notif?.attributes?.title}
+            {notif?.attributes?.title} {content?.data?.attributes?.title && ` - ${content?.data?.attributes?.title}`}
           </Typography.Title>
           <Typography.Paragraph ellipsis={{ rows: 3 }} className="description">
             {notif?.attributes?.type === 'rahche' ? `برای شما ${notif?.attributes?.body} راهکار معرفی شده است.` : notif?.attributes?.body}
@@ -80,12 +82,23 @@ const NotificationItem = ({ notif, setContent, setRahche }: any) => {
             if (notif?.attributes?.type === "endOfMonthQuiz") {
               router.push("/parent/quiz?redirectUrl=/parent/message");
             }
+            if (notif?.attributes?.type === "goalAssist") {
+              setVisible(!visible)
+            }
           }}
         >
           <type.icon className="tw-text-4xl tw-mb-1" />
           <span>{type?.label}</span>
         </div>
       </div>
+      <Collapse in={visible}>
+        <div className="tw-p-5 tw-pt-0 tw-bg-white tw-rounded-b-xl">
+          <Divider className="tw-mt-0" />
+          <Typography.Paragraph className="description tw-whitespace-pre-line">
+            {notif?.attributes?.body}
+          </Typography.Paragraph>
+        </div>
+      </Collapse>
     </Col>
   );
 };
