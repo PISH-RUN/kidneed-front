@@ -5,7 +5,7 @@ import { Models } from "@kidneed/types";
 export const useSendOtp = () =>
   useMutation("request-otp", (data: any) => strapi.request("post", "/core/otp", {
     data: {
-      mobile: "+98" + data.mobile
+      mobile: "+98" + data.mobile.replace(/^(\+98|98|0)/g, '')
     }
   }));
 
@@ -18,7 +18,7 @@ export const useLogin = () =>
       }>("post", "/core/login", {
         data: {
           ...data,
-          mobile: "+98" + data.mobile
+          mobile: "+98" + data.mobile.replace(/^(\+98|98|0)/g, '')
         }
       });
     strapi.setToken(resp.jwt);

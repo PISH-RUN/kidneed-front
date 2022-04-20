@@ -4,22 +4,23 @@ import { useRouter } from "next/router";
 import { Guard } from "@kidneed/types";
 import BaseLayout from "../../layouts/baseLayout";
 import { PLAYERS_URL } from "../../core-team/constants";
-import { useContent, useUpdateProgress } from "../../core-team/api/activity";
+import { useContent, useSeenContent, useUpdateProgress } from "../../core-team/api/activity";
 import { Result } from "antd";
 import { useApp } from "@kidneed/hooks";
 
 const Audio = () => {
   const { query } = useRouter();
   const interval = useRef<any>();
-  const { url, child, id } = query;
+  const { url, child, id, contentId } = query;
   const { ctx } = useApp();
   const [remained, setRemained] = useState(0);
-  const { data: content } = useContent(parseInt(id as string));
+  const { data: content } = useContent(parseInt(contentId as string));
   const { mutateAsync: updateProgressRequest } = useUpdateProgress();
+  const { mutate: seenContent } = useSeenContent();
 
   const updateProgress = () => {
     interval.current = setInterval(() => {
-      updateProgressRequest({ id, duration: 1 }).then((resp: any) => {
+      updateProgressRequest({ contentId, duration: 1 }).then((resp: any) => {
         setRemained(resp?.data?.duration - resp?.data?.progress);
       });
     }, 60000);
@@ -42,6 +43,12 @@ const Audio = () => {
       clearInterval(interval.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (id && parseInt(id as string)) {
+      seenContent(parseInt(id as string));
+    }
+  }, [id]);
 
   if (remained < 0) {
     return (

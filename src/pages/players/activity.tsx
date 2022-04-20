@@ -1,15 +1,16 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import { Guard } from "@kidneed/types";
 import { Box, Button, Typography } from "@mui/material";
 import BaseLayout from "layouts/baseLayout";
 import { useRouter } from "next/router";
-import { useContent, useUpdateProgress } from "core-team/api/activity";
+import { useContent, useSeenContent, useUpdateProgress } from "core-team/api/activity";
 
 const Activity = () => {
   const { query, push } = useRouter();
-  const { id, child } = query;
+  const { id, activity, child } = query;
   const { data: content, isLoading } = useContent(parseInt(id as string));
   const { mutateAsync: updateProgressRequest } = useUpdateProgress();
+  const { mutate: seenContent } = useSeenContent();
 
   const poster = content?.data?.attributes?.meta?.poster;
 
@@ -22,6 +23,12 @@ const Activity = () => {
       push("/child/dashboard");
     }
   };
+
+  useEffect(() => {
+    if (activity && parseInt(activity as string)) {
+      seenContent(parseInt(activity as string));
+    }
+  }, [activity]);
 
   return (
     <div className="tw-min-h-screen tw-flex tw-full tw-items-center tw-justify-center tw-bg-sky-100 tw-py-10">

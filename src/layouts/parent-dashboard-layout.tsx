@@ -124,7 +124,11 @@ const NavBar = () => {
         p: 2
       }}
     >
-      <Box sx={{ maxWidth: 210, p: 2, margin: "0 auto" }}><Image src={LogoImage} alt="logo" /></Box>
+      <Box sx={{ maxWidth: 210, p: 2, margin: "0 auto" }}>
+        <Link href='/'>
+          <Image src={LogoImage} alt="logo" className="tw-cursor-pointer" />
+        </Link>
+      </Box>
       <Box sx={{ mt: 5 }}>
         {/*@ts-ignore*/}
         {menu.map((m, index) =>
@@ -237,7 +241,7 @@ const ChildSelector = () => {
                   }}
                   size="small" edge="end" aria-label="حذف"
                 >
-                  {/*<FiX />*/}
+                  <FiX />
                 </IconButton>
               }
             >

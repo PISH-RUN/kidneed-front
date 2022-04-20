@@ -32,6 +32,7 @@ import erik from 'landing/media/images/erik.png'
 import chamrani from 'landing/media/images/chamrani.png'
 import pishrun from 'landing/media/images/pishrun.png'
 import khallagh from 'landing/media/images/khallagh.png'
+import { BLOG_URL } from "../core-team/constants";
 
 
 
@@ -324,7 +325,10 @@ export default function Home() {
             <div className={styles.title}>درباره ما بیشتر بدانید</div>
             <ul className={styles.links}>
               <li>
-                <a href="#about-us">درباره ما</a>
+                <Link href="/login">شروع کنیم</Link>
+              </li>
+              <li>
+                <a href={BLOG_URL}>بلاگ</a>
               </li>
               <li>
                 <a href="https://www.dropbox.com/s/sej2lvz8hrwo7sh/yekodo.apk?dl=1">دانلود برنامه موبایل</a>

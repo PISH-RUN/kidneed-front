@@ -46,11 +46,12 @@ export const useActivityGlance = (child?: number) =>
     }
   );
 
-export const useContent = (id?: number) =>
+export const useContent = (id?: number, options?: any) =>
   useQuery(["content", id], () =>
       axios.get(`${DAPI_URL}/api/contents/${id}?populate=*`).then(resp => Promise.resolve(resp.data)),
     {
-      enabled: !!id
+      enabled: !!id,
+      ...options,
     }
   );
 
@@ -65,12 +66,17 @@ export const useUpdateProgress = () =>
     })
   );
 
+export const useSeenContent = () =>
+  useMutation(["seen"], (id: number) =>
+    strapi.request("post", `/activities/${id}/seen`)
+  );
+
 export const useContents = (ids?: number[]) => {
   const query = qs.stringify({
     populate: {
       images: "*",
       movies: {
-        populate: ['tags'],
+        populate: ["tags"]
       }
     },
     publicationState: "preview",

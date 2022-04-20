@@ -17,7 +17,7 @@ import { useContents } from "../../core-team/api/activity";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import { POSTER_ORIGIN } from "../../core-team/constants";
-import { Input, Tabs } from "antd";
+import { Input, notification, Tabs } from "antd";
 import { useVerifyPassword } from "../../core-team/api/user";
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
@@ -133,8 +133,8 @@ const DataBox = ({ data }: any) => {
 
   const content2 = {
     activity: {
-      id: data[0].id,
-      ...data[0].attributes
+      id: data[1].id,
+      ...data[1].attributes
     },
     ...(contents?.data?.find((c: any) => c.id === parseInt(data[1].attributes?.content)) || {})
   };
@@ -145,6 +145,21 @@ const DataBox = ({ data }: any) => {
   // @ts-ignore
   const Icon = typeIcons[content1.activity.type];
   const type = content1?.attributes?.type;
+
+  const openPlayer = (content: any) => {
+    const playerType = content?.attributes?.type;
+    let source = content?.attributes?.meta?.source && content?.attributes?.meta?.source[0].src;
+    source = source ? source : content?.attributes?.srcFile;
+
+    if (playerType === "video" && content?.attributes?.attachments?.data)
+      window.open(`${location.origin}/players/video?contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, '_blank');
+    else if (playerType === "activity")
+      window.open(`${location.origin}/players/activity?activity=${content?.activity?.id}&id=${content.id}`, '_blank');
+    else if (playerType === "game")
+      window.open(`${location.origin}/players/${playerType}?contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(content?.attributes?.sourceUrl)}`, '_blank');
+    else if (source)
+      window.open(`${location.origin}/players/${playerType}?contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(source)}`, '_blank');
+  };
 
   return <Box
     sx={{
@@ -175,7 +190,7 @@ const DataBox = ({ data }: any) => {
             <Button
               variant="contained" color="primary" sx={{ width: 220, height: 70, borderRadius: 6, marginTop: -5 }}
               size="large"
-              onClick={() => window.open(`${location.origin}/players/${content1.activity.type}?child=true&id=${content1.activity.id}&url=${encodeURIComponent(source1)}`, "_blank")}
+              onClick={() => openPlayer(content1)}
             ><PlayIcon /></Button>
           </Box>
         </Link>
@@ -186,7 +201,7 @@ const DataBox = ({ data }: any) => {
           <Button
             variant="contained" color="primary" sx={{ width: 220, height: 70, borderRadius: 6, marginTop: -5 }}
             size="large"
-            onClick={() => window.open(`${location.origin}/players/${content2.activity.type}?child=true&id=${content2.activity.id}&url=${encodeURIComponent(source2)}`, "_blank")}
+            onClick={() => openPlayer(content2)}
           ><PlayIcon /></Button>
         </Box>
       </Grid>
@@ -393,8 +408,14 @@ const LoginDialog = ({ open, onClose }: any) => {
       return;
     }
 
-    verifyPassword({ lockPassword: passwordValue }).then(() => {
-      location.href = "/parent/dashboard";
+    verifyPassword({ lockPassword: passwordValue }).then((resp: any) => {
+      if(resp?.data?.verified === true){
+        location.href = "/parent/dashboard";
+      } else {
+        notification.error({
+          message: "کلمه عبور وارد شده اشتباه است."
+        });
+      }
     });
   };
 
@@ -414,7 +435,7 @@ const LoginDialog = ({ open, onClose }: any) => {
       background: "rgba(226, 241, 253, 0.9)"
     }}
   >
-    <Box>
+    <Box className="tw-flex tw-justify-center tw-flex-col tw-items-center">
       <Box component="img" src="/images/logo.png" alt="logo" sx={{ width: 260, maxWidth: 260 }} />
       <Typography variant="h6">برای ورود به بخش والدین، ابتدا لطفا پاسخ سوال زیر را وارد نمایید.</Typography>
       <Box
@@ -425,7 +446,8 @@ const LoginDialog = ({ open, onClose }: any) => {
           boxShadow: "0px 14px 17px rgba(0, 0, 0, 0.08)",
           p: 7,
           pt: 4,
-          mt: 3
+          mt: 3,
+          width: "100%",
         }}
       >
         {!ctx.user?.hasLockPassword &&
