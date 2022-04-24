@@ -152,13 +152,15 @@ const DataBox = ({ data }: any) => {
     source = source ? source : content?.attributes?.srcFile;
 
     if (playerType === "video" && content?.attributes?.attachments?.data)
-      window.open(`${location.origin}/players/video?contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, '_blank');
+      window.open(`${location.origin}/players/video?child=true&contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, '_blank');
     else if (playerType === "activity")
-      window.open(`${location.origin}/players/activity?activity=${content?.activity?.id}&id=${content.id}`, '_blank');
+      window.open(`${location.origin}/players/activity?child=true&activity=${content?.activity?.id}&id=${content.id}`, '_blank');
     else if (playerType === "game")
-      window.open(`${location.origin}/players/${playerType}?contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(content?.attributes?.sourceUrl)}`, '_blank');
+      window.open(`${location.origin}/players/${playerType}?child=true&contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(content?.attributes?.sourceUrl)}`, '_blank');
+    else if (playerType === "book")
+      window.open(`${location.origin}/players/${playerType}?child=true&url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, '_blank');
     else if (source)
-      window.open(`${location.origin}/players/${playerType}?contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(source)}`, '_blank');
+      window.open(`${location.origin}/players/${playerType}?child=true&contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(source)}`, '_blank');
   };
 
   return <Box
