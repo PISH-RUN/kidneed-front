@@ -160,6 +160,7 @@ const ChildSelector = () => {
   };
 
   const handleSelectChild = (child: Models.Child) => {
+    console.log(child);
     selectChild(child);
     setAnchorEl(null);
   };
@@ -183,6 +184,9 @@ const ChildSelector = () => {
             message: "حذف با موفقیت انجام شد"
           });
           deleteChild(child.id);
+          if(ctx?.children && ctx?.children.length <= 1) {
+            router.push("/add-child");
+          }
         });
       }
     });
