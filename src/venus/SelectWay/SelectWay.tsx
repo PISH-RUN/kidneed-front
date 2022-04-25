@@ -1,5 +1,5 @@
 import { strapi } from "@kidneed/services";
-import { message } from "antd";
+import { message, notification } from "antd";
 import Text from "antd/lib/typography/Text";
 import React from "react";
 import { SecondVideo } from "venus/Video/SecondVideo";
@@ -28,7 +28,15 @@ export const SelectWay: React.FC<{
         })
         .catch((error) => {
           console.log(error);
-          message.error("خطایی رخ داده است");
+          if (error?.error.name === "LockedError") {
+            notification.info({
+              message: "شما قبلا حوزه رشدی فرزندتان را انتخاب کردید، لطفا آزمون را شروع کنید",
+            });
+            props.setWay(type);
+            props.setPage("quiz");
+          } else {
+            message.error("خطایی رخ داده است");
+          }
         });
     else {
       props.setWay(type);

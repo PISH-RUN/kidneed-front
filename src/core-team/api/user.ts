@@ -13,7 +13,7 @@ export const useVerifyPassword = () =>
 
 export const useUpdateChild = (childId?: number) =>
   useMutation(["update-child", childId], (data: any) =>
-    strapi.request("put", `/children/${childId}`, { data: { data } })
+    strapi.request<any>("put", `/children/${childId}`, { data: { data } })
   );
 
 export const useDeleteChild = () =>

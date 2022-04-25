@@ -9,35 +9,56 @@ import { PrimaryButton } from "../PrimaryButton/PrimaryButton";
 import { useApp } from "@kidneed/hooks";
 import jMoment from "moment-jalaali";
 import { useRegister } from "../../core-team/api/register";
+import { useUpdateChild } from "../../core-team/api/user";
 
 export const AddChild: React.FC<{
-  setPage: React.Dispatch<React.SetStateAction<string>>;
-  setChildId: (id: number) => void;
+  setPage: (id?: number) => void;
+  childId?: number;
 }> = (props) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
-  const { selectChild, addChild } = useApp();
+  const { ctx, selectChild, addChild, editChild } = useApp();
   const { mutateAsync: addChildRequest } = useRegister();
+  const { mutateAsync: editChildRequest } = useUpdateChild(props.childId);
+  const child: any = ctx.children?.find((c) => c.id === props.childId) || {};
 
   const onFinish = (values: any) => {
     setLoading(true);
-    addChildRequest({
-      data: values,
-      age: values.age
-    })
-      .then((response) => {
-        addChild({ id: response.data.id, ...response.data.attributes });
-        selectChild({ id: response.data.id, ...response.data.attributes });
-        props.setChildId(response.data.id);
-        props.setPage("selectWay");
+    if (props.childId) {
+      editChildRequest({
+        ...values,
+        name: values.childName,
       })
-      .catch((error) => {
-        console.log(error);
-        message.error("خطایی رخ داده است");
+        .then((response) => {
+          editChild({ id: response.data.id, ...response.data.attributes });
+          selectChild({ id: response.data.id, ...response.data.attributes });
+          props.setPage(response.data.id);
+        })
+        .catch((error) => {
+          console.log(error);
+          message.error("خطایی رخ داده است");
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      addChildRequest({
+        data: values,
+        age: values.age
       })
-      .finally(() => {
-        setLoading(false);
-      });
+        .then((response) => {
+          addChild({ id: response.data.id, ...response.data.attributes });
+          selectChild({ id: response.data.id, ...response.data.attributes });
+          props.setPage(response.data.id);
+        })
+        .catch((error) => {
+          console.log(error);
+          message.error("خطایی رخ داده است");
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   };
 
   return (
@@ -47,6 +68,13 @@ export const AddChild: React.FC<{
         style={{ padding: "0 200px" }}
         form={form}
         onFinish={onFinish}
+        initialValues={{
+          ...child,
+          age: child ? jMoment().jYear() - child.birthYear : 0,
+          childName: child.name,
+          name: ctx.user?.name,
+          relation: child && child.relation
+        }}
       >
         <Text style={{ fontSize: "16px" }}>
           اطلاعات فرزند خود را وارد نمایید
@@ -57,6 +85,7 @@ export const AddChild: React.FC<{
         >
           <Input
             size="large"
+            disabled={!!ctx.user?.name}
             placeholder="نام شما"
             prefix={<UserOutlined style={{ color: "#1890FF" }} />}
           />
