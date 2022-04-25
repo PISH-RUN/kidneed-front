@@ -152,15 +152,15 @@ const DataBox = ({ data }: any) => {
     source = source ? source : content?.attributes?.srcFile;
 
     if (playerType === "video" && content?.attributes?.attachments?.data)
-      window.open(`${location.origin}/players/video?child=true&contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, '_blank');
+      window.open(`${location.origin}/players/video?child=true&contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, "_blank");
     else if (playerType === "activity")
-      window.open(`${location.origin}/players/activity?child=true&activity=${content?.activity?.id}&id=${content.id}`, '_blank');
+      window.open(`${location.origin}/players/activity?child=true&activity=${content?.activity?.id}&id=${content.id}`, "_blank");
     else if (playerType === "game")
-      window.open(`${location.origin}/players/${playerType}?child=true&contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(content?.attributes?.sourceUrl)}`, '_blank');
+      window.open(`${location.origin}/players/${playerType}?child=true&contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(content?.attributes?.sourceUrl)}`, "_blank");
     else if (playerType === "book")
-      window.open(`${location.origin}/players/${playerType}?child=true&url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, '_blank');
+      window.open(`${location.origin}/players/${playerType}?child=true&url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, "_blank");
     else if (source)
-      window.open(`${location.origin}/players/${playerType}?child=true&contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(source)}`, '_blank');
+      window.open(`${location.origin}/players/${playerType}?child=true&contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(source)}`, "_blank");
   };
 
   return <Box
@@ -217,6 +217,12 @@ const Dashboard = () => {
   const { data } = useDashboard(ctx?.child?.id);
 
   const result = _.groupBy(data?.data, (i: any) => i.attributes?.type);
+
+  useEffect(() => {
+    window.onpopstate = () => {
+      history.go(1);
+    };
+  }, []);
 
   return <BaseLayout>
     <>
@@ -411,7 +417,7 @@ const LoginDialog = ({ open, onClose }: any) => {
     }
 
     verifyPassword({ lockPassword: passwordValue }).then((resp: any) => {
-      if(resp?.data?.verified === true){
+      if (resp?.data?.verified === true) {
         location.href = "/parent/dashboard";
       } else {
         notification.error({
@@ -449,7 +455,7 @@ const LoginDialog = ({ open, onClose }: any) => {
           p: 7,
           pt: 4,
           mt: 3,
-          width: "100%",
+          width: "100%"
         }}
       >
         {!ctx.user?.hasLockPassword &&
