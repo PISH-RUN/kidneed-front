@@ -219,9 +219,7 @@ const Dashboard = () => {
   const result = _.groupBy(data?.data, (i: any) => i.attributes?.type);
 
   useEffect(() => {
-    window.onpopstate = () => {
-      history.go(1);
-    };
+    localStorage.setItem("isChild", "true");
   }, []);
 
   return <BaseLayout>
@@ -409,6 +407,7 @@ const LoginDialog = ({ open, onClose }: any) => {
   const onSubmit = () => {
     if (!ctx.user?.hasLockPassword) {
       if (inputValue === (numbers[0] * numbers[1]).toString()) {
+        localStorage.removeItem("isChild");
         location.href = "/parent/dashboard";
       } else {
         alert("کد وارد شده اشتباه است.");
@@ -418,6 +417,7 @@ const LoginDialog = ({ open, onClose }: any) => {
 
     verifyPassword({ lockPassword: passwordValue }).then((resp: any) => {
       if (resp?.data?.verified === true) {
+        localStorage.removeItem("isChild");
         location.href = "/parent/dashboard";
       } else {
         notification.error({

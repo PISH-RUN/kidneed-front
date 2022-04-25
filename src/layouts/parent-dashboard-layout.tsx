@@ -279,6 +279,7 @@ export default function ParentDashboardLayout(props: ParentDashboardLayoutProps)
   const { children, SideComponent, showChild, showRange, onRangeChange, Header, bp, bd } = props;
   const [range, setRange] = useState<DateRange<Date>>(today);
   const { ctx } = useApp();
+  const isChild = localStorage.getItem('isChild')
 
   useEffect(() => {
     if (range[0] !== null && range[1] !== null) {
@@ -286,7 +287,13 @@ export default function ParentDashboardLayout(props: ParentDashboardLayoutProps)
     }
   }, [range]);
 
-  if (!ctx.child && ctx.children) {
+  useEffect(() => {
+    if(isChild) {
+      location.href = "/child/dashboard";
+    }
+  }, [isChild])
+
+  if (isChild || (!ctx.child && ctx.children)) {
     return <></>;
   }
 
