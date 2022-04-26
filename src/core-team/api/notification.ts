@@ -12,12 +12,12 @@ export const useNotification = (search: string, sort: string, pagination: any) =
           $or: [
             {
               body: {
-                $contains: search || undefined,
+                $containsi: search || undefined,
               },
             },
             {
               title: {
-                $contains: search || undefined,
+                $containsi: search || undefined,
               },
             }
           ]

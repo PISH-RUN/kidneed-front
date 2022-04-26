@@ -104,7 +104,7 @@ export const useSearchContents = () => useMutation(["contents-search"], ({ searc
       filters: {
         type,
         title: {
-          $contains: search
+          $containsi: search
         }
       }
     }, {

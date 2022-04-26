@@ -11,7 +11,7 @@ import { Result } from "antd";
 const Book = () => {
   const { query } = useRouter();
   const interval = useRef<any>();
-  const { url, child, id, contentId } = query;
+  const { url, child, id, secondId, contentId } = query;
   const { ctx } = useApp();
   const [remained, setRemained] = useState(0);
   const { data: content } = useContent(parseInt(contentId as string));
@@ -20,9 +20,10 @@ const Book = () => {
 
   const updateProgress = () => {
     interval.current = setInterval(() => {
-      updateProgressRequest({ contentId, duration: 1 }).then((resp: any) => {
+      updateProgressRequest({ id, duration: 1 }).then((resp: any) => {
         setRemained(resp?.data?.duration - resp?.data?.progress);
       });
+      updateProgressRequest({ id: secondId, duration: 1 })
     }, 60000);
   };
 

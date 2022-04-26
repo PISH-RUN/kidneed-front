@@ -10,7 +10,7 @@ export const useSubjects = (title?: string) =>
         populate: "*",
         filters: {
           name: {
-            $contains: title
+            $containsi: title
           }
         }
       }

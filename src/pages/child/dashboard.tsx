@@ -17,8 +17,12 @@ import { useContents } from "../../core-team/api/activity";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import { POSTER_ORIGIN } from "../../core-team/constants";
-import { Input, notification, Tabs } from "antd";
+import { Input, notification, Progress } from "antd";
 import { useVerifyPassword } from "../../core-team/api/user";
+
+notification.config({
+  placement: "bottomLeft",
+});
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
 
@@ -120,7 +124,8 @@ const DataBox = ({ data }: any) => {
 
   if (!data[0]) return null;
 
-  const duration = _.sumBy(data, (i: any) => i.attributes?.duration);
+  const duration = data[0].attributes?.duration;
+  const progress = _.sumBy(data, (i: any) => i.attributes?.progress);
 
   const content1 = {
     activity: {
@@ -146,21 +151,21 @@ const DataBox = ({ data }: any) => {
   const Icon = typeIcons[content1.activity.type];
   const type = content1?.attributes?.type;
 
-  const openPlayer = (content: any) => {
+  const openPlayer = (content: any, content2: any) => {
     const playerType = content?.attributes?.type;
     let source = content?.attributes?.meta?.source && content?.attributes?.meta?.source[0].src;
     source = source ? source : content?.attributes?.srcFile;
 
     if (playerType === "video" && content?.attributes?.attachments?.data)
-      window.open(`${location.origin}/players/video?child=true&contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, "_blank");
+      window.open(`${location.origin}/players/video?child=true&contentId=${content?.id}&id=${content?.activity?.id}&secondId=${content2?.activity?.id}&url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, "_blank");
     else if (playerType === "activity")
-      window.open(`${location.origin}/players/activity?child=true&activity=${content?.activity?.id}&id=${content.id}`, "_blank");
+      window.open(`${location.origin}/players/activity?child=true&activity=${content?.activity?.id}&secondId=${content2?.activity?.id}&id=${content.id}`, "_blank");
     else if (playerType === "game")
-      window.open(`${location.origin}/players/${playerType}?child=true&contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(content?.attributes?.sourceUrl)}`, "_blank");
+      window.open(`${location.origin}/players/${playerType}?child=true&contentId=${content?.id}&id=${content?.activity?.id}&secondId=${content2?.activity?.id}&url=${encodeURIComponent(content?.attributes?.sourceUrl)}`, "_blank");
     else if (playerType === "book")
-      window.open(`${location.origin}/players/${playerType}?child=true&url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, "_blank");
+      window.open(`${location.origin}/players/${playerType}?child=true&id=${content?.activity?.id}&secondId=${content2?.activity?.id}&url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, "_blank");
     else if (source)
-      window.open(`${location.origin}/players/${playerType}?child=true&contentId=${content?.id}&id=${content?.activity?.id}&url=${encodeURIComponent(source)}`, "_blank");
+      window.open(`${location.origin}/players/${playerType}?child=true&contentId=${content?.id}&id=${content?.activity?.id}&secondId=${content2?.activity?.id}&url=${encodeURIComponent(source)}`, "_blank");
   };
 
   return <Box
@@ -181,7 +186,8 @@ const DataBox = ({ data }: any) => {
             <Icon className={`tw-stroke-white !tw-w-16 !tw-h-16 ${type !== "game" && "!tw-fill-transparent"}`} />}
         </Box>
         {/* @ts-ignore */}
-        <Box sx={{ ...styles.dataMenu, background: "#FED150" }}>
+        <Box sx={{ ...styles.dataMenu, background: "#FED150" }} className="tw-relative">
+          <Progress width={92} trailColor="transparent" type="circle" percent={progress / duration * 100} format={() => ""} strokeColor="#FF8345" className="tw-absolute" />
           <Typography variant="h5" sx={{ color: "#fff", fontWeight: 700, mt: 0.5 }}>{duration}</Typography>
         </Box>
       </Stack>
@@ -192,7 +198,7 @@ const DataBox = ({ data }: any) => {
             <Button
               variant="contained" color="primary" sx={{ width: 220, height: 70, borderRadius: 6, marginTop: -5 }}
               size="large"
-              onClick={() => openPlayer(content1)}
+              onClick={() => openPlayer(content1, content2)}
             ><PlayIcon /></Button>
           </Box>
         </Link>
@@ -203,7 +209,7 @@ const DataBox = ({ data }: any) => {
           <Button
             variant="contained" color="primary" sx={{ width: 220, height: 70, borderRadius: 6, marginTop: -5 }}
             size="large"
-            onClick={() => openPlayer(content2)}
+            onClick={() => openPlayer(content2, content1)}
           ><PlayIcon /></Button>
         </Box>
       </Grid>
@@ -215,6 +221,7 @@ const Dashboard = () => {
   const [showUserSelect, setShowUseSelect] = useState(false);
   const { ctx, selectChild } = useApp();
   const { data } = useDashboard(ctx?.child?.id);
+  const values = ctx?.child?.gender && childType[ctx?.child?.gender];
 
   const result = _.groupBy(data?.data, (i: any) => i.attributes?.type);
 
@@ -236,10 +243,15 @@ const Dashboard = () => {
             textAlign: "center"
           }}
         >
-          <Avatar
-            sx={{ width: 118, height: 118, p: 2, background: "#57ABF4", cursor: "pointer" }}
-            onClick={() => setShowUseSelect(true)} src="/images/avatar-woman.png"
-          />
+          {values && <Avatar
+            className="tw-cursor-pointer"
+            classes={{
+              img: "!tw-object-contain"
+            }}
+            src={values.avatar}
+            onClick={() => setShowUseSelect(true)}
+            sx={{ width: 126, height: 126, p: 2, background: values.color, mx: "auto" }}
+          />}
           {ctx.child &&
             <Typography
               variant="h6"
@@ -500,7 +512,7 @@ const LoginDialog = ({ open, onClose }: any) => {
   </Box>;
 };
 
-const childType = {
+const childType: any = {
   boy: {
     color: "#57ABF4",
     avatar: "/images/avatar-man.png"
@@ -516,16 +528,23 @@ const AvatarBox = ({ type, name, onSelect }: any) => {
   const values = childType[type];
 
   return <Box
-    onClick={onSelect} sx={{
-    p: 3,
-    background: "#fff",
-    textAlign: "center",
-    borderRadius: 8,
-    cursor: "pointer",
-    "&:hover": { background: "#f6f6f6" }
-  }}
+    onClick={onSelect}
+    sx={{
+      p: 3,
+      background: "#fff",
+      textAlign: "center",
+      borderRadius: 8,
+      cursor: "pointer",
+      "&:hover": { background: "#f6f6f6" }
+    }}
   >
-    <Avatar src={values.avatar} sx={{ width: 126, height: 126, mb: 4, p: 3, background: values.color, mx: "auto" }} />
+    <Avatar
+      classes={{
+        img: "!tw-object-contain"
+      }}
+      src={values.avatar}
+      sx={{ width: 126, height: 126, mb: 4, p: 3, background: values.color, mx: "auto" }}
+    />
     <Typography variant="h5">{name}</Typography>
   </Box>;
 };

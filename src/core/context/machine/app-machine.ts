@@ -96,8 +96,8 @@ export const appMachine = createMachine<PartialAppContext, AppEvent, AppState>({
       on: {
         LOGGED_OUT: { target: "guest", actions: logout },
         ADD_CHILD: { target: ".child", actions: childAdded },
-        EDIT_CHILD: { target: ".parent", actions: childEdited },
-        DELETE_CHILD: { target: ".parent", actions: childDeleted },
+        EDIT_CHILD: { target: ".child", actions: childEdited },
+        DELETE_CHILD: { target: ".child", actions: childDeleted },
         FETCH_USER: { target: ".parent", actions: fetchUser },
         PARENT_PASS: { target: ".parent" },
       },

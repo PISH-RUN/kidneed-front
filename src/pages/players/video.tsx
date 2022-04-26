@@ -13,7 +13,7 @@ const Video = () => {
   const { query } = useRouter();
   const { ctx } = useApp();
   const interval = useRef<any>();
-  const { url, child, id, contentId } = query;
+  const { url, child, id, secondId, contentId } = query;
   const [remained, setRemained] = useState(0);
   const { data: content } = useContent(parseInt(contentId as string));
   const { mutateAsync: updateProgressRequest } = useUpdateProgress();
@@ -21,9 +21,10 @@ const Video = () => {
 
   const updateProgress = () => {
     interval.current = setInterval(() => {
-      updateProgressRequest({ contentId, duration: 1 }).then((resp: any) => {
+      updateProgressRequest({ id, duration: 1 }).then((resp: any) => {
         setRemained(resp?.data?.duration - resp?.data?.progress);
       });
+      updateProgressRequest({ id: secondId, duration: 1 })
     }, 60000);
   };
 

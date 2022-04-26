@@ -7,7 +7,7 @@ import { useContent, useSeenContent, useUpdateProgress } from "core-team/api/act
 
 const Activity = () => {
   const { query, push } = useRouter();
-  const { id, activity, child } = query;
+  const { id, secondId, activity, child } = query;
   const { data: content, isLoading } = useContent(parseInt(id as string));
   const { mutateAsync: updateProgressRequest } = useUpdateProgress();
   const { mutate: seenContent } = useSeenContent();
@@ -19,6 +19,7 @@ const Activity = () => {
       updateProgressRequest({ id, duration: content?.data?.attributes?.duration }).then(() => {
         push("/child/dashboard");
       });
+      updateProgressRequest({ id: secondId, duration: content?.data?.attributes?.duration })
     } else {
       push("/child/dashboard");
     }

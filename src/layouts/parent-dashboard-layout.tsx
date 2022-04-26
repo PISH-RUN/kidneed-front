@@ -35,6 +35,10 @@ import { FiLogOut, FiX } from "react-icons/fi";
 import { Modal, notification, Popconfirm } from "antd";
 import { useDeleteChild } from "../core-team/api/user";
 
+notification.config({
+  placement: "bottomLeft",
+});
+
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
 
 export type ParentDashboardLayoutProps = {

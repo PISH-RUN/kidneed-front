@@ -56,10 +56,12 @@ export const childAdded = assign(
 );
 
 export const childEdited = assign(
-  (ctx: PartialAppContext, event: EditChildEvent) => ({
-    children: [event.child],
-    child: event.child
-  })
+  (ctx: PartialAppContext, event: EditChildEvent) => {
+    return {
+      children: [...(ctx.children?.filter(c => c.id !== event.child.id) || []), event.child],
+      child: event.child
+    }
+  }
 );
 
 export const childDeleted = assign(
