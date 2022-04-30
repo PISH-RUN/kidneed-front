@@ -47,11 +47,34 @@ export const useActivityGlance = (child?: number) =>
   );
 
 export const useContent = (id?: number, options?: any) =>
-  useQuery(["content", id], () =>
-      axios.get(`${DAPI_URL}/api/contents/${id}?populate=*`).then(resp => Promise.resolve(resp.data)),
+  useQuery(["content", id], () => {
+      const query = qs.stringify({
+        populate: ['content', 'content.images', 'content.editions', 'content.movies', 'content.movies.tags']
+      }, {
+        encodeValuesOnly: true
+      });
+
+      return axios.get(`${DAPI_URL}/api/entities/${id}?` + query).then(resp => {
+        const data = resp.data;
+        return Promise.resolve({
+          ...data,
+          data: {
+            id: data.data.id,
+            attributes: {
+              ...data.data?.attributes,
+              ageCategory: data.data?.attributes?.age,
+              type: data.data?.attributes?.content?.data?.attributes?.type,
+              images: data.data?.attributes?.content?.data?.attributes?.images,
+              editions: data.data?.attributes?.content?.data?.attributes?.editions,
+              movies: data.data?.attributes?.content?.data?.attributes?.movies,
+            }
+          }
+        })
+      });
+    },
     {
       enabled: !!id,
-      ...options,
+      ...options
     }
   );
 
@@ -74,9 +97,11 @@ export const useSeenContent = () =>
 export const useContents = (ids?: number[]) => {
   const query = qs.stringify({
     populate: {
-      images: "*",
-      movies: {
-        populate: ["tags"]
+      content: {
+        images: "*",
+        movies: {
+          populate: ["tags"]
+        }
       }
     },
     publicationState: "preview",
@@ -90,7 +115,7 @@ export const useContents = (ids?: number[]) => {
   });
 
   return useQuery(["content", ids], () =>
-      axios.get(`${DAPI_URL}/api/contents?${query}`).then(resp => Promise.resolve(resp.data)),
+      axios.get(`${DAPI_URL}/api/entities?${query}`).then(resp => Promise.resolve(resp.data)),
     {
       enabled: !!ids
     }
@@ -102,15 +127,17 @@ export const useSearchContents = () => useMutation(["contents-search"], ({ searc
       populate: "*",
       sort: ["title:asc"],
       filters: {
-        type,
         title: {
           $containsi: search
+        },
+        content: {
+          type
         }
       }
     }, {
       encodeValuesOnly: true
     });
-    return axios.get(`${DAPI_URL}/api/contents?${query}`).then(resp => Promise.resolve(resp.data));
+    return axios.get(`${DAPI_URL}/api/entities?${query}`).then(resp => Promise.resolve(resp.data));
   }
 );
 

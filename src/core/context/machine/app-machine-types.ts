@@ -24,6 +24,11 @@ export type LoggedInEvent = {
   user: Models.User;
 };
 
+export type EditUserEvent = {
+  type: "EDIT_USER";
+  user: Models.User;
+};
+
 export type SelectChildEvent = {
   type: "SELECT_CHILD";
   child: Models.Child;
@@ -71,6 +76,7 @@ export type AppEvent =
   | FetchUserEvent
   | ParentPassEvent
   | RetryEvent
+  | EditUserEvent
   | LoggedOutEvent;
 
 export type AppState =

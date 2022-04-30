@@ -3,7 +3,7 @@ import { Api, strapi } from "@kidneed/services";
 import {
   AddChildEvent,
   BootstrapDone,
-  ChildrenFetchDone, DeleteChildEvent, EditChildEvent,
+  ChildrenFetchDone, DeleteChildEvent, EditChildEvent, EditUserEvent,
   FetchUserEvent,
   LoggedInContext,
   PartialAppContext,
@@ -32,6 +32,12 @@ export const bootstrapDone = assign(
 
 export const fetchUser = assign(
   (_: PartialAppContext, event: FetchUserEvent) => ({
+    user: event.user
+  })
+);
+
+export const editUser = assign(
+  (_: PartialAppContext, event: EditUserEvent) => ({
     user: event.user
   })
 );

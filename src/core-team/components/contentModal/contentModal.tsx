@@ -17,7 +17,6 @@ const ContentForm = ({ time, activity, onClose }: any) => {
 
   const handleSubmit = () => {
     form.validateFields().then(values => {
-      console.log(values);
       if (isEdit) {
         const promises = [
           editActivity({

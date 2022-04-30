@@ -11,7 +11,7 @@ import {
   bootstrapDone,
   childAdded, childDeleted, childEdited,
   childrenFetched,
-  childSelected,
+  childSelected, editUser,
   fetchChildren, fetchUser,
   logout
 } from "./app-machine-actions";
@@ -99,6 +99,7 @@ export const appMachine = createMachine<PartialAppContext, AppEvent, AppState>({
         EDIT_CHILD: { target: ".child", actions: childEdited },
         DELETE_CHILD: { target: ".child", actions: childDeleted },
         FETCH_USER: { target: ".parent", actions: fetchUser },
+        EDIT_USER: { target: ".parent", actions: editUser },
         PARENT_PASS: { target: ".parent" },
       },
     },

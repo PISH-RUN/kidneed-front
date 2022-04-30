@@ -10,7 +10,7 @@ import { useApp } from "@kidneed/hooks";
 import jMoment from "moment-jalaali";
 
 const Setting = () => {
-  const { ctx, editChild } = useApp();
+  const { ctx, editChild, editUser } = useApp();
   const { mutateAsync: updateMe } = useUpdateMe();
   const { mutateAsync: updateChild } = useUpdateChild(ctx?.child?.id);
   const [loginType, setLoginType] = useState(ctx?.user?.hasLockPassword ? "password" : "question");
@@ -27,7 +27,8 @@ const Setting = () => {
       gender: values.gender
     };
 
-    updateMe(userParams).then(() => {
+    updateMe(userParams).then((resp: any) => {
+      editUser(resp)
       notification.success({
         message: "اطلاعات شما با موفقیت ویرایش شد."
       });

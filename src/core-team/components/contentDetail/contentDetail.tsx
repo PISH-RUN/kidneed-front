@@ -22,7 +22,6 @@ const ageCategory: any = {
 
 export const ContentDetail = (props: any) => {
   const { content, ...rest } = props;
-  const router = useRouter();
 
   let poster = content?.attributes?.meta?.verticalPoster && `${POSTER_ORIGIN}${content?.attributes?.meta?.verticalPoster[0].url}`;
   poster = poster || content?.attributes?.meta?.img || content?.attributes?.meta?.poster

@@ -18,6 +18,11 @@ export default function useApp() {
     [send]
   );
 
+  const editUser = useCallback(
+    (user: Models.User) => send("EDIT_USER", { user }),
+    [send]
+  );
+
   const passParent = useCallback(
     (user: Models.User) => send("LOGGED_IN", { user }),
     [send]
@@ -68,6 +73,7 @@ export default function useApp() {
     addChild,
     editChild,
     deleteChild,
-    fetchUser
+    fetchUser,
+    editUser
   };
 }

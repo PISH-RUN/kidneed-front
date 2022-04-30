@@ -164,7 +164,6 @@ const ChildSelector = () => {
   };
 
   const handleSelectChild = (child: Models.Child) => {
-    console.log(child);
     selectChild(child);
     setAnchorEl(null);
   };

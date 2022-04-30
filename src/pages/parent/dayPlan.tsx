@@ -57,8 +57,6 @@ const SideComponent = (props: any) => {
     return days;
   };
 
-  console.log(jMoment().jMonth() === jMoment(month).jMonth());
-
   return (
     <div>
       <div className="tw-flex tw-px-3 tw-pr-6 tw-py-6 tw-items-center tw-justify-between">
@@ -341,7 +339,7 @@ const DayPlan = () => {
           time={selectedDate}
         />
         <ContentDetail
-          visible={!!selectedContent && !!content?.data}
+          visible={!!selectedContent && !!content}
           content={content?.data}
           onCancel={() => setContent(undefined)}
         />
