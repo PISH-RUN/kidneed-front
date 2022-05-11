@@ -54,7 +54,7 @@ export const useContent = (id?: number, options?: any) =>
         encodeValuesOnly: true
       });
 
-      return axios.get(`${DAPI_URL}/api/entities/${id}?` + query).then(resp => {
+      return axios.get(`${DAPI_URL}/api/contents/${id}?` + query).then(resp => {
         const data = resp.data;
         return Promise.resolve({
           ...data,
@@ -62,11 +62,6 @@ export const useContent = (id?: number, options?: any) =>
             id: data.data.id,
             attributes: {
               ...data.data?.attributes,
-              ageCategory: data.data?.attributes?.age,
-              type: data.data?.attributes?.content?.data?.attributes?.type,
-              images: data.data?.attributes?.content?.data?.attributes?.images,
-              editions: data.data?.attributes?.content?.data?.attributes?.editions,
-              movies: data.data?.attributes?.content?.data?.attributes?.movies,
             }
           }
         })
@@ -115,7 +110,7 @@ export const useContents = (ids?: number[]) => {
   });
 
   return useQuery(["content", ids], () =>
-      axios.get(`${DAPI_URL}/api/entities?${query}`).then(resp => Promise.resolve(resp.data)),
+      axios.get(`${DAPI_URL}/api/contents?${query}`).then(resp => Promise.resolve(resp.data)),
     {
       enabled: !!ids
     }
@@ -137,7 +132,7 @@ export const useSearchContents = () => useMutation(["contents-search"], ({ searc
     }, {
       encodeValuesOnly: true
     });
-    return axios.get(`${DAPI_URL}/api/entities?${query}`).then(resp => Promise.resolve(resp.data));
+    return axios.get(`${DAPI_URL}/api/contents?${query}`).then(resp => Promise.resolve(resp.data));
   }
 );
 

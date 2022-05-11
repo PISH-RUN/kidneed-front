@@ -32,7 +32,9 @@ export const ContentDetail = (props: any) => {
     let source = content?.attributes?.meta?.source && content?.attributes?.meta?.source[0].src;
     source = source ? source : content?.attributes?.srcFile;
 
-    if (playerType === "video" && content?.attributes?.attachments?.data)
+    if (playerType === "video")
+      window.open(`${location.origin}/players/video?url=${encodeURIComponent(content?.attributes.sourceUrl)}`, '_blank');
+    else if (playerType === "video" && content?.attributes?.attachments?.data)
       window.open(`${location.origin}/players/video?url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, '_blank');
     else if (playerType === "activity")
       window.open(`${location.origin}/players/activity?id=${content.id}`, '_blank');
