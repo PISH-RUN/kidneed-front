@@ -31,7 +31,7 @@ import { DateRange, LocalizationProvider, StaticDateRangePicker } from "@mui/lab
 import JalaliUtils from "@date-io/jalaali";
 import jMoment from "moment-jalaali";
 import { FaPlus, FaSignOutAlt } from "react-icons/fa";
-import { FiLogOut, FiX } from "react-icons/fi";
+import { FiLogOut, FiTrash, FiTrash2, FiX } from "react-icons/fi";
 import { Modal, notification, Popconfirm } from "antd";
 import { useDeleteChild } from "../core-team/api/user";
 
@@ -248,7 +248,7 @@ const ChildSelector = () => {
                   }}
                   size="small" edge="end" aria-label="حذف"
                 >
-                  <FiX />
+                  <FiTrash2 className="tw-text-red-500" />
                 </IconButton>
               }
             >

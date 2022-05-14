@@ -300,8 +300,8 @@ const DayPlan = () => {
       showChild
       Header={
         <div className="tw-flex tw-justify-between tw-mt-4 tw-mb-3 tw-w-full">
-          <Typography variant="h5" className="!tw-font-bold tw-flex tw-items-center">تمام برنامه
-            های {jMoment(selectedDate).format("jDD jMMMM")} {jMoment().startOf("day").diff(selectedDate.startOf("day"), "days") === 0 && "(امروز)"}</Typography>
+          <Typography variant="h5" className="!tw-font-bold tw-flex tw-items-center">
+            تمام برنامه‌های {jMoment(selectedDate).format("jDD jMMMM")} {jMoment().startOf("day").diff(selectedDate.startOf("day"), "days") === 0 && "(امروز)"}</Typography>
           <Button
             onClick={() => setSelectPlan(true)}
             className="tw-w-48 tw-h-12 tw-bg-blue-400 tw-text-white tw-rounded-full"
