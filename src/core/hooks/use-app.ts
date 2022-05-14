@@ -3,10 +3,11 @@ import { Api } from "@kidneed/services";
 import { AppContext } from "@kidneed/context";
 import { Models } from "@kidneed/types";
 import { useCallback, useContext, useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function useApp() {
   const { appService } = useContext(AppContext);
-
+  const router = useRouter();
   const { send } = appService;
 
   const ctx = useSelector(appService, (state) => {
@@ -61,6 +62,9 @@ export default function useApp() {
   useEffect(() => {
     if (!ctx.child && ctx.children) {
       selectChild(ctx.children[0]);
+    }
+    if (!ctx.child && ctx.children && ctx.children.length === 0) {
+      router.push('/add-child')
     }
   }, [ctx]);
 

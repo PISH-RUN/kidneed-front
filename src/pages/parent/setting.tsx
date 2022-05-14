@@ -2,7 +2,7 @@ import { Guard } from "@kidneed/types";
 import ParentDashboardLayout from "layouts/parent-dashboard-layout";
 import { Button, Col, Form, Input, notification, Radio, Select } from "antd";
 import { Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AgeSlider } from "venus/AgeSlider/AgeSlider";
 import { FiUser, FiLock } from "react-icons/fi";
 import { useUpdateChild, useUpdateMe } from "../../core-team/api/user";
@@ -14,11 +14,12 @@ const Setting = () => {
   const { mutateAsync: updateMe } = useUpdateMe();
   const { mutateAsync: updateChild } = useUpdateChild(ctx?.child?.id);
   const [loginType, setLoginType] = useState(ctx?.user?.hasLockPassword ? "password" : "question");
+  const [form] = Form.useForm();
 
   const handleSubmit = (values: any) => {
     const userParams = {
       name: values.name,
-      lockPassword: loginType === "question" ? undefined : values.lockPassword
+      lockPassword: loginType === "question" ? null : values.lockPassword
     };
     const childParams = {
       name: values.childName,
@@ -41,11 +42,19 @@ const Setting = () => {
     });
   };
 
+  useEffect(() => {
+    form.setFieldsValue({
+      childName: ctx.child?.name,
+      gender: ctx.child?.gender,
+      age: ctx?.child?.birthYear && (jMoment().jYear() - ctx?.child?.birthYear)
+    });
+  }, [ctx.child])
+
   return (
     <ParentDashboardLayout showChild="header">
       <div className="tw-py-8 tw-px-10">
         <Col xl={10} xs={24}>
-          <Form onFinish={handleSubmit}>
+          <Form form={form} onFinish={handleSubmit}>
             <Typography variant="body1">اطلاعات فرزند شما</Typography>
             <div className="tw-mt-6 tw-mb-8">
               <Form.Item name="childName" initialValue={ctx?.child?.name}>

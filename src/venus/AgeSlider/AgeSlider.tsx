@@ -24,6 +24,7 @@ export const AgeSlider: React.FC<AgeSliderProps> = (props) => {
         />
         <div className="tw-flex-auto tw-relative tw-mx-2">
           <Slider
+            value={props.value}
             tooltipVisible
             tooltipPlacement="bottom"
             defaultValue={props.value || 3}

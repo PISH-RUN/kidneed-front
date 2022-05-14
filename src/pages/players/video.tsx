@@ -65,7 +65,7 @@ const Video = () => {
   }
 
   return (
-    <iframe src={`${PLAYERS_URL}/video?url=${url as string}`} className="tw-w-full tw-h-screen" />
+    <iframe allowFullScreen={true} src={`${PLAYERS_URL}/video?url=${url as string}`} className="tw-w-full tw-h-screen" />
   );
 };
 

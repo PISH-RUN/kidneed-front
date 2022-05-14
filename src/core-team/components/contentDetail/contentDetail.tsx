@@ -7,6 +7,7 @@ import VideoDetails from "./video";
 import AudioDetails from "./audio";
 import BookDetails from "./book";
 import { POSTER_ORIGIN } from "../../constants";
+import { CloseOutlined } from "@ant-design/icons";
 
 const tags: any = {
   A: "رشدی حرکتی",
@@ -49,12 +50,13 @@ export const ContentDetail = (props: any) => {
   return (
     <Modal
       footer={false}
-      closable
+      closable={false}
       centered
       {...rest}
       className={styles.resultModal + " tw-rounded-3xl tw-overflow-hidden"}
     >
       <div className={styles.allContent}>
+        <CloseOutlined className="tw-absolute tw-left-5 tw-text-2xl tw-top-8 tw-text-gray-500 tw-cursor-pointer" onClick={props.onCancel} />
         <div className={styles.header}>
           {content?.attributes?.title}
         </div>

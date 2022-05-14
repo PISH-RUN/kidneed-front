@@ -8,19 +8,19 @@ export const PolarAreaChart = ({ data, labels }: any) => {
   const bg = [
     [
       "rgba(30,116,253,0.5)",
-      pattern.draw('diagonal', "rgba(30,116,253,0.5)"),
+      pattern.draw("diagonal", "rgba(30,116,253,0.5)"),
       "rgba(139,218,146,0.5)",
-      pattern.draw('diagonal', "rgba(139,218,146,0.5)"),
+      pattern.draw("diagonal", "rgba(139,218,146,0.5)"),
       "rgba(255,131,69,0.5)",
-      pattern.draw('diagonal', "rgba(255,131,69,0.5)"),
+      pattern.draw("diagonal", "rgba(255,131,69,0.5)"),
       "rgba(255,99,132,0.5)",
-      pattern.draw('diagonal', "rgba(255,99,132,0.5)"),
+      pattern.draw("diagonal", "rgba(255,99,132,0.5)")
     ],
     [
       "rgba(30,116,253,0.5)",
       "rgba(139,218,146,0.5)",
       "rgba(255,131,69,0.5)",
-      "rgba(255,99,132,0.5)",
+      "rgba(255,99,132,0.5)"
     ]
   ];
   const border = [
@@ -38,9 +38,9 @@ export const PolarAreaChart = ({ data, labels }: any) => {
       "#1E74FD",
       "#8BDA92",
       "#FF8345",
-      "#FF6384",
+      "#FF6384"
     ]
-  ]
+  ];
 
   return (
     <PolarArea
@@ -54,20 +54,26 @@ export const PolarAreaChart = ({ data, labels }: any) => {
       }}
       options={{
         responsive: true,
+        scales: {
+          radialLinear: {
+            min: 0,
+            max: 20
+          }
+        },
         plugins: {
           tooltip: {
             padding: 10,
             boxPadding: 4,
             rtl: true,
             titleFont: {
-              family: "IRANSans",
+              family: "IRANSans"
             },
             bodyFont: {
-              family: "IRANSans",
+              family: "IRANSans"
             }
           },
           legend: {
-            display: false,
+            display: false
           },
           title: {
             display: true,

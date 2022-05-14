@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import { POSTER_ORIGIN } from "../../core-team/constants";
 import { Input, notification, Progress } from "antd";
 import { useVerifyPassword } from "../../core-team/api/user";
+import moment from "moment";
 
 notification.config({
   placement: "bottomLeft",
@@ -156,7 +157,9 @@ const DataBox = ({ data }: any) => {
     let source = content?.attributes?.meta?.source && content?.attributes?.meta?.source[0].src;
     source = source ? source : content?.attributes?.srcFile;
 
-    if (playerType === "video" && content?.attributes?.attachments?.data)
+    if (playerType === "video")
+      window.open(`${location.origin}/players/video?url=${encodeURIComponent(content?.attributes.sourceUrl)}`, '_blank');
+    else if (playerType === "video" && content?.attributes?.attachments?.data)
       window.open(`${location.origin}/players/video?child=true&contentId=${content?.id}&id=${content?.activity?.id}&secondId=${content2?.activity?.id}&url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, "_blank");
     else if (playerType === "activity")
       window.open(`${location.origin}/players/activity?child=true&activity=${content?.activity?.id}&secondId=${content2?.activity?.id}&id=${content.id}`, "_blank");
@@ -188,7 +191,7 @@ const DataBox = ({ data }: any) => {
         {/* @ts-ignore */}
         <Box sx={{ ...styles.dataMenu, background: "#FED150" }} className="tw-relative">
           <Progress width={92} trailColor="transparent" type="circle" percent={progress / duration * 100} format={() => ""} strokeColor="#FF8345" className="tw-absolute" />
-          <Typography variant="h5" sx={{ color: "#fff", fontWeight: 700, mt: 0.5 }}>{duration}</Typography>
+          <Typography variant="h5" sx={{ color: "#fff", fontWeight: 700, mt: 0.5 }}>{moment.utc(moment.duration(duration, "minutes").as('milliseconds')).format('HH:mm')}</Typography>
         </Box>
       </Stack>
       <Grid item xs={6}>

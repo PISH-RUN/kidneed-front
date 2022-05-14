@@ -49,7 +49,7 @@ export const useActivityGlance = (child?: number) =>
 export const useContent = (id?: number, options?: any) =>
   useQuery(["content", id], () => {
       const query = qs.stringify({
-        populate: ['content', 'content.images', 'content.editions', 'content.movies', 'content.movies.tags']
+        populate: ['attachments', 'images', 'editions', 'movies', 'movies.tags']
       }, {
         encodeValuesOnly: true
       });
@@ -92,11 +92,9 @@ export const useSeenContent = () =>
 export const useContents = (ids?: number[]) => {
   const query = qs.stringify({
     populate: {
-      content: {
-        images: "*",
-        movies: {
-          populate: ["tags"]
-        }
+      images: "*",
+      movies: {
+        populate: ["tags"]
       }
     },
     publicationState: "preview",
@@ -125,9 +123,7 @@ export const useSearchContents = () => useMutation(["contents-search"], ({ searc
         title: {
           $containsi: search
         },
-        content: {
-          type
-        }
+        type
       }
     }, {
       encodeValuesOnly: true

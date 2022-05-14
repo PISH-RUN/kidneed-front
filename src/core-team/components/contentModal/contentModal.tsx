@@ -77,11 +77,11 @@ const ContentForm = ({ time, activity, onClose }: any) => {
         }}
         aria-label="basic tabs example"
       >
-        <Tab label="فیلم" value="video" />
-        <Tab label="صوت" value="audio" />
-        <Tab label="بازی" value="game" />
-        <Tab label="فعالیت" value="activity" />
-        <Tab label="کتاب" value="book" />
+        <Tab label="فیلم" value="video" disabled={isEdit} />
+        <Tab label="صوت" value="audio" disabled={isEdit} />
+        <Tab label="بازی" value="game" disabled={isEdit} />
+        <Tab label="فعالیت" value="activity" disabled={isEdit} />
+        <Tab label="کتاب" value="book" disabled={isEdit} />
       </Tabs>
       <Form layout="vertical" form={form} onFinish={handleSubmit}>
         <div className="tw-mt-10">

@@ -10,7 +10,7 @@ import { Button, Divider } from "antd";
 import { useStats } from "../../core-team/api/dashboard";
 import { useApp } from "@kidneed/hooks";
 import { useGrowthFields, useGrowthSubFields, useQuizProgression, useQuizResult } from "../../core-team/api/question";
-import pattern from "public/images/pattern.png"
+import pattern from "public/images/pattern.png";
 import Link from "next/link";
 
 const today = jMoment();
@@ -41,7 +41,7 @@ const WorkView = () => {
       labels: []
     };
 
-    const subFieldIds = Object.keys(result?.data?.startOfMonth?.result);
+    const subFieldIds = Object.keys(result?.data?.startOfMonth?.result || result?.data?.endOfMonth?.result || {});
     const subFieldData = _.filter(subFields?.data, f => subFieldIds.indexOf(f.id.toString()) > -1);
     const polarData: number[] = [];
     const polarLabels: string[] = [];
@@ -97,7 +97,7 @@ const WorkView = () => {
       "نوع اول",
       "نوع دوم",
       "نوع سوم",
-      "نوع چهارم",
+      "نوع چهارم"
     ];
     let index = 0;
     _.map(progression?.data, (p, fieldId) => {

@@ -16,9 +16,9 @@ import EditIcon from "layouts/icons/edit";
 import { Guard } from "@kidneed/types";
 import React, { useEffect, useState } from "react";
 import { DateRange } from "@mui/lab";
-import { useActivity, useActivityStats, useContents } from "../../core-team/api/activity";
+import { useActivity, useActivityStats, useContent, useContents } from "../../core-team/api/activity";
 import { useDashboard, useStats } from "../../core-team/api/dashboard";
-import { ActivityStats } from "../../core-team/components";
+import { ActivityStats, ContentDetail } from "../../core-team/components";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { POSTER_ORIGIN } from "../../core-team/constants";
@@ -40,6 +40,8 @@ const titles: any = {
 const Schedule = (props: any) => {
   const { sum, data, contents } = props;
   const router = useRouter();
+  const [selectedContent, setContent] = useState();
+  const { data: content } = useContent(selectedContent);
 
   return (
     <Paper sx={{ mt: 4, p: 3, boxShadow: "none", borderRadius: 8 }}>
@@ -73,7 +75,7 @@ const Schedule = (props: any) => {
 
           return (
             <Grid key={index} item xs={6} sx={{ mb: 3 }}>
-              <Stack direction="row" alignItems="flex-start" spacing={3}>
+              <Stack direction="row" alignItems="flex-start" spacing={3} className="tw-cursor-pointer" onClick={() => setContent(item.attributes?.content)}>
                 <Box sx={{ width: 80, height: 80 }}>
                   <ItemPic content={content} type={item.attributes?.type} />
                 </Box>
@@ -89,6 +91,12 @@ const Schedule = (props: any) => {
           );
         })}
       </Grid>
+
+      <ContentDetail
+        visible={!!selectedContent && !!content}
+        content={content?.data}
+        onCancel={() => setContent(undefined)}
+      />
     </Paper>
   );
 };

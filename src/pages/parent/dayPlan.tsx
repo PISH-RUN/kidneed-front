@@ -259,7 +259,7 @@ const ActivityCard = ({ type, items, contents, onSelectContent, onEdit }: any) =
                 </div>
                 <div className="tw-pt-5 tw-pr-4">
                   <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">مدت زمان:</span>
-                  <span className="tw-text-xl tw-font-bold">{items[0].attributes.duration}</span>
+                  <span className="tw-text-xl tw-font-bold">{moment.utc(moment.duration(items[0].attributes.duration, "minutes").as('milliseconds')).format('HH:mm')}</span>
                 </div>
                 <div className="tw-mt-8 tw-pt-5 tw-pr-4">
                   <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">تگ ها:</span>
