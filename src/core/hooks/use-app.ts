@@ -4,10 +4,12 @@ import { AppContext } from "@kidneed/context";
 import { Models } from "@kidneed/types";
 import { useCallback, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useQueryClient } from "react-query";
 
 export default function useApp() {
   const { appService } = useContext(AppContext);
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { send } = appService;
 
   const ctx = useSelector(appService, (state) => {
@@ -29,7 +31,14 @@ export default function useApp() {
     [send]
   );
 
-  const logout = useCallback(() => send("LOGGED_OUT"), [send]);
+  const logout = useCallback(() => {
+    queryClient.invalidateQueries()
+    queryClient.resetQueries()
+    queryClient.removeQueries()
+    queryClient.clear()
+
+    send("LOGGED_OUT")
+  }, [send]);
 
   const selectChild = useCallback(
     (child: Models.Child) => send("SELECT_CHILD", { child }),

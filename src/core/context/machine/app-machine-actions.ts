@@ -9,6 +9,7 @@ import {
   PartialAppContext,
   SelectChildEvent
 } from "./app-machine-types";
+import { Models } from "@kidneed/types";
 
 export async function bootstrap() {
   const user = await Api.me();
@@ -66,17 +67,25 @@ export const childEdited = assign(
     return {
       children: [...(ctx.children?.filter(c => c.id !== event.child.id) || []), event.child],
       child: event.child
-    }
+    };
   }
 );
 
 export const childDeleted = assign(
   (ctx: PartialAppContext, event: DeleteChildEvent) => ({
     children: ctx.children?.filter(c => c.id !== event.child),
-    child: event.child === ctx?.child?.id ? ctx.children?.filter(c => c.id !== event.child)[0] : ctx.child
+    child: event.child === ctx?.child?.id ?
+      (ctx.children?.filter(c => c.id !== event.child)[0] || {} as Models.Child)
+      : ctx.child
   })
 );
 
-export const logout = () => {
+export const logout = assign(() => {
   strapi.logout();
-};
+
+  return {
+    user: null,
+    children: null,
+    child: null
+  };
+});
