@@ -23,6 +23,7 @@ import MusicIcon from "../../layouts/icons/music";
 import ActivityIcon from "../../layouts/icons/activity";
 import GameIcon from "../../layouts/icons/game";
 import BookIcon from "../../layouts/icons/book";
+import { useRouter } from "next/router";
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
 
@@ -287,13 +288,18 @@ const ActivityCard = ({ type, items, contents, onSelectContent, onEdit }: any) =
 };
 
 const DayPlan = () => {
+  const router = useRouter();
   const { ctx } = useApp();
   const [selectPlan, setSelectPlan] = useState<any>(false);
   const [selectedDate, setDate] = useState(today);
   const [selectedContent, setContent] = useState();
-  const { data: activities, isLoading, refetch } = useTodayActivity(ctx?.child?.id, selectedDate);
+  const { data: activities, isLoading, refetch, error } = useTodayActivity(ctx?.child?.id, selectedDate);
   const { data: content } = useContent(selectedContent);
   const { data: contents } = useContents(activities?.data?.map((i: any) => i.attributes.content));
+
+  if(error && error?.error?.status === 406) {
+    return router.push('/parent/quiz?type=startOfMonth');
+  }
 
   return (
     <ParentDashboardLayout

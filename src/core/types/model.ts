@@ -54,6 +54,7 @@ export interface User extends Model {
   name?: string;
   email?: string;
   hasLockPassword?: boolean;
+  subscribedUntil?: string;
   unreadNotifications?: number
 }
 

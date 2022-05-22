@@ -8,8 +8,8 @@ import { DAPI_URL } from "../constants";
 import { useApp } from "@kidneed/hooks";
 
 export const useTodayActivity = (child?: number, date = moment()) =>
-  useQuery(["activity", child, date.startOf("day").format("YYYY-MM-DD")], () =>
-      strapi.request<any>("get", `/children/${child}/activities`, {
+  useQuery<any, any>(["activity", child, date.startOf("day").format("YYYY-MM-DD")], () =>
+      strapi.request("get", `/children/${child}/activities`, {
         params: {
           filters: {
             date: date.startOf("day").format("YYYY-MM-DD")

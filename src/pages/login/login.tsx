@@ -11,7 +11,7 @@ const Login = () => {
 
   const handleMobileSubmit = ({ mobile }: any) => {
     requestOtp({ mobile }).then(() => {
-      router.push(`/login/verify?mobile=${mobile}`);
+      router.push(`/login/verify?mobile=${mobile}${router.query.redirect ? `&redirect=${router.query.redirect}` : ""}`);
     });
   };
 
@@ -35,7 +35,7 @@ export const loginGuard: Guard = (matcher, _, router) => {
     return true;
   }
 
-  router.push("/parent");
+  router.push(router.query.redirect as string || "/parent");
 
   return false;
 };

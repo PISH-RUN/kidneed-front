@@ -16,7 +16,9 @@ class Document extends BaseDocument {
   render(): JSX.Element {
     return (
       <Html lang="fa" dir="rtl">
-        <Head />
+        <Head>
+          <title>یکودو</title>
+        </Head>
         <body dir="rtl">
           <Main />
           <NextScript />

@@ -17,7 +17,7 @@ const Verify = () => {
   const handleMobileSubmit = async ({ token }: any) => {
     const user = await requestLogin({ token, mobile: router.query.mobile });
     login(user);
-    router.push("/parent");
+    router.push(router.query.redirect as string || "/parent");
   };
 
   const handleRequestOtp = async () => {

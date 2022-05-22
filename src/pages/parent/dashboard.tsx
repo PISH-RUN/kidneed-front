@@ -28,6 +28,7 @@ import ActivityIcon from "../../layouts/icons/activity";
 import GameIcon from "../../layouts/icons/game";
 import BookIcon from "../../layouts/icons/book";
 import Link from "next/link";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const titles: any = {
   "video": "تماشای فیلم",
@@ -38,7 +39,7 @@ const titles: any = {
 };
 
 const Schedule = (props: any) => {
-  const { sum, data, contents } = props;
+  const { sum, data, contents, isLoading } = props;
   const router = useRouter();
   const [selectedContent, setContent] = useState();
   const { data: content } = useContent(selectedContent);
@@ -69,13 +70,24 @@ const Schedule = (props: any) => {
           </Button>
         </Box>
       </Stack>
-      <Grid container sx={{ mt: 5 }}>
+      {isLoading &&
+        <div className="tw-min-h-[150px] tw-flex tw-items-center tw-justify-center">
+          <LoadingOutlined className="tw-text-blue-500 tw-text-4xl" />
+        </div>
+      }
+      {!isLoading && <Grid container sx={{ mt: 5 }}>
         {data && _.map(_.flatten(_.values(data)), (item: any, index: number) => {
           const content = _.find(contents?.data, { id: parseInt(item.attributes?.content) });
 
           return (
             <Grid key={index} item xs={6} sx={{ mb: 3 }}>
-              <Stack direction="row" alignItems="flex-start" spacing={3} className="tw-cursor-pointer" onClick={() => setContent(item.attributes?.content)}>
+              <Stack
+                direction="row"
+                alignItems="flex-start"
+                spacing={3}
+                className="tw-cursor-pointer"
+                onClick={() => setContent(item.attributes?.content)}
+              >
                 <Box sx={{ width: 80, height: 80 }}>
                   <ItemPic content={content} type={item.attributes?.type} />
                 </Box>
@@ -90,7 +102,7 @@ const Schedule = (props: any) => {
             </Grid>
           );
         })}
-      </Grid>
+      </Grid>}
 
       <ContentDetail
         visible={!!selectedContent && !!content}
@@ -168,7 +180,7 @@ const ItemPic = ({ content, type }: any) => {
 const Dashboard = () => {
   const [range, setRange] = useState<DateRange<Date>>(today);
   const { ctx } = useApp();
-  const { data } = useDashboard(ctx.child?.id);
+  const { data, isLoading: loading } = useDashboard(ctx.child?.id);
   const { data: contents } = useContents(_.map(_.flatten(_.values(data?.data)), i => parseInt(i?.attributes?.content)));
   const { data: stats, isLoading } = useActivityStats(range, ctx.child?.id);
 
@@ -180,7 +192,7 @@ const Dashboard = () => {
         سلام {ctx?.user?.name}! 👋
       </Typography>
       <ActivityStats stats={stats?.data} loading={isLoading} />
-      <Schedule sum={sum} data={data?.data} contents={contents} />
+      <Schedule sum={sum} data={data?.data} contents={contents} isLoading={loading} />
     </ParentDashboardLayout>
   );
 };

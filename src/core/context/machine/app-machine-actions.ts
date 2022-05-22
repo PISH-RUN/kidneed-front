@@ -5,7 +5,7 @@ import {
   BootstrapDone,
   ChildrenFetchDone, DeleteChildEvent, EditChildEvent, EditUserEvent,
   FetchUserEvent,
-  LoggedInContext,
+  LoggedInContext, LoggedOutEvent,
   PartialAppContext,
   SelectChildEvent
 } from "./app-machine-types";
@@ -80,12 +80,12 @@ export const childDeleted = assign(
   })
 );
 
-export const logout = assign(() => {
+export const logout = assign((ctx: PartialAppContext, event: LoggedOutEvent) => {
   strapi.logout();
 
   return {
     user: null,
     children: null,
     child: null
-  };
+  } as PartialAppContext;
 });

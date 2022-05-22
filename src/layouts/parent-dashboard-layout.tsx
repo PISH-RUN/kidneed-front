@@ -21,6 +21,7 @@ import TelescopeIcon from "layouts/icons/telescope";
 import GiftIcon from "layouts/icons/gift";
 import BulbIcon from "layouts/icons/bulb";
 import ChatBubbleIcon from "layouts/icons/chatBubble";
+import Basket from "layouts/icons/basket";
 import SettingIcon from "layouts/icons/setting";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -98,6 +99,11 @@ const menu = [
     type: "notification",
     link: "/parent/message",
     icon: <ChatBubbleIcon />
+  }, {
+    title: "اشتراک",
+    type: "notification",
+    link: "/parent/subscription",
+    icon: <Basket />
   }, {
     title: "تنظیمات",
     link: "/parent/setting",
