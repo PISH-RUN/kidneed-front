@@ -42,7 +42,7 @@ export const useSubscriptions = () =>
     strapi.request("get", `/subscriptions`));
 
 export const useCouponSubscriptions = (coupon?: string) =>
-  useQuery<any>(["yekodo", "coupon-subscriptions"], () =>
+  useQuery<any>(["yekodo", "coupon-subscriptions", coupon], () =>
     strapi.request("post", `/coupon-subscriptions`, {
       data: {
         data: {
