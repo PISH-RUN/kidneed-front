@@ -29,7 +29,7 @@ export const SubscriptionCard = ({ subscription, index = 0, onSelect }: any) => 
       <div className="tw-flex tw-flex-col">
         <div className="tw-flex">
           <Typography className="!tw-ml-2">{subscription?.name}</Typography>
-          {subscription?.discountPrice &&
+          {subscription?.discountPrice >= 0 &&
             <Tag
               color="green"
               className="tw-text-center tw-font-bold tw-text-md tw-mr-2"
