@@ -47,7 +47,7 @@ export const SubscriptionCard = ({ subscription, index = 0, onSelect }: any) => 
               className="tw-text-center tw-font-bold tw-text-lg"
               style={{ color: colors[index] }}
             >
-              {new Intl.NumberFormat().format((subscription?.discountPrice || subscription?.currentPrice) / 10)} تومان
+              {new Intl.NumberFormat().format((subscription?.discountPrice >= 0 ? subscription?.discountPrice : subscription?.currentPrice) / 10)} تومان
             </div>
           </div>
         </div>
