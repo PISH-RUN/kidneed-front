@@ -15,6 +15,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { FiTrash } from "react-icons/fi";
 import { useApp } from "@kidneed/hooks";
+import Link from "next/link";
 
 const Subscription = () => {
   const { ctx } = useApp();
@@ -53,8 +54,10 @@ const Subscription = () => {
   return (
     <BaseLayout>
       <>
-        <div className="tw-bg-gray-50 tw-p-2 tw-px-10 tw-flex">
-          <Image src={logo} alt="logo" />
+        <div className="tw-bg-sky-100 tw-p-4 tw-px-10 tw-flex">
+          <Link href="/">
+            <Image src={logo} alt="logo" className="tw-cursor-pointer" />
+          </Link>
         </div>
         <div className="tw-max-w-2xl tw-m-auto tw-border tw-mt-20 tw-rounded-xl">
           <div className="tw-m-8">
