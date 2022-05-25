@@ -26,6 +26,7 @@ const Login = () => {
     requestOtp({
       mobile: mobile.replace(/[۰۱۲۳۴۵۶۷۸۹]/g, (c: string) => chars[c]),
     }).then(() => {
+      console.log(`/login/verify?mobile=${mobile.replace(/[۰۱۲۳۴۵۶۷۸۹]/g, (c: string) => chars[c])}${router.query.redirect ? `&redirect=${router.query.redirect}` : ""}`);
       router.push(`/login/verify?mobile=${mobile.replace(/[۰۱۲۳۴۵۶۷۸۹]/g, (c: string) => chars[c])}${router.query.redirect ? `&redirect=${router.query.redirect}` : ""}`);
     });
   };

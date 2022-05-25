@@ -14,9 +14,9 @@ const Verify = () => {
   const { mutateAsync: requestLogin, isLoading } = useLogin({
     onError: () => {
       notification.error({
-        message: "کد وارد شده اشتباه است.",
-      })
-    },
+        message: "کد وارد شده اشتباه است."
+      });
+    }
   });
   const { mutateAsync: requestOtp, isLoading: otpLoading } = useSendOtp();
 
@@ -56,7 +56,7 @@ export const loginGuard: Guard = (matcher, _, router) => {
     return true;
   }
 
-  router.push("/parent");
+  router.push(router.query.redirect as string || "/parent");
 
   return false;
 };

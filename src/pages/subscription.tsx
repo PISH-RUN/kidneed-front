@@ -18,7 +18,7 @@ import { useApp } from "@kidneed/hooks";
 import Link from "next/link";
 
 const Subscription = () => {
-  const { ctx } = useApp();
+  const { ctx, fetchUser } = useApp();
   const router = useRouter();
   const [couponValue, setCouponValue] = useState("");
   const [coupon, setCoupon] = useState<string>();
@@ -38,10 +38,18 @@ const Subscription = () => {
       coupon
     }).then(resp => {
       requestPayment(resp.data.uuid).then(resp => {
-        notification.success({
-          message: "در حال انتقال به درگاه بانک، لطفا صبر کنید."
-        });
-        window.location.href = resp?.data?.url;
+        if (resp?.data?.url.includes("yekodo.ir")) {
+          notification.success({
+            message: "خرید اشتراک با موفقیت انجام شد."
+          });
+          fetchUser();
+          router.push("/parent/dashboard");
+        } else {
+          notification.success({
+            message: "در حال انتقال به درگاه بانک، لطفا صبر کنید."
+          });
+          window.location.href = resp?.data?.url;
+        }
       });
     });
   };
@@ -71,7 +79,7 @@ const Subscription = () => {
                 data={subscriptions}
                 onSelect={(selected: number) => {
                   if (!ctx?.user) {
-                    router.push("/login?redirectUrl=/parent/subscription");
+                    router.push("/login?redirectUrl=/subscription");
                   } else {
                     handlePurchase(selected);
                   }
@@ -112,7 +120,13 @@ const Subscription = () => {
                 <Button
                   variant="contained"
                   className="!tw-rounded-full tw-whitespace-nowrap tw-w-48"
-                  onClick={handleAddCoupon}
+                  onClick={() => {
+                    if (!ctx.user) {
+                      router.push("/login?redirectUrl=/subscription");
+                    } else {
+                      handleAddCoupon();
+                    }
+                  }}
                 >
                   اعمال کد تخفیف
                 </Button>

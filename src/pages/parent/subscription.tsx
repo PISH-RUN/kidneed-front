@@ -16,7 +16,7 @@ import ParentDashboardLayout from "../../layouts/parent-dashboard-layout";
 import moment from "moment";
 
 const Subscription = () => {
-  const { ctx } = useApp();
+  const { ctx, fetchUser } = useApp();
   const router = useRouter();
   const [couponValue, setCouponValue] = useState("");
   const [coupon, setCoupon] = useState<string>();
@@ -36,10 +36,18 @@ const Subscription = () => {
       coupon
     }).then(resp => {
       requestPayment(resp.data.uuid).then(resp => {
-        notification.success({
-          message: "در حال انتقال به درگاه بانک، لطفا صبر کنید."
-        });
-        window.location.href = resp?.data?.url;
+        if (resp?.data?.url.includes("yekodo.ir")) {
+          notification.success({
+            message: "خرید اشتراک با موفقیت انجام شد."
+          });
+          fetchUser();
+          router.push("/parent/dashboard");
+        } else {
+          notification.success({
+            message: "در حال انتقال به درگاه بانک، لطفا صبر کنید."
+          });
+          window.location.href = resp?.data?.url;
+        }
       });
     });
   };
@@ -60,7 +68,9 @@ const Subscription = () => {
           </div>
           <div className="tw-mx-8 tw-flex tw-mb-6 tw-items-center tw-p-4 tw-bg-green-200 tw-border tw-rounded-xl tw-text-lg">
             <IoCheckmarkCircle className="tw-ml-3 tw-text-2xl tw-text-green-500" />
-            از اشتراک یکودو شما، {parseInt(moment.duration(moment(ctx?.user?.subscribedUntil).valueOf() - moment().valueOf()).asDays() + '')} روز دیگر باقی مانده است.
+            از اشتراک یکودو
+            شما، {parseInt(moment.duration(moment(ctx?.user?.subscribedUntil).valueOf() - moment().valueOf()).asDays() + "")} روز
+            دیگر باقی مانده است.
           </div>
           <div className="tw-px-8 tw-bg-white">
             <div className="tw-flex tw-flex-col tw-justify-center tw-mb-5">

@@ -2,9 +2,7 @@ import { Button, Typography } from "@mui/material";
 import { IoCheckmarkCircle, IoWarning } from "react-icons/io5";
 import {
   usePurchaseDetail,
-  useSubscriptions
 } from "../../core-team/api/payment";
-import { useState } from "react";
 import { isMobile } from 'react-device-detect';
 import BaseLayout from "../../layouts/baseLayout";
 import logo from "../../landing/media/images/logo.png";
@@ -14,15 +12,7 @@ import Link from "next/link";
 
 const Subscription = () => {
   const router = useRouter();
-  const [couponValue, setCouponValue] = useState("");
-  const [coupon, setCoupon] = useState<string>();
-  const { data } = useSubscriptions();
   const { data: purchase } = usePurchaseDetail(router.query.purchase);
-
-  const handleAddCoupon = () => {
-    setCoupon(couponValue);
-    setCouponValue("");
-  };
 
   return (
     <BaseLayout>
