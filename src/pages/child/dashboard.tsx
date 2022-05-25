@@ -79,6 +79,14 @@ const typeColors = {
   "book": "#A084E1"
 };
 
+const typeNames: any = {
+  video: "ویدئو",
+  activity: "فعالیت",
+  book: "کتاب",
+  game: "بازی",
+  audio: "صوت"
+};
+
 const typeIcons: any = {
   "video": VideoIcon,
   "audio": MusicIcon,
@@ -184,9 +192,10 @@ const DataBox = ({ data }: any) => {
     <Grid container spacing={5}>
       <Stack sx={{ position: "absolute", right: -50, top: "30%" }} spacing={1}>
         {/* @ts-ignore */}
-        <Box sx={{ ...styles.dataMenu, background: color }}>
+        <Box className="tw-flex tw-flex-col" sx={{ ...styles.dataMenu, background: color }}>
           {Icon &&
-            <Icon className={`tw-stroke-white !tw-w-16 !tw-h-16 ${type !== "game" && "!tw-fill-transparent"}`} />}
+            <Icon className={`tw-stroke-white !tw-w-10 !tw-h-10 ${type !== "game" && "!tw-fill-transparent"}`} />}
+          <span className="tw-text-lg">{typeNames[type]}</span>
         </Box>
         {/* @ts-ignore */}
         <Box sx={{ ...styles.dataMenu, background: "#FED150" }} className="tw-relative">
@@ -202,7 +211,7 @@ const DataBox = ({ data }: any) => {
           <Typography
             variant="h5"
             sx={{ color: "#fff", fontWeight: 700, mt: 0.5 }}
-          >{moment.utc(moment.duration(duration, "minutes").as("milliseconds")).format("HH:mm")}</Typography>
+          >{duration}′</Typography>
         </Box>
       </Stack>
       <Grid item xs={6}>
