@@ -30,11 +30,16 @@ strapi.axios.interceptors.response.use(
   (response) => Promise.resolve(response),
   (error) => {
     if ((error?.config && !error?.config?.headers?.Authorization) || (error?.response?.status === 401)) {
-      if(location.pathname !== "/" && location.pathname !== "/subscription" && !location.href.includes("/login")) {
+      if(location.pathname !== "/" && location.pathname !== "/subscription" && !location.href.includes("/payment-result") && !location.href.includes("/login")) {
         return location.href = "/login";
       }
 
       return strapi.removeToken();
+    }
+    if ((error?.config && error?.config?.headers?.Authorization) && (error?.response?.status === 403)) {
+      if(location.pathname !== "/" && location.pathname !== "/subscription" && !location.href.includes("/payment-result") && !location.href.includes("/login")) {
+        return location.href = "/subscription";
+      }
     }
 
     return Promise.reject(error);

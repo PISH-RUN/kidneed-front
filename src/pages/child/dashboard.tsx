@@ -22,7 +22,7 @@ import { useVerifyPassword } from "../../core-team/api/user";
 import moment from "moment";
 
 notification.config({
-  placement: "bottomLeft",
+  placement: "bottomLeft"
 });
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
@@ -158,7 +158,7 @@ const DataBox = ({ data }: any) => {
     source = source ? source : content?.attributes?.srcFile;
 
     if (playerType === "video")
-      window.open(`${location.origin}/players/video?url=${encodeURIComponent(content?.attributes.sourceUrl)}`, '_blank');
+      window.open(`${location.origin}/players/video?url=${encodeURIComponent(content?.attributes.sourceUrl)}`, "_blank");
     else if (playerType === "video" && content?.attributes?.attachments?.data)
       window.open(`${location.origin}/players/video?child=true&contentId=${content?.id}&id=${content?.activity?.id}&secondId=${content2?.activity?.id}&url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, "_blank");
     else if (playerType === "activity")
@@ -190,8 +190,19 @@ const DataBox = ({ data }: any) => {
         </Box>
         {/* @ts-ignore */}
         <Box sx={{ ...styles.dataMenu, background: "#FED150" }} className="tw-relative">
-          <Progress width={92} trailColor="transparent" type="circle" percent={progress / duration * 100} format={() => ""} strokeColor="#FF8345" className="tw-absolute" />
-          <Typography variant="h5" sx={{ color: "#fff", fontWeight: 700, mt: 0.5 }}>{moment.utc(moment.duration(duration, "minutes").as('milliseconds')).format('HH:mm')}</Typography>
+          <Progress
+            width={92}
+            trailColor="transparent"
+            type="circle"
+            percent={progress / duration * 100}
+            format={() => ""}
+            strokeColor="#FF8345"
+            className="tw-absolute"
+          />
+          <Typography
+            variant="h5"
+            sx={{ color: "#fff", fontWeight: 700, mt: 0.5 }}
+          >{moment.utc(moment.duration(duration, "minutes").as("milliseconds")).format("HH:mm")}</Typography>
         </Box>
       </Stack>
       <Grid item xs={6}>
@@ -260,7 +271,7 @@ const Dashboard = () => {
               variant="h6"
               sx={{ fontWeight: 700, mt: 1 }}
             >
-              {ctx.child.gender === "boy" ? `آقا ${ctx.child.name}` : `${ctx.child.name} خانوم`}
+              {ctx.child.gender === "boy" ? `آقا ${ctx.child.name}` : `${ctx.child.name} خانم`}
             </Typography>}
         </Box>
         <UserSelect
@@ -323,13 +334,16 @@ const Footer = () => {
       <Box sx={{ textAlign: "center" }}>
         <Badge badgeContent={ctx?.user?.unreadNotifications} color="secondary" sx={{}}>
           <Button
-            onClick={() => setShowLogin(true)} size="large" startIcon={<LoginIcon />} sx={{
-            background: "#fff",
-            borderRadius: 4,
-            width: 160,
-            mb: 2
-          }}
-          >ورود والدین</Button></Badge>
+            onClick={() => setShowLogin(true)}
+            size="large"
+            startIcon={<LoginIcon />}
+            sx={{
+              background: "#fff",
+              borderRadius: 4,
+              width: 220,
+              mb: 2
+            }}
+          >محیط اختصاصی پدر و مادر</Button></Badge>
         <Typography variant="h6">تمامی حقوق این سایت محفوظ است.</Typography>
       </Box>
       <Box component="img" src="/images/childImages/footer.png" alt="logo" sx={{ width: 150, maxWidth: 150 }} />
@@ -468,6 +482,7 @@ const LoginDialog = ({ open, onClose }: any) => {
           borderRadius: 8,
           boxShadow: "0px 14px 17px rgba(0, 0, 0, 0.08)",
           p: 7,
+          pb: 4,
           pt: 4,
           mt: 3,
           width: "100%"
@@ -510,6 +525,9 @@ const LoginDialog = ({ open, onClose }: any) => {
             onClick={onClose}
           >لغو</Button>
         </Stack>
+        <div className="tw-mt-4 tw-text-right">
+          برای انتخاب رمز ورود دلخواه، به قسمت تنظیمات مراجعه نمایید.
+        </div>
       </Box>
     </Box>
   </Box>;
@@ -580,7 +598,7 @@ const UserSelect = ({ open, onSelect }: any) => {
           <AvatarBox
             key={child.id}
             type={child.gender}
-            name={child.gender === "boy" ? `آقا ${child.name}` : `${child.name} خانوم`}
+            name={child.gender === "boy" ? `آقا ${child.name}` : `${child.name} خانم`}
             onSelect={() => onSelect(child)}
           />
         ))

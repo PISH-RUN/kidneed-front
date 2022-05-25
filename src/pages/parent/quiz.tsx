@@ -10,6 +10,7 @@ const QuizPage = () => {
   const { ctx } = useApp();
   const { query } = useRouter();
   const [way, setWay] = useState<string>();
+  const [page, setPage] = useState<string>("way");
 
   let type = "endOfMonth";
   if(typeof query.type === 'string') {
@@ -18,8 +19,8 @@ const QuizPage = () => {
 
   return (
     <div className="tw-w-screen tw-h-screen tw-flex tw-items-center tw-justify-center">
-      {(ctx?.child?.id && !way) && <SelectWay setPage={() => null} childId={ctx?.child?.id} setWay={setWay} />}
-      {way && <Quiz way="" childId={ctx?.child?.id} type={type} />}
+      {page === "way" && <SelectWay setPage={setPage} childId={ctx?.child?.id} setWay={setWay} />}
+      {page === "quiz" && <Quiz way="" childId={ctx?.child?.id} type={type} />}
     </div>
   )
 }

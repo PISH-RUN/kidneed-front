@@ -25,7 +25,7 @@ export const useActivityStats = (date: [Date | Moment | null, Date | Moment | nu
   const start = jMoment(date[0]).startOf("day").format("YYYY-MM-DD");
   const end = jMoment(date[1]).endOf("day").format("YYYY-MM-DD");
 
-  return useQuery(["activity", child, start, end], () =>
+  return useQuery(["yekodo", "activity", child, start, end], () =>
       strapi.request<any>("get", `/children/${child}/stats`, {
         params: {
           from: start,
@@ -39,7 +39,7 @@ export const useActivityStats = (date: [Date | Moment | null, Date | Moment | nu
 };
 
 export const useActivityGlance = (child?: number) =>
-  useQuery(["activity-glance", child], () =>
+  useQuery(["yekodo", "activity-glance", child], () =>
       strapi.request<any>("get", `/children/${child}/current-month-activity-glance`),
     {
       enabled: !!child
@@ -47,9 +47,9 @@ export const useActivityGlance = (child?: number) =>
   );
 
 export const useContent = (id?: number, options?: any) =>
-  useQuery(["content", id], () => {
+  useQuery(["yekodo", "content", id], () => {
       const query = qs.stringify({
-        populate: ['attachments', 'images', 'editions', 'movies', 'movies.tags']
+        populate: ['attachments', 'images', 'content_tags', 'content_tags.tags', 'poster', 'editions', 'movies', 'movies.tags']
       }, {
         encodeValuesOnly: true
       });
@@ -92,6 +92,10 @@ export const useSeenContent = () =>
 export const useContents = (ids?: number[]) => {
   const query = qs.stringify({
     populate: {
+      poster: "*",
+      content_tags: {
+        populate: ["tags"]
+      },
       images: "*",
       movies: {
         populate: ["tags"]
@@ -107,7 +111,7 @@ export const useContents = (ids?: number[]) => {
     encodeValuesOnly: true
   });
 
-  return useQuery(["content", ids], () =>
+  return useQuery(["yekodo", "content", ids], () =>
       axios.get(`${DAPI_URL}/api/contents?${query}`).then(resp => Promise.resolve(resp.data)),
     {
       enabled: !!ids
@@ -136,7 +140,7 @@ export const useActivity = (date: [Date | Moment | null, Date | Moment | null], 
   const start = jMoment(date[0]).startOf("day").format("YYYY-MM-DD");
   const end = jMoment(date[1]).endOf("day").format("YYYY-MM-DD");
 
-  return useQuery(["activity", child, start, end], () =>
+  return useQuery(["yekodo", "activity", child, start, end], () =>
       strapi.request<any>("get", `/children/${child}/activities`, {
         params: {
           pagination: {

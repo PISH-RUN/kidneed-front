@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 interface MobileFormProp {
   onSubmit: (values: any) => void;
-  loading: boolean
+  loading: boolean;
 }
 
 const MobileForm: FC<MobileFormProp> = ({ onSubmit, loading }) => {
@@ -23,18 +23,31 @@ const MobileForm: FC<MobileFormProp> = ({ onSubmit, loading }) => {
       <div className="tw-mb-6">
         لطفا شماره موبایل خود را وارد کنید
       </div>
-      <Form.Item name="mobile" className="tw-mb-12" rules={[{ required: true }]}>
+      <Form.Item
+        name="mobile"
+        className="tw-mb-12"
+        rules={[
+          { required: true, message: "لطفا شماره موبایل خود را وارد کنید." },
+          { pattern: /^(\+98|0)?9\d{9}$/g, message: "شماره موبایل معتبر نمی‌باشد." },
+        ]}
+      >
         <Input className={styles.mobileInput} addonAfter={<div className={styles.ltr}>+98</div>} />
       </Form.Item>
 
       <Row gutter={15}>
         <Col span={12}>
-          <Button loading={loading} htmlType="submit" type="primary" className="tw-rounded-full tw-bg-blue-500 tw-ml-5" block>
+          <Button
+            loading={loading}
+            htmlType="submit"
+            type="primary"
+            className="tw-rounded-full tw-bg-blue-500 tw-ml-5"
+            block
+          >
             ارسال کد
           </Button>
         </Col>
         <Col span={12}>
-          <Button className="tw-rounded-full" block onClick={() => router.push('/')}>بازگشت به آغازه</Button>
+          <Button className="tw-rounded-full" block onClick={() => router.push("/")}>بازگشت به آغازه</Button>
         </Col>
       </Row>
     </Form>

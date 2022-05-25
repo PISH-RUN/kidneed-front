@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "react-query";
 import { strapi } from "@kidneed/services";
 
 export const useQuiz = (way?: string, childId?: number, type: string = "startOfMonth") =>
-  useQuery(["questions", childId], () =>
+  useQuery(["yekodo", "questions", childId], () =>
       strapi
         .request<any>("get", `/children/${childId}/quiz?type=${type}`),
     {
@@ -11,7 +11,7 @@ export const useQuiz = (way?: string, childId?: number, type: string = "startOfM
   );
 
 export const useQuestions = (way?: string, childId?: number) =>
-  useQuery(["questions", childId], () =>
+  useQuery(["yekodo", "questions", childId], () =>
       strapi
         .request<any>("get", `/children/${childId}/growth-field-questions`),
     {
@@ -40,20 +40,20 @@ export const useSubmitSystemQuiz = () =>
   }));
 
 export const useGrowthFields = () =>
-  useQuery(["growth-fields"], () =>
+  useQuery(["yekodo", "growth-fields"], () =>
     strapi
       .request<any>("get", `/growth-fields`)
   );
 
 
 export const useGrowthSubFields = () =>
-  useQuery(["growth-subfields"], () =>
+  useQuery(["yekodo", "growth-subfields"], () =>
     strapi
       .request<any>("get", `/growth-subfields`)
   );
 
 export const useQuizResult = (childId?: number) =>
-  useQuery(["quiz-result", childId], () =>
+  useQuery(["yekodo", "quiz-result", childId], () =>
       strapi
         .request<any>("get", `/children/${childId}/growth-field-result`),
     {
@@ -62,7 +62,7 @@ export const useQuizResult = (childId?: number) =>
   );
 
 export const useQuizProgression = (childId?: number) =>
-  useQuery(["quiz-progression", childId], () =>
+  useQuery(["yekodo", "quiz-progression", childId], () =>
       strapi
         .request<any>("get", `/children/${childId}/growth-progression`),
     {

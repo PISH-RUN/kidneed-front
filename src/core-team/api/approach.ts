@@ -4,7 +4,7 @@ import { strapi } from "@kidneed/services";
 import jMoment from "moment-jalaali";
 
 export const useSubjects = (title?: string) =>
-  useQuery(["subjects", title], () =>
+  useQuery(["yekodo", "subjects", title], () =>
     strapi.request<any>("get", `/rahche-subjects`, {
       params: {
         populate: "*",
@@ -27,7 +27,7 @@ export const useSelectSubject = () =>
   );
 
 export const useSign = (rahche?: number) =>
-  useQuery(["sign", rahche], () =>
+  useQuery(["yekodo", "sign", rahche], () =>
       strapi.request<any>("get", `/rahche/${rahche}/signs`),
     {
       enabled: rahche !== undefined
@@ -46,7 +46,7 @@ export const useSubmitSign = () =>
   );
 
 export const useRoot = (rahche?: number) =>
-  useQuery(["root", rahche], () =>
+  useQuery(["yekodo", "root", rahche], () =>
     strapi.request<any>("get", `/rahche/${rahche}/roots`),
     {
       enabled: !!rahche
@@ -65,7 +65,7 @@ export const useSubmitRoot = () =>
   );
 
 export const useApproaches = (rahche?: number) =>
-  useQuery(["approaches", rahche], () =>
+  useQuery(["yekodo", "approaches", rahche], () =>
       strapi.request<any>("get", `/rahche/${rahche}/approaches`),
     {
       enabled: !!rahche

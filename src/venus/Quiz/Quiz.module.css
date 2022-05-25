@@ -7,7 +7,7 @@
     overflow-y: auto;
 }
 .questionsWrapper::-webkit-scrollbar {
-    width: 4px;
+    width: 8px;
     border-radius: 5px;
 }
 

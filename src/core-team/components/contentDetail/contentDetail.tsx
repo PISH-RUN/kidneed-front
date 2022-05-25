@@ -24,9 +24,7 @@ const ageCategory: any = {
 export const ContentDetail = (props: any) => {
   const { content, ...rest } = props;
 
-  let poster = content?.attributes?.meta?.verticalPoster && `${POSTER_ORIGIN}${content?.attributes?.meta?.verticalPoster[0].url}`;
-  poster = poster || content?.attributes?.meta?.img || content?.attributes?.meta?.poster
-  poster = poster || (content?.attributes?.images?.data && content?.attributes?.images?.data[0]?.attributes?.url);
+  let poster = content?.attributes?.poster?.data?.attributes?.url
 
   const openPlayer = () => {
     const playerType = content?.attributes?.type;

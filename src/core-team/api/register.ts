@@ -9,7 +9,7 @@ export const useRegister = () =>
   );
 
 export const useGrowthFields = () =>
-  useQuery(["growth-fields"], () =>
+  useQuery(["yekodo", "growth-fields"], () =>
     strapi
       .request<any>("get", `/growth-fields`)
   );

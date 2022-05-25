@@ -53,11 +53,10 @@ export const Quiz: React.FC<{ way?: string, childId?: number, type?: string }> =
               <Form.Item
                 className="tw-mt-4"
                 key={item.id}
-                rules={[{ required: true, message: "این فیلد الزامی است" }]}
+                rules={[{ required: true, message: "پاسخ به این سوال الزامی است" }]}
                 label={<Typography>{item.body}</Typography>}
                 style={{ marginBottom: 0 }}
                 name={item.id}
-                initialValue={2}
               >
                 <QuestionSlider />
               </Form.Item>

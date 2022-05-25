@@ -119,13 +119,13 @@ export const AddChild: React.FC<{
             prefix={<UserOutlined style={{ color: "#1890FF" }} />}
           />
         </Form.Item>
-        <Form.Item name="gender" rules={[{ required: true, message: "این فیلد الزامی است" }]}>
-          <Radio.Group defaultValue={1}>
+        <Form.Item name="gender" rules={[{ required: true, message: "این فیلد الزامی است" }]} initialValue="girl">
+          <Radio.Group>
             <Radio value={"boy"}>آقا پسر</Radio>
-            <Radio value={"girl"}>دختر خانوم</Radio>
+            <Radio value={"girl"}>دختر خانم</Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item name="age">
+        <Form.Item name="age" label="سن فرزند">
           <AgeSlider />
         </Form.Item>
         <div className={styles.formButtons}>

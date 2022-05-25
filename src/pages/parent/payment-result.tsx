@@ -5,18 +5,14 @@ import {
   useSubscriptions
 } from "../../core-team/api/payment";
 import { useState } from "react";
-import { SubscriptionList } from "../../core-team/components";
-import { Col, Input, notification, Row, Tag } from "antd";
+import { isMobile } from 'react-device-detect';
 import BaseLayout from "../../layouts/baseLayout";
 import logo from "../../landing/media/images/logo.png";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { FiTrash } from "react-icons/fi";
-import { useApp } from "@kidneed/hooks";
 import Link from "next/link";
 
 const Subscription = () => {
-  const { ctx } = useApp();
   const router = useRouter();
   const [couponValue, setCouponValue] = useState("");
   const [coupon, setCoupon] = useState<string>();
@@ -58,11 +54,16 @@ const Subscription = () => {
             }
           </div>
           <div className="tw-py-8 tw-flex tw-justify-center">
-            <Link href="/parent/dashboard">
+            {!isMobile && <Link href="/parent/dashboard">
               <Button variant="contained">
                 بازگشت به داشبورد
               </Button>
-            </Link>
+            </Link>}
+            {isMobile && <a href="https://pwa.yekodo.ir">
+              <Button variant="contained">
+                بازگشت به برنامه
+              </Button>
+            </a>}
           </div>
         </div>
       </>

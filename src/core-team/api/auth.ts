@@ -9,7 +9,7 @@ export const useSendOtp = () =>
     }
   }));
 
-export const useLogin = () =>
+export const useLogin = (options?: any) =>
   useMutation("login", async (data: any) => {
     const resp = await strapi
       .request<{
@@ -24,4 +24,4 @@ export const useLogin = () =>
     strapi.setToken(resp.jwt);
 
     return resp.user;
-  });
+  }, options);

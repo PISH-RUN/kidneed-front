@@ -66,7 +66,7 @@ const Schedule = (props: any) => {
               height: 55
             }}
           >
-            ویرایش
+            تغییر برنامه
           </Button>
         </Box>
       </Stack>

@@ -111,7 +111,7 @@ const ContentForm = ({ time, activity, onClose }: any) => {
             htmlType="submit"
             className="tw-h-10 tw-w-32 tw-ml-5 tw-rounded-full tw-bg-blue-400"
           >
-            {isEdit ? "ویرایش" : "افزودن"}
+            {isEdit ? "تغییر برنامه" : "افزودن"}
           </Button>
           <Button
             className="tw-h-10 tw-w-32 tw-ml-5 tw-rounded-full"

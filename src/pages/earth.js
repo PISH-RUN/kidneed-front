@@ -34,7 +34,7 @@ const SideDashboard = (props) => {
           src="/images/avatar-woman.png"
         />
         <Box flexGrow={1}>
-          <Typography variant="h5">حسنا خانوم</Typography>
+          <Typography variant="h5">حسنا خانم</Typography>
           <Typography variant="h6" sx={{ color: "#8CA3A5" }}>
             2500 سکه
           </Typography>

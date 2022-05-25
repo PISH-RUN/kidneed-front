@@ -32,9 +32,9 @@ export default function useApp() {
   );
 
   const logout = useCallback(() => {
-    queryClient.invalidateQueries()
-    queryClient.resetQueries()
-    queryClient.removeQueries()
+    queryClient.invalidateQueries("yekodo")
+    queryClient.resetQueries("yekodo")
+    queryClient.removeQueries("yekodo")
     queryClient.clear()
 
     send("LOGGED_OUT")

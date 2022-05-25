@@ -68,7 +68,7 @@ const Setting = () => {
               <Form.Item name="gender" initialValue={ctx?.child?.gender}>
                 <Radio.Group>
                   <Radio value={"boy"}>آقا پسر</Radio>
-                  <Radio value={"girl"}>دختر خانوم</Radio>
+                  <Radio value={"girl"}>دختر خانم</Radio>
                 </Radio.Group>
               </Form.Item>
               <Form.Item name="age" initialValue={ctx?.child?.birthYear && (jMoment().jYear() - ctx?.child?.birthYear)}>

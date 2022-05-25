@@ -72,7 +72,7 @@ export const ApproachModal = ({ data, ...rest }: any) => {
     >
       <div className={styles.allContent}>
         <div className={styles.header}>
-          {data?.data && data?.data[0].title}
+          راهکار
         </div>
         <div className="tw-flex tw-flex-col tw-p-5 tw-px-10">
           <div className={styles.movie}>

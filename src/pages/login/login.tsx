@@ -5,13 +5,28 @@ import Logo from "core-team/components/logo/logo";
 import { useRouter } from "next/router";
 import { useSendOtp } from "core-team/api";
 
+const chars: any = {
+  "۰": "0",
+  "۱": "1",
+  "۲": "2",
+  "۳": "3",
+  "۴": "4",
+  "۵": "5",
+  "۶": "6",
+  "۷": "7",
+  "۸": "8",
+  "۹": "9",
+};
+
 const Login = () => {
   const { mutateAsync: requestOtp, isLoading } = useSendOtp();
   const router = useRouter();
 
   const handleMobileSubmit = ({ mobile }: any) => {
-    requestOtp({ mobile }).then(() => {
-      router.push(`/login/verify?mobile=${mobile}${router.query.redirect ? `&redirect=${router.query.redirect}` : ""}`);
+    requestOtp({
+      mobile: mobile.replace(/[۰۱۲۳۴۵۶۷۸۹]/g, (c: string) => chars[c]),
+    }).then(() => {
+      router.push(`/login/verify?mobile=${mobile.replace(/[۰۱۲۳۴۵۶۷۸۹]/g, (c: string) => chars[c])}${router.query.redirect ? `&redirect=${router.query.redirect}` : ""}`);
     });
   };
 

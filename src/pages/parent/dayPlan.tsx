@@ -1,23 +1,16 @@
 import ParentDashboardLayout from "layouts/parent-dashboard-layout";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { openGuard } from "@kidneed/utils";
 import { Avatar, Button, Card, Tag } from "antd";
 import ContentModal from "core-team/components/contentModal";
-import {
-  useActivityGlance,
-  useContent,
-  useContents,
-  useTodayActivity
-} from "core-team/api/activity";
+import { useActivityGlance, useContent, useContents, useTodayActivity } from "core-team/api/activity";
 import { useApp } from "@kidneed/hooks";
 import _ from "lodash";
 import jMoment from "moment-jalaali";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { Moment } from "moment";
+import moment, { Moment } from "moment";
 import { ContentDetail } from "core-team/components";
-import moment from "moment";
-import { POSTER_ORIGIN } from "../../core-team/constants";
 import VideoIcon from "../../layouts/icons/video";
 import MusicIcon from "../../layouts/icons/music";
 import ActivityIcon from "../../layouts/icons/activity";
@@ -105,11 +98,11 @@ const SideComponent = (props: any) => {
               }}
               className={`hover:tw-bg-gray-100 tw-cursor-pointer tw-p-2 tw-ml-4 tw-rounded-l-2xl tw-py-4 tw-pr-6 tw-flex tw-items-center ${date.jDate() === selectedDate.jDate() ? "tw-bg-gray-200" : ""}`}
             >
-              <div className="tw-text-center">
+              <div className="tw-text-center tw-w-[50px]">
                 <Typography variant="h4">
                   <span className="tw-font-bold">{date.format("jDD")}</span>
                 </Typography>
-                <span className="tw-text-gray-400">{date.format("dd")}</span>
+                <span className="tw-text-gray-400">{date.format("dddd")}</span>
               </div>
               <div className="tw-mr-4">
                 <Typography
@@ -153,11 +146,7 @@ const ItemPic = ({ content, type }: any) => {
   const Icon = typeIcons[type];
 
   const getPoster = (content: any) => {
-    let poster = content?.attributes?.meta?.verticalPoster && `${POSTER_ORIGIN}${content?.attributes?.meta?.verticalPoster[0].url}`;
-    poster = poster || content?.attributes?.meta?.img || content?.attributes?.meta?.poster;
-    poster = poster || (content?.attributes?.images?.data && content?.attributes?.images?.data[0]?.attributes?.url);
-
-    return poster;
+    return content?.attributes?.poster?.data?.attributes?.url;
   };
 
   if (getPoster(content)) {
@@ -220,7 +209,7 @@ const ActivityCard = ({ type, items, contents, onSelectContent, onEdit }: any) =
         const content2 = items[1] ? _.find(contents?.data, i => i.id === parseInt(items[1].attributes.content)) : {};
         const contentTags: string[] = [];
 
-        content1?.attributes?.movies?.data?.map((tag: any) => {
+        content1?.attributes?.content_tags?.data?.map((tag: any) => {
           tag?.attributes?.tags?.data?.map((tag: any) => {
             if (contentTags.indexOf(tag?.attributes?.name) === -1 && tag?.attributes?.name) {
               contentTags.push(tag?.attributes?.name);
@@ -228,7 +217,7 @@ const ActivityCard = ({ type, items, contents, onSelectContent, onEdit }: any) =
           });
         });
 
-        content2?.attributes?.movies?.data?.map((tag: any) => {
+        content2?.attributes?.content_tags?.data?.map((tag: any) => {
           tag?.attributes?.tags?.data?.map((tag: any) => {
             if (contentTags.indexOf(tag?.attributes?.name) === -1 && tag?.attributes?.name) {
               contentTags.push(tag?.attributes?.name);
@@ -260,7 +249,7 @@ const ActivityCard = ({ type, items, contents, onSelectContent, onEdit }: any) =
                 </div>
                 <div className="tw-pt-5 tw-pr-4">
                   <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">مدت زمان:</span>
-                  <span className="tw-text-xl tw-font-bold">{moment.utc(moment.duration(items[0].attributes.duration, "minutes").as('milliseconds')).format('HH:mm')}</span>
+                  <span className="tw-text-xl tw-font-bold">{moment.utc(moment.duration(items[0].attributes.duration, "minutes").as("milliseconds")).format("HH:mm")}</span>
                 </div>
                 <div className="tw-mt-8 tw-pt-5 tw-pr-4">
                   <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">تگ ها:</span>
@@ -275,7 +264,7 @@ const ActivityCard = ({ type, items, contents, onSelectContent, onEdit }: any) =
                     className="hover:tw-bg-gray-200 hover:tw-text-gray-500 hover:tw-border-gray-100 tw-w-60 tw-h-14 tw-bg-gray-100 tw-border-gray-50 tw-text-gray-500 tw-rounded-full"
                     block
                   >
-                    ویرایش
+                    تغییر برنامه
                   </Button>
                 </div>
               </div>
@@ -297,8 +286,8 @@ const DayPlan = () => {
   const { data: content } = useContent(selectedContent);
   const { data: contents } = useContents(activities?.data?.map((i: any) => i.attributes.content));
 
-  if(error && error?.error?.status === 406) {
-    return router.push('/parent/quiz?type=startOfMonth');
+  if (error && error?.error?.status === 406) {
+    return router.push("/parent/quiz?type=startOfMonth");
   }
 
   return (
@@ -307,7 +296,8 @@ const DayPlan = () => {
       Header={
         <div className="tw-flex tw-justify-between tw-mt-4 tw-mb-3 tw-w-full">
           <Typography variant="h5" className="!tw-font-bold tw-flex tw-items-center">
-            تمام برنامه‌های {jMoment(selectedDate).format("jDD jMMMM")} {jMoment().startOf("day").diff(selectedDate.startOf("day"), "days") === 0 && "(امروز)"}</Typography>
+            تمام
+            برنامه‌های {jMoment(selectedDate).format("jDD jMMMM")} {jMoment().startOf("day").diff(selectedDate.startOf("day"), "days") === 0 && "(امروز)"}</Typography>
           <Button
             onClick={() => setSelectPlan(true)}
             className="tw-w-48 tw-h-12 tw-bg-blue-400 tw-text-white tw-rounded-full"

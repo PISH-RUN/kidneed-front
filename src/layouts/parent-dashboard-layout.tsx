@@ -216,7 +216,7 @@ const ChildSelector = () => {
         />
         <Box flexGrow={1}>
           {ctx.child &&
-            <span className="tw-text-xl tw-font-bold">{ctx.child.gender === "boy" ? `آقا ${ctx.child.name}` : `${ctx.child.name} خانوم`}</span>
+            <span className="tw-text-xl tw-font-bold">{ctx.child.gender === "boy" ? `آقا ${ctx.child.name}` : `${ctx.child.name} خانم`}</span>
           }
         </Box>
         <Box>

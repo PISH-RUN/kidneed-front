@@ -1,5 +1,5 @@
 import { Guard } from "@kidneed/types";
-import { Button, Card, Col, Form, Input, message, Row } from "antd";
+import { Button, Card, Col, Form, Input, message, notification, Row } from "antd";
 import { useApp } from "@kidneed/hooks";
 import Logo from "core-team/components/logo/logo";
 import { useState } from "react";
@@ -11,7 +11,13 @@ const Verify = () => {
   const [state, setState] = useState();
   const { login } = useApp();
   const router = useRouter();
-  const { mutateAsync: requestLogin, isLoading } = useLogin();
+  const { mutateAsync: requestLogin, isLoading } = useLogin({
+    onError: () => {
+      notification.error({
+        message: "کد وارد شده اشتباه است.",
+      })
+    },
+  });
   const { mutateAsync: requestOtp, isLoading: otpLoading } = useSendOtp();
 
   const handleMobileSubmit = async ({ token }: any) => {
