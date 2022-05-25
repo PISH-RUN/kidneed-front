@@ -9,7 +9,7 @@ import styles from "./Quiz.module.css";
 import { useQuestions, useQuiz, useSubmitQuiz, useSubmitSystemQuiz } from "core-team/api/question";
 import _ from "lodash";
 import Link from "next/link";
-import { FiArrowDown } from "react-icons/all";
+import { FiArrowDown } from "react-icons/fi";
 
 export const Quiz: React.FC<{ way?: string, childId?: number, type?: string }> = (props) => {
   const router = useRouter();
