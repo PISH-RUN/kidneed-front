@@ -32,12 +32,13 @@ import { DateRange, LocalizationProvider, StaticDateRangePicker } from "@mui/lab
 import JalaliUtils from "@date-io/jalaali";
 import jMoment from "moment-jalaali";
 import { FaPlus, FaSignOutAlt } from "react-icons/fa";
-import { FiLogOut, FiTrash, FiTrash2, FiX } from "react-icons/fi";
-import { Modal, notification, Popconfirm } from "antd";
+import { FiLogOut, FiTrash2 } from "react-icons/fi";
+import { Modal, notification } from "antd";
 import { useDeleteChild } from "../core-team/api/user";
+import { IoHome, IoNewspaper } from "react-icons/io5";
 
 notification.config({
-  placement: "bottomLeft",
+  placement: "bottomLeft"
 });
 
 jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: false });
@@ -109,6 +110,16 @@ const menu = [
     link: "/parent/setting",
     icon: <SettingIcon />
   }, {
+    title: "صفحه اصلی",
+    link: "https://yekodo.ir",
+    external: true,
+    icon: <IoHome />
+  }, {
+    title: "بلاگ",
+    link: "https://blog.yekodo.ir",
+    external: true,
+    icon: <IoNewspaper />
+  }, {
     title: "خروج",
     type: "logout",
     link: "/login",
@@ -135,7 +146,7 @@ const NavBar = () => {
       }}
     >
       <Box sx={{ maxWidth: 210, p: 2, margin: "0 auto" }}>
-        <Link href='/'>
+        <Link href="/">
           <Image src={LogoImage} alt="logo" className="tw-cursor-pointer" />
         </Link>
       </Box>
@@ -193,7 +204,7 @@ const ChildSelector = () => {
             message: "حذف با موفقیت انجام شد"
           });
           deleteChild(child.id);
-          if(ctx?.children && ctx?.children.length <= 1) {
+          if (ctx?.children && ctx?.children.length <= 1) {
             router.push("/add-child");
           }
         });
@@ -288,7 +299,7 @@ export default function ParentDashboardLayout(props: ParentDashboardLayoutProps)
   const { children, SideComponent, showChild, showRange, onRangeChange, Header, bp, bd } = props;
   const [range, setRange] = useState<DateRange<Date>>(today);
   const { ctx } = useApp();
-  const isChild = localStorage.getItem('isChild')
+  const isChild = localStorage.getItem("isChild");
 
   useEffect(() => {
     if (range[0] !== null && range[1] !== null) {
@@ -297,10 +308,10 @@ export default function ParentDashboardLayout(props: ParentDashboardLayoutProps)
   }, [range]);
 
   useEffect(() => {
-    if(isChild) {
+    if (isChild) {
       location.href = "/child/dashboard";
     }
-  }, [isChild])
+  }, [isChild]);
 
   if (isChild || (!ctx.child && ctx.children)) {
     return <></>;

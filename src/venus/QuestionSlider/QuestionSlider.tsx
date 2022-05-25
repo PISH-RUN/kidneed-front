@@ -10,9 +10,6 @@ export const QuestionSlider = (props: any) => {
         defaultValue={2}
         value={props.value}
         onChange={props.onChange}
-        handleStyle={!props.value ? { backgroundColor: "#939393" } : {}}
-        trackStyle={!props.value ? { backgroundColor: "#939393" } : {}}
-        onAfterChange={props.onChange}
         min={1}
         max={4}
         marks={{

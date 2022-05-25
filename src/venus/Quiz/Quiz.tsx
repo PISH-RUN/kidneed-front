@@ -1,7 +1,7 @@
 import { Button, Form, notification, Typography } from "antd";
 import Text from "antd/lib/typography/Text";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { PrimaryButton } from "venus/PrimaryButton/PrimaryButton";
 import { ContentWrapper } from "../ContentWrapper/ContentWrapper";
 import { QuestionSlider } from "../QuestionSlider/QuestionSlider";
@@ -9,9 +9,11 @@ import styles from "./Quiz.module.css";
 import { useQuestions, useQuiz, useSubmitQuiz, useSubmitSystemQuiz } from "core-team/api/question";
 import _ from "lodash";
 import Link from "next/link";
+import { FiArrowDown } from "react-icons/all";
 
 export const Quiz: React.FC<{ way?: string, childId?: number, type?: string }> = (props) => {
   const router = useRouter();
+  const [scroll, setScroll] = useState(false);
   const { mutateAsync: submitQuiz } = useSubmitQuiz();
   const { mutateAsync: submitSystemQuiz } = useSubmitSystemQuiz();
   const { data: quiz } = useQuiz(props.way, props.childId, props.type);
@@ -47,29 +49,36 @@ export const Quiz: React.FC<{ way?: string, childId?: number, type?: string }> =
     >
       <Text style={{ fontSize: "16px" }}>لطفا موارد زیر را در مورد فرزندتان مشخص نمایید</Text>
       <Form layout="vertical" onFinish={handleSubmit}>
-        <div className={styles.questionsWrapper}>
-          {data?.data?.map((item: any) => {
-            return (
-              <Form.Item
-                className="tw-mt-4"
-                key={item.id}
-                rules={[{ required: true, message: "پاسخ به این سوال الزامی است" }]}
-                label={<Typography>{item.body}</Typography>}
-                style={{ marginBottom: 0 }}
-                name={item.id}
+        <div className="tw-relative">
+          <div className={styles.questionsWrapper} onScroll={() => !scroll && setScroll(true)}>
+            {data?.data?.map((item: any) => {
+              return (
+                <Form.Item
+                  className="tw-mt-4"
+                  key={item.id}
+                  rules={[{ required: true, message: "پاسخ به این سوال الزامی است" }]}
+                  label={<Typography>{item.body}</Typography>}
+                  style={{ marginBottom: 0 }}
+                  name={item.id}
+                >
+                  <QuestionSlider />
+                </Form.Item>
+              );
+            })}
+            <div className="tw-text-center">
+              <PrimaryButton
+                className="tw-my-4 tw-w-52"
+                htmlType="submit"
               >
-                <QuestionSlider />
-              </Form.Item>
-            );
-          })}
+                تایید
+              </PrimaryButton>
+            </div>
+            {!scroll && <div className="tw-absolute tw-bottom-2 tw-left-1/2 tw-animate-bounce">
+              <FiArrowDown className="tw-text-4xl tw-bg-white tw-rounded-full tw-border tw-p-1" />
+            </div>}
+          </div>
         </div>
         <div className="tw-text-center">
-          <PrimaryButton
-            className="tw-mt-14 tw-w-52"
-            htmlType="submit"
-          >
-            تایید
-          </PrimaryButton>
           {props.type &&
             <Link href="/parent/dashboard">
               <Button

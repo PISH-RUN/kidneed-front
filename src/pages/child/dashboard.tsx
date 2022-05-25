@@ -306,7 +306,10 @@ const Dashboard = () => {
         />
 
         <Box sx={{ position: "relative", zIndex: 12 }}>
-          <Box sx={{ maxWidth: 800, m: "300px auto 0" }}>
+          <Typography variant="h4" className="tw-text-center !tw-mt-[250px]" style={{ textShadow: "0 0 10px #57ABF4" }}>
+            سرگرمی‌های امروز من
+          </Typography>
+          <Box sx={{ maxWidth: 800, m: "50px auto 0" }}>
             {_.map(result, (items, type) => {
               const dataItems = _.chunk(items, 2);
 

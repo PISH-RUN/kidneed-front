@@ -2,7 +2,7 @@ import ParentDashboardLayout from "layouts/parent-dashboard-layout";
 import React, { useState } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { openGuard } from "@kidneed/utils";
-import { Avatar, Button, Card, Tag } from "antd";
+import { Avatar, Button, Card, Tag, Tooltip } from "antd";
 import ContentModal from "core-team/components/contentModal";
 import { useActivityGlance, useContent, useContents, useTodayActivity } from "core-team/api/activity";
 import { useApp } from "@kidneed/hooks";
@@ -180,18 +180,18 @@ const ActivityTags = ({ contentTags }: any) => {
       {(showTags ? contentTags : contentTags.slice(0, 4)).map((tag: any) =>
         <Tag
           key={tag}
-          className="tw-bg-gray-300 tw-text-white tw-px-3 tw-font-normal tw-rounded-full tw-text-base"
+          className="tw-inline-block tw-cursor-pointer tw-bg-gray-300 tw-text-white tw-px-3 tw-font-normal tw-transition-all tw-rounded-full tw-text-base !tw-mb-1 hover:tw-max-w-[300px] tw-max-w-[110px] tw-text-ellipsis tw-overflow-hidden"
         >
           {tag}
         </Tag>
       )}
       {contentTags.length > 4 &&
-        <div className="tw-mt-5">
+        <div className="tw-inline-block">
           <span
             className="tw-text-blue-400 tw-cursor-pointer tw-text-base"
             onClick={() => setShowTags(!showTags)}
           >
-            {showTags ? "پنهان کردن تگ ها" : "نمایش تگ ها"}
+            {showTags ? "بستن" : "بیشتر"}
           </span>
         </div>
       }
@@ -207,20 +207,21 @@ const ActivityCard = ({ type, items, contents, onSelectContent, onEdit }: any) =
       {_.map(dataItems, (items: any) => {
         const content1 = _.find(contents?.data, i => i.id === parseInt(items[0].attributes.content));
         const content2 = items[1] ? _.find(contents?.data, i => i.id === parseInt(items[1].attributes.content)) : {};
-        const contentTags: string[] = [];
+        const contentTags1: string[] = [];
+        const contentTags2: string[] = [];
 
         content1?.attributes?.content_tags?.data?.map((tag: any) => {
           tag?.attributes?.tags?.data?.map((tag: any) => {
-            if (contentTags.indexOf(tag?.attributes?.name) === -1 && tag?.attributes?.name) {
-              contentTags.push(tag?.attributes?.name);
+            if (contentTags1.indexOf(tag?.attributes?.name) === -1 && tag?.attributes?.name) {
+              contentTags1.push(tag?.attributes?.name);
             }
           });
         });
 
         content2?.attributes?.content_tags?.data?.map((tag: any) => {
           tag?.attributes?.tags?.data?.map((tag: any) => {
-            if (contentTags.indexOf(tag?.attributes?.name) === -1 && tag?.attributes?.name) {
-              contentTags.push(tag?.attributes?.name);
+            if (contentTags2.indexOf(tag?.attributes?.name) === -1 && tag?.attributes?.name) {
+              contentTags2.push(tag?.attributes?.name);
             }
           });
         });
@@ -251,12 +252,18 @@ const ActivityCard = ({ type, items, contents, onSelectContent, onEdit }: any) =
                   <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">مدت زمان:</span>
                   <span className="tw-text-xl tw-font-bold">{moment.utc(moment.duration(items[0].attributes.duration, "minutes").as("milliseconds")).format("HH:mm")}</span>
                 </div>
-                <div className="tw-mt-8 tw-pt-5 tw-pr-4">
-                  <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">تگ ها:</span>
-                  <span className="tw-text-xl tw-font-bold">
-                    <ActivityTags contentTags={contentTags} />
+                {contentTags1.length > 0 && <div className="tw-mt-4 tw-pt-2 tw-pr-4">
+                  <span className="tw-text-xl tw-flex tw-flex-wrap">
+                    <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">تگ ها‌ی محتوا اول:</span>
+                    <ActivityTags contentTags={contentTags1} />
                   </span>
-                </div>
+                </div>}
+                {contentTags2.length > 0 && <div className="tw-mt-4 tw-pt-2 tw-pr-4">
+                  <span className="tw-text-xl tw-flex tw-flex-wrap">
+                    <span className="tw-text-gray-400 tw-ml-3 tw-text-xl">تگ ها‌ی محتوا دوم:</span>
+                    <ActivityTags contentTags={contentTags2} />
+                  </span>
+                </div>}
                 <div className="tw-mt-5 tw-mr-3">
                   <Button
                     onClick={() => onEdit(items)}
