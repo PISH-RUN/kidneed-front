@@ -74,7 +74,7 @@ export const Quiz: React.FC<{ way?: string, childId?: number, type?: string }> =
               </PrimaryButton>
             </div>
             {!scroll && <div className="tw-absolute tw-bottom-2 tw-left-1/2 tw-animate-bounce">
-              <FiArrowDown className="tw-text-4xl tw-bg-white tw-rounded-full tw-border tw-p-1" />
+              <FiArrowDown className="tw-text-4xl tw-bg-blue-400 tw-rounded-full tw-border tw-p-1 tw-text-white" />
             </div>}
           </div>
         </div>
