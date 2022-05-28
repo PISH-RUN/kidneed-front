@@ -10,6 +10,7 @@ import FA from "antd/lib/locale/fa_IR";
 import { AppContext, appMachine } from "@kidneed/context";
 import { useInterpret } from "@xstate/react";
 import { RecoilRoot } from "recoil";
+import { TextsProvider } from "../core-team/hooks/use-texts";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -29,19 +30,21 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   const guard: Guard = Component.guard ?? (() => false);
 
   notification.config({
-    placement: "bottomLeft",
+    placement: "bottomLeft"
   });
 
   return (
     <AppContext.Provider value={{ appService }}>
       <QueryClientProvider client={queryClient}>
-        <ConfigProvider direction="rtl" prefixCls="ant" locale={FA}>
-          <RecoilRoot>
-            <Protected guard={guard}>
-              {getLayout(<Component {...pageProps} />)}
-            </Protected>
-          </RecoilRoot>
-        </ConfigProvider>
+        <TextsProvider>
+          <ConfigProvider direction="rtl" prefixCls="ant" locale={FA}>
+            <RecoilRoot>
+              <Protected guard={guard}>
+                {getLayout(<Component {...pageProps} />)}
+              </Protected>
+            </RecoilRoot>
+          </ConfigProvider>
+        </TextsProvider>
       </QueryClientProvider>
     </AppContext.Provider>
   );

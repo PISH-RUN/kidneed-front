@@ -14,6 +14,9 @@ import { FiTrash } from "react-icons/fi";
 import { useApp } from "@kidneed/hooks";
 import ParentDashboardLayout from "../../layouts/parent-dashboard-layout";
 import moment from "moment";
+import { useTexts } from "../../core-team/hooks/use-texts";
+import { identity } from "lodash";
+import _ from "lodash";
 
 const Subscription = () => {
   const { ctx, fetchUser } = useApp();
@@ -24,6 +27,7 @@ const Subscription = () => {
   const { data: couponSubscriptions } = useCouponSubscriptions(coupon);
   const { mutateAsync: requestPurchase } = useRequestPurchase();
   const { mutateAsync: requestPayment } = useRequestPayment();
+  const { getText } = useTexts();
 
   const handleAddCoupon = () => {
     setCoupon(couponValue);
@@ -157,26 +161,12 @@ const Subscription = () => {
           <div className="tw-flex tw-flex-col tw-px-10 tw-py-5 tw-bg-gray-100">
             <Typography variant="body1" className="!tw-mb-4">امکانات اشتراک یکودو</Typography>
             <Row gutter={[15, 15]}>
-              <Col className="tw-flex" span={12}>
-                <IoCheckmarkCircle className="tw-text-green-500 tw-text-xl tw-ml-2" />
-                <span className="tw-text-md">دسترسی کامل به فیلم</span>
-              </Col>
-              <Col className="tw-flex" span={12}>
-                <IoCheckmarkCircle className="tw-text-green-500 tw-text-xl tw-ml-2" />
-                <span className="tw-text-md">دسترسی کامل به کتاب</span>
-              </Col>
-              <Col className="tw-flex" span={12}>
-                <IoCheckmarkCircle className="tw-text-green-500 tw-text-xl tw-ml-2" />
-                <span className="tw-text-md">دسترسی کامل به پادکست</span>
-              </Col>
-              <Col className="tw-flex" span={12}>
-                <IoCheckmarkCircle className="tw-text-green-500 tw-text-xl tw-ml-2" />
-                <span className="tw-text-md">دسترسی کامل به بازی</span>
-              </Col>
-              <Col className="tw-flex" span={12}>
-                <IoCheckmarkCircle className="tw-text-green-500 tw-text-xl tw-ml-2" />
-                <span className="tw-text-md">و ...</span>
-              </Col>
+              {_.filter(getText('subscribePros').split("\n"), identity).map((pros: any) => (
+                <Col className="tw-flex" span={12} key={pros}>
+                  <IoCheckmarkCircle className="tw-text-green-500 tw-text-xl tw-ml-2" />
+                  <span className="tw-text-md">{pros}</span>
+                </Col>
+              ))}
             </Row>
           </div>
         </div>

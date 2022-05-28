@@ -8,6 +8,7 @@ import SignStep from "./sign";
 import RootStep from "./root";
 import ResultStep from "./result";
 import styles from "earth/styles/earth.module.css";
+import { useTexts } from "../../../core-team/hooks/use-texts";
 
 const steps = [
   "موضوع",
@@ -21,6 +22,7 @@ const Approach = () => {
   const [step, setStep] = useState(0);
   const router = useRouter();
   const rahcheModal = localStorage.getItem('rahcheModal');
+  const { getText } = useTexts();
 
   useEffect(() => {
     if (router.query.step === 'result') {
@@ -67,10 +69,7 @@ const Approach = () => {
           <div className={styles.content}>
             <div className={styles.plan}>
               <div className={styles.text}>
-                پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی
-                کودک شما پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما پلنت، تعیین برنامه هوشمند اوقات فراغت و
-                درسی کودک شما پلنت، تعیین برنامه هوشمند اوقات فراغت و درسی کودک شما پلنت، تعیین برنامه هوشمند اوقات
-                فراغت و درسی کودک شما
+                {getText('rahcheIntroduce')}
               </div>
               <div className={styles.buttons}>
                 <div>

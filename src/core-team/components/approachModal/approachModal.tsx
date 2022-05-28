@@ -8,6 +8,7 @@ import "react-player-circle-controls/dist/styles.css";
 import { API } from "../../constants";
 import { Typography } from "@mui/material";
 import { IoPause, IoPlay } from "react-icons/io5";
+import { useTexts } from "../../hooks/use-texts";
 
 const Player = ({ item, isPlaying, onPlay }: any) => {
   const player = useRef<any>(null);
@@ -61,6 +62,7 @@ const Player = ({ item, isPlaying, onPlay }: any) => {
 
 export const ApproachModal = ({ data, ...rest }: any) => {
   const [playing, setPlay] = useState<boolean | number>(false);
+  const { getText } = useTexts();
 
   return (
     <Modal
@@ -85,7 +87,7 @@ export const ApproachModal = ({ data, ...rest }: any) => {
           </div>
           <div className="tw-mt-6">
             <Typography variant="body1">
-              توضیحات
+              {getText('rahcheShortResult')}
             </Typography>
           </div>
           <div className="tw-mt-6 tw-overflow-y-auto tw-max-h-96">
