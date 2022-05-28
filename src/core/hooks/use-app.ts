@@ -32,12 +32,12 @@ export default function useApp() {
   );
 
   const logout = useCallback(() => {
-    queryClient.invalidateQueries("yekodo")
-    queryClient.resetQueries("yekodo")
-    queryClient.removeQueries("yekodo")
-    queryClient.clear()
+    queryClient.invalidateQueries("yekodo");
+    queryClient.resetQueries("yekodo");
+    queryClient.removeQueries("yekodo");
+    queryClient.clear();
 
-    send("LOGGED_OUT")
+    send("LOGGED_OUT");
   }, [send]);
 
   const selectChild = useCallback(
@@ -72,8 +72,10 @@ export default function useApp() {
     if (!ctx.child && ctx.children) {
       selectChild(ctx.children[0]);
     }
-    if (!ctx.child && ctx.children && ctx.children.length === 0) {
-      router.push('/add-child')
+    if (ctx.user?.subscribedUntil === null) {
+      router.push("/subscription");
+    } else if (!ctx.child && ctx.children && ctx.children.length === 0) {
+      router.push("/add-child");
     }
   }, [ctx]);
 

@@ -110,7 +110,12 @@ const menu = [
     title: "تنظیمات",
     link: "/parent/setting",
     icon: <SettingIcon />
-  }, {
+  },
+  {
+    type: "divider",
+    link: "/",
+  },
+  {
     title: "صفحه اصلی",
     link: "https://yekodo.ir",
     external: true,
@@ -120,7 +125,12 @@ const menu = [
     link: BLOG_URL,
     external: true,
     icon: <IoNewspaper />
-  }, {
+  },
+  {
+    link: "/",
+    type: "divider"
+  },
+  {
     title: "خروج",
     type: "logout",
     link: "/login",
@@ -154,18 +164,21 @@ const NavBar = () => {
       <Box sx={{ mt: 5 }}>
         {/*@ts-ignore*/}
         {menu.map((m, index) =>
-          <Link key={index} href={m.link}>
-            <Button
-              sx={{ ...styles.navButton, ...(isSelectedMenu(m.link) ? styles.activeNavButton : {}) }}
-              variant={isSelectedMenu(m.link) ? "contained" : "text"}
-              startIcon={m.icon}
-              onClick={() => m.type === "logout" && logout()}
-            >
-              {m.title}
-              {(m.type === "notification" && !!ctx?.user?.unreadNotifications && ctx?.user?.unreadNotifications > 0) &&
-                <span className={`tw-text-sm tw-rounded-full tw-text-white tw-bg-orange-500 tw-w-8 tw-h-8 tw-flex tw-items-center tw-justify-center tw-mr-4`}>{ctx?.user?.unreadNotifications}</span>}
-            </Button>
-          </Link>)}
+          m.type === "divider" ?
+            <Divider /> :
+            <Link key={index} href={m.link}>
+              <Button
+                sx={{ ...styles.navButton, ...(isSelectedMenu(m.link) ? styles.activeNavButton : {}) }}
+                variant={isSelectedMenu(m.link) ? "contained" : "text"}
+                startIcon={m.icon}
+                onClick={() => m.type === "logout" && logout()}
+              >
+                {m.title}
+                {(m.type === "notification" && !!ctx?.user?.unreadNotifications && ctx?.user?.unreadNotifications > 0) &&
+                  <span className={`tw-text-sm tw-rounded-full tw-text-white tw-bg-orange-500 tw-w-8 tw-h-8 tw-flex tw-items-center tw-justify-center tw-mr-4`}>{ctx?.user?.unreadNotifications}</span>}
+              </Button>
+            </Link>
+        )}
       </Box>
     </Box>
   );

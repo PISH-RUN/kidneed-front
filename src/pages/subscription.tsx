@@ -8,7 +8,7 @@ import {
 } from "../core-team/api/payment";
 import { useState } from "react";
 import { SubscriptionList } from "../core-team/components";
-import { Col, Input, notification, Row, Tag } from "antd";
+import { Avatar, Col, Input, notification, Row, Tag } from "antd";
 import BaseLayout from "../layouts/baseLayout";
 import logo from "../landing/media/images/logo.png";
 import Image from "next/image";
@@ -16,9 +16,13 @@ import { useRouter } from "next/router";
 import { FiTrash } from "react-icons/fi";
 import { useApp } from "@kidneed/hooks";
 import Link from "next/link";
+import { useTexts } from "../core-team/hooks/use-texts";
+import _, { identity } from "lodash";
+import { UserOutlined } from "@ant-design/icons";
+import { YEKODO } from "../core-team/constants";
 
 const Subscription = () => {
-  const { ctx, fetchUser } = useApp();
+  const { ctx, fetchUser, logout } = useApp();
   const router = useRouter();
   const [couponValue, setCouponValue] = useState("");
   const [coupon, setCoupon] = useState<string>();
@@ -26,6 +30,7 @@ const Subscription = () => {
   const { data: couponSubscriptions } = useCouponSubscriptions(coupon);
   const { mutateAsync: requestPurchase } = useRequestPurchase();
   const { mutateAsync: requestPayment } = useRequestPayment();
+  const { getText } = useTexts();
 
   const handleAddCoupon = () => {
     setCoupon(couponValue);
@@ -62,10 +67,18 @@ const Subscription = () => {
   return (
     <BaseLayout>
       <>
-        <div className="tw-bg-sky-100 tw-p-4 tw-px-10 tw-flex">
-          <Link href="/">
+        <div className="tw-bg-sky-100 tw-p-4 tw-px-10 tw-flex tw-justify-between">
+          <Link href={YEKODO}>
             <Image src={logo} alt="logo" className="tw-cursor-pointer" />
           </Link>
+          {ctx.user ? <Button
+            color="error"
+            onClick={() => {
+              window.location.href = YEKODO;
+            }}
+          >خروج</Button> : <Link href="/login">
+            <Button color="primary" variant="outlined">ورود</Button>
+          </Link>}
         </div>
         <div className="tw-max-w-2xl tw-m-auto tw-border tw-mt-20 tw-rounded-xl">
           <div className="tw-m-8">
@@ -164,26 +177,12 @@ const Subscription = () => {
           <div className="tw-flex tw-flex-col tw-px-10 tw-py-5 tw-bg-gray-100">
             <Typography variant="body1" className="!tw-mb-4">امکانات اشتراک یکودو</Typography>
             <Row gutter={[15, 15]}>
-              <Col className="tw-flex" span={12}>
-                <IoCheckmarkCircle className="tw-text-green-500 tw-text-xl tw-ml-2" />
-                <span className="tw-text-md">دسترسی کامل به فیلم</span>
-              </Col>
-              <Col className="tw-flex" span={12}>
-                <IoCheckmarkCircle className="tw-text-green-500 tw-text-xl tw-ml-2" />
-                <span className="tw-text-md">دسترسی کامل به کتاب</span>
-              </Col>
-              <Col className="tw-flex" span={12}>
-                <IoCheckmarkCircle className="tw-text-green-500 tw-text-xl tw-ml-2" />
-                <span className="tw-text-md">دسترسی کامل به پادکست</span>
-              </Col>
-              <Col className="tw-flex" span={12}>
-                <IoCheckmarkCircle className="tw-text-green-500 tw-text-xl tw-ml-2" />
-                <span className="tw-text-md">دسترسی کامل به بازی</span>
-              </Col>
-              <Col className="tw-flex" span={12}>
-                <IoCheckmarkCircle className="tw-text-green-500 tw-text-xl tw-ml-2" />
-                <span className="tw-text-md">و ...</span>
-              </Col>
+              {_.filter(getText("subscribePros")?.split("\n"), identity).map((pros: any) => (
+                <Col className="tw-flex" span={12} key={pros}>
+                  <IoCheckmarkCircle className="tw-text-green-500 tw-text-xl tw-ml-2" />
+                  <span className="tw-text-md">{pros}</span>
+                </Col>
+              ))}
             </Row>
           </div>
         </div>

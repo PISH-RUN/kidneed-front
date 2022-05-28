@@ -4,3 +4,4 @@ export const PLAYERS_URL = process.env.NEXT_PUBLIC_PLAYERS_URL || "https://playe
 export const POSTER_ORIGIN = process.env.NEXT_PUBLIC_POSTER_ORIGIN || "https://gateway.telewebion.com";
 export const BLOG_URL = process.env.NEXT_PUBLIC_BLOG_URL || "https://yekodo.ir/blog/";
 export const PWA_URL = process.env.NEXT_PUBLIC_BLOG_URL || "https://pwa.yekodo.ir";
+export const YEKODO = process.env.NEXT_PUBLIC_BLOG_URL || "https://yekodo.ir";

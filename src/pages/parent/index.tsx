@@ -21,7 +21,11 @@ const guard: Guard = (matcher, ctx, router) => {
     return true;
   }
 
-  router.push("/add-child");
+  if (ctx.user?.subscribedUntil === null) {
+    router.push("/subscription");
+  } else {
+    router.push("/add-child");
+  }
 
   return false;
 };
