@@ -11,6 +11,8 @@ import { AppContext, appMachine } from "@kidneed/context";
 import { useInterpret } from "@xstate/react";
 import { RecoilRoot } from "recoil";
 import { TextsProvider } from "../core-team/hooks/use-texts";
+import { isMobile } from "react-device-detect";
+import { PWA_URL } from "../core-team/constants";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -32,6 +34,10 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   notification.config({
     placement: "bottomLeft"
   });
+
+  if(isMobile) {
+    window.location.href = PWA_URL;
+  }
 
   return (
     <AppContext.Provider value={{ appService }}>

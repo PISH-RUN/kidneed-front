@@ -63,7 +63,7 @@ export default function Home() {
             <Link href="#contact-us">تماس با ما</Link>
           </div>
           <div>
-            <Link href="https://blog.yekodo.net">بلاگ</Link>
+            <Link href={BLOG_URL}>بلاگ</Link>
           </div>
         </div>
       </div>

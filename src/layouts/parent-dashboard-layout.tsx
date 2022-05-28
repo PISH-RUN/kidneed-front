@@ -36,6 +36,7 @@ import { FiLogOut, FiTrash2 } from "react-icons/fi";
 import { Modal, notification } from "antd";
 import { useDeleteChild } from "../core-team/api/user";
 import { IoHome, IoNewspaper } from "react-icons/io5";
+import { BLOG_URL } from "../core-team/constants";
 
 notification.config({
   placement: "bottomLeft"
@@ -116,7 +117,7 @@ const menu = [
     icon: <IoHome />
   }, {
     title: "بلاگ",
-    link: "https://blog.yekodo.ir",
+    link: BLOG_URL,
     external: true,
     icon: <IoNewspaper />
   }, {
