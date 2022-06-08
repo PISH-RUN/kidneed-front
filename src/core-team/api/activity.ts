@@ -17,7 +17,8 @@ export const useTodayActivity = (child?: number, date = moment()) =>
         }
       }),
     {
-      enabled: !!child
+      enabled: !!child,
+      retry: 0,
     }
   );
 

@@ -149,11 +149,7 @@ const ItemPic = ({ content, type }: any) => {
   const Icon = typeIcons[type];
 
   const getPoster = (content: any) => {
-    let poster = content?.attributes?.meta?.verticalPoster && `${POSTER_ORIGIN}${content?.attributes?.meta?.verticalPoster[0].url}`;
-    poster = poster || content?.attributes?.meta?.img || content?.attributes?.meta?.poster;
-    poster = poster || (content?.attributes?.images?.data && content?.attributes?.images?.data[0]?.attributes?.url);
-
-    return poster;
+    return content?.attributes?.poster?.data?.attributes?.url;
   };
 
   if (getPoster(content)) {
@@ -178,13 +174,18 @@ const ItemPic = ({ content, type }: any) => {
 };
 
 const Dashboard = () => {
+  const router = useRouter();
   const [range, setRange] = useState<DateRange<Date>>(today);
   const { ctx } = useApp();
-  const { data, isLoading: loading } = useDashboard(ctx.child?.id);
+  const { data, isLoading: loading, error } = useDashboard(ctx.child?.id);
   const { data: contents } = useContents(_.map(_.flatten(_.values(data?.data)), i => parseInt(i?.attributes?.content)));
   const { data: stats, isLoading } = useActivityStats(range, ctx.child?.id);
 
   const sum = _.sumBy(_.flatten(_.values(data?.data)), (i: any) => i.attributes?.duration);
+
+  if (error && error?.error?.status === 406) {
+    router.push("/parent/quiz?type=startOfMonth");
+  }
 
   return (
     <ParentDashboardLayout SideComponent={<SideDashboard />} showChild showRange onRangeChange={setRange}>

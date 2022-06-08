@@ -294,7 +294,7 @@ const DayPlan = () => {
   const { data: contents } = useContents(activities?.data?.map((i: any) => i.attributes.content));
 
   if (error && error?.error?.status === 406) {
-    return router.push("/parent/quiz?type=startOfMonth");
+    router.push("/parent/quiz?type=startOfMonth");
   }
 
   return (

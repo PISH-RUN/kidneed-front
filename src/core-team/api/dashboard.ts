@@ -7,7 +7,7 @@ export const useDashboard = (child?: number, date?: [Date | Moment | null, Date 
   const start = jMoment(date && date[0]).startOf("day").format("YYYY-MM-DD");
   const end = jMoment(date && date[1]).endOf("day").format("YYYY-MM-DD");
 
-  return useQuery(["yekodo", "dashboard", child], () =>
+  return useQuery<any, any>(["yekodo", "dashboard", child], () =>
       strapi.request<any>("get", `/children/${child}/activities`, {
         params: {
           filters: {
@@ -28,7 +28,8 @@ export const useDashboard = (child?: number, date?: [Date | Moment | null, Date 
 
       }),
     {
-      enabled: !!child
+      enabled: !!child,
+      retry: 0,
     }
   );
 }
