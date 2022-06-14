@@ -16,7 +16,7 @@ export const Way: React.FC<WayProps> = (props) => {
         href="#"
         style={{ minWidth: "85px", height: "35px" }}
       >
-        بیشتر بدانید
+        انتخاب
       </PrimaryButton>
     </div>
   );
