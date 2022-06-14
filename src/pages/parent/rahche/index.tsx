@@ -83,7 +83,7 @@ const Approach = () => {
             <div className={styles.movie}>
               <div className={styles.iframeDiv}><span style={{ display: "block", paddingTop: "57%" }}></span>
                 <iframe
-                  src="https://www.aparat.com/video/video/embed/videohash/7ZXqM/vt/frame"
+                  src={`https://www.aparat.com/video/video/embed/videohash/${getText('rahcheIntroduceVideo')}/vt/frame`}
                   allowFullScreen={true}
                 ></iframe>
               </div>
