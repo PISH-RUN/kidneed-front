@@ -5,14 +5,14 @@ ENV PATH $PATH:/usr/src/app/node_modules/.bin
 
 WORKDIR /usr/src/app
 
-COPY ./app/package*.json ./
-COPY ./app/yarn.lock ./
+COPY ./package*.json ./
+COPY ./yarn.lock ./
 
 # CI and release builds should use npm ci to fully respect the lockfile.
 # Local development may use npm install for opportunistic package updates.
 RUN yarn
 
-COPY ./app .
+COPY . .
 
 # Build
 FROM test-target as build-target
