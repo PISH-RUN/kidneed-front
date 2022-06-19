@@ -33,6 +33,4 @@ COPY --from=build-target /usr/src/app .
 
 RUN npm i -g next
 
-RUN ls -la
-
 CMD ["next", "start"]
