@@ -87,7 +87,7 @@ export const ApproachModal = ({ data, ...rest }: any) => {
           </div>
           <div className="tw-mt-6">
             <Typography variant="body1">
-              {data?.data?.subject?.description}
+              {data?.data?.subject?.solution}
             </Typography>
           </div>
           <div className="tw-mt-6 tw-overflow-y-auto tw-max-h-96">
