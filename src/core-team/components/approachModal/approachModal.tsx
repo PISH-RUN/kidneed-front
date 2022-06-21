@@ -70,6 +70,7 @@ export const ApproachModal = ({ data, ...rest }: any) => {
       closable={true}
       centered
       {...rest}
+      destroyOnClose
       className={styles.resultModal + " tw-rounded-3xl tw-overflow-hidden"}
     >
       <div className={styles.allContent}>
