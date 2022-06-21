@@ -50,9 +50,12 @@ export const childrenFetched = assign(
 );
 
 export const childSelected = assign(
-  (_: PartialAppContext, event: SelectChildEvent) => ({
-    child: event.child
-  })
+  (_: PartialAppContext, event: SelectChildEvent) => {
+    console.log(event);
+    return {
+      child: event.child
+    }
+  }
 );
 
 export const childAdded = assign(

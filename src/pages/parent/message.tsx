@@ -110,8 +110,8 @@ const Message = () => {
   const [search, setSearch] = useState("");
   const [pagination, setPagination] = useState({ page: 1, pageSize: 25 });
   const { data: rahcheData } = useApproaches(rahche);
-  const { fetchUser } = useApp();
-  const { data } = useNotification(search, sort, pagination);
+  const { fetchUser, ctx } = useApp();
+  const { data } = useNotification(search, sort, pagination, ctx?.child?.id);
   const { mutateAsync: readAll } = useNotificationRead();
 
   useEffect(() => {

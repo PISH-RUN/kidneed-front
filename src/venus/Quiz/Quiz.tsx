@@ -60,6 +60,7 @@ export const Quiz: React.FC<{ way?: string, childId?: number, type?: string }> =
                   label={<Typography>{item.body}</Typography>}
                   style={{ marginBottom: 0 }}
                   name={item.id}
+                  initialValue={2}
                 >
                   <QuestionSlider />
                 </Form.Item>

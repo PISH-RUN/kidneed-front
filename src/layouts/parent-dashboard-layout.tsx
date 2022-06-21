@@ -195,6 +195,7 @@ const ChildSelector = () => {
   };
 
   const handleSelectChild = (child: Models.Child) => {
+    console.log(child);
     selectChild(child);
     setAnchorEl(null);
   };
@@ -267,6 +268,7 @@ const ChildSelector = () => {
             selected={ctx.child?.id === c.id}
             onClick={(e) => {
               e.stopPropagation();
+              console.log(c);
               handleSelectChild(c);
             }}
           >

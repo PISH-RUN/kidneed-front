@@ -80,18 +80,18 @@ export const ApproachModal = ({ data, ...rest }: any) => {
           <div className={styles.movie}>
             <div className={styles.iframeDiv}><span style={{ display: "block", paddingTop: "57%" }}></span>
               <iframe
-                src="https://www.aparat.com/video/video/embed/videohash/7ZXqM/vt/frame"
+                src={`https://www.aparat.com/video/video/embed/videohash/${data?.data?.subject?.aparat}/vt/frame`}
                 allowFullScreen={true}
               ></iframe>
             </div>
           </div>
           <div className="tw-mt-6">
             <Typography variant="body1">
-              {getText('rahcheShortResult')}
+              {data?.data?.subject?.description}
             </Typography>
           </div>
           <div className="tw-mt-6 tw-overflow-y-auto tw-max-h-96">
-            {data?.data && data?.data.map((item: any) => (
+            {data?.data && data?.data.approaches.map((item: any) => (
               <div className="tw-flex tw-items-center tw-mb-5" key={item.id}>
                 <div key={item.id} className="tw-ml-4">
                   <Player item={item} isPlaying={playing === item.id} onPlay={() => setPlay(item.id)} />

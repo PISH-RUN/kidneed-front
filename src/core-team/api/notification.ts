@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from "react-query";
 import { strapi } from "@kidneed/services";
 
-export const useNotification = (search: string, sort: string, pagination: any) =>
-  useQuery<any>(["notification", search, sort], () =>
+export const useNotification = (search: string, sort: string, pagination: any, child?: number) =>
+  useQuery<any>(["notification", search, sort, child], () =>
     strapi.request("get", "/users/me/notifications", {
       params: {
         populate: "*",
@@ -10,6 +10,9 @@ export const useNotification = (search: string, sort: string, pagination: any) =
         pagination: { page: pagination.page, pageSize: pagination.pageSize },
         filters: {
           $or: [
+            {
+              child: child,
+            },
             {
               body: {
                 $containsi: search || undefined,

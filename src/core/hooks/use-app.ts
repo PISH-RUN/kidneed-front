@@ -41,7 +41,10 @@ export default function useApp() {
   }, [send]);
 
   const selectChild = useCallback(
-    (child: Models.Child) => send("SELECT_CHILD", { child }),
+    (child: Models.Child) => {
+      console.log(child);
+      return send("SELECT_CHILD", { child })
+    },
     [send]
   );
 
