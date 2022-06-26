@@ -9,6 +9,8 @@ export const Video: React.FC<{ style?: React.CSSProperties }> = (props) => {
     <a href="#">
       <div style={props.style} className={styles.videoContainer}>
         <iframe
+          width="100%"
+          className="tw-min-h-[350px]"
           src={`https://www.aparat.com/video/video/embed/videohash/${getText("yekodoIntroduceVideo")}/vt/frame`}
           allowFullScreen
         />

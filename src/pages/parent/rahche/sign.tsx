@@ -42,7 +42,7 @@ const SignStep = () => {
 
   return (
     <>
-      <Typography variant="h5">لطفا موارد زیر را برای فرزندتان مشخص نمایید</Typography>
+      <Typography variant="h5">لطفا موارد زیر را در مورد فرزندتان مشخص نمایید</Typography>
       <div className="tw-mt-8">
         <Form layout="vertical" onFinish={handleSubmit}>
           {sign?.data && sign?.data?.map((s: any) => (

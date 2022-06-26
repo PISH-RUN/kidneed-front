@@ -42,7 +42,7 @@ const RootStep = () => {
 
   return (
     <>
-      <Typography variant="h5">لطفا موارد زیر را برای فرزندتان مشخص نمایید</Typography>
+      <Typography variant="h5">لطفا به موارد زیر با دقت پاسخ دهید</Typography>
       <div className="tw-mt-8">
         <Form layout="vertical" onFinish={handleSubmit}>
           {roots?.data && _.map(_.uniqBy(roots?.data, "id"), (s: any) => (

@@ -19,9 +19,9 @@ const ResultStep = () => {
   return (
     <div className="tw-p-10">
       <Typography variant="h5" gutterBottom>
-        توضیحات راه چه
+        نگران نباشید ...
       </Typography>
-      <Typography variant="body1" className="!tw-mt-10">{getText('rahcheLongResult')}</Typography>
+      <Typography variant="body1" className="!tw-mt-10 tw-text-justify">{getText('rahcheLongResult')}</Typography>
       <div className="tw-flex tw-justify-center">
         <Button onClick={() => setModal(true)} variant="contained" className="tw-w-40 !tw-rounded-full !tw-mt-14">مشاهده
           راهکار</Button>

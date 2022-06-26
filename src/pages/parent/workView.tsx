@@ -142,24 +142,6 @@ const WorkView = () => {
                 data={getPolarData().data}
                 labels={getPolarData().labels}
               />
-              <div className="tw-flex tw-mt-5 tw-justify-center">
-                <div className="tw-flex tw-ml-6">
-                  <span className="tw-w-6 tw-h-6 tw-bg-blue-600 tw-ml-3" />
-                  <div>
-                    <Typography variant="body1" className="!tw-text-sm">نتایج آزمون اول ماه</Typography>
-                    <Typography variant="caption" className="tw-text-sm !tw-text-gray-400">آزمون دوره اول</Typography>
-                  </div>
-                </div>
-                <div className="tw-flex">
-                  <div className="tw-w-6 tw-h-6 tw-ml-3">
-                    <Image src={pattern} className="tw-flex" />
-                  </div>
-                  <div>
-                    <Typography variant="body1" className="!tw-text-sm">نتایج آزمون آخر ماه</Typography>
-                    <Typography variant="caption" className="tw-text-sm !tw-text-gray-400">آزمون دوره اول</Typography>
-                  </div>
-                </div>
-              </div>
             </Box>
             <div className="tw-px-14 tw-py-5 tw-flex-1">
               <Typography variant="h5" className="!tw-font-bold">حوزه های رشدی</Typography>
@@ -172,14 +154,22 @@ const WorkView = () => {
                 نمایید.
               </Typography>
               <div className="tw-mt-10">
-                <Button type="primary" className="tw-h-10 tw-w-40 tw-ml-5 tw-rounded-full tw-bg-blue-400">
-                  آزمون اول ماه
-                </Button>
-                <Link href="/parent/quiz?redirectUrl=/parent/workView">
-                  <Button className="tw-h-10 tw-w-40 tw-ml-5 tw-rounded-full tw-bg-gray-400 tw-border-gray-500 tw-text-white">
-                    آزمون آخر ماه
-                  </Button>
-                </Link>
+                <div className="tw-flex tw-mt-5">
+                  <div className="tw-flex tw-ml-6">
+                    <span className="tw-w-6 tw-h-6 tw-bg-blue-600 tw-ml-3" />
+                    <div>
+                      <Typography variant="body1" className="!tw-text-sm">نتایج آزمون اول ماه</Typography>
+                    </div>
+                  </div>
+                  <div className="tw-flex">
+                    <div className="tw-w-6 tw-h-6 tw-ml-3">
+                      <Image src={pattern} className="tw-flex" />
+                    </div>
+                    <div>
+                      <Typography variant="body1" className="!tw-text-sm">نتایج آزمون آخر ماه</Typography>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

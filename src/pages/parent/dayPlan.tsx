@@ -231,16 +231,22 @@ const ActivityCard = ({ type, items, contents, onSelectContent, onEdit }: any) =
             <div className="tw-flex" style={{ minHeight: 350 }}>
               <div className="tw-flex tw-flex-nowrap">
                 <div
-                  className="tw-ml-4 tw-w-60 tw-min-h-full tw-max-h-96 tw-cursor-pointer tw-border tw-rounded-2xl"
+                  className="tw-ml-4 tw-w-60 tw-min-h-full tw-max-h-96 tw-cursor-pointer tw-border tw-rounded-2xl tw-relative tw-overflow-hidden"
                   onClick={() => onSelectContent(items[0].attributes.content)}
                 >
                   <ItemPic content={content1} type={items[0].attributes.type} />
+                  <div className="tw-absolute tw-w-full tw-bg-gray-900 tw-bg-opacity-60 tw-bottom-0 tw-text-white tw-py-4 tw-text-center">
+                    محتوای اول
+                  </div>
                 </div>
                 <div
-                  className="tw-ml-4 tw-w-60 tw-min-h-full tw-max-h-96 tw-cursor-pointer tw-border tw-rounded-2xl"
+                  className="tw-ml-4 tw-w-60 tw-min-h-full tw-max-h-96 tw-cursor-pointer tw-border tw-rounded-2xl tw-relative tw-overflow-hidden"
                   onClick={() => onSelectContent(items[1].attributes.content)}
                 >
                   <ItemPic content={content2} type={items[1] && items[1].attributes.type} />
+                  <div className="tw-absolute tw-w-full tw-bg-gray-900 tw-bg-opacity-60 tw-bottom-0 tw-text-white tw-py-4 tw-text-center">
+                    محتوای دوم
+                  </div>
                 </div>
               </div>
               <div className="tw-flex-auto">

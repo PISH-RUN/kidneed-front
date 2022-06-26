@@ -50,9 +50,9 @@ export const ActivityStats = ({ stats, loading }: any) => {
           </Box>
 
           <Box sx={styles.cardBottom}>
-            <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.book?.progress, 'minute').asHours().toString()) || 0)} ساعت</Typography>
+            <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.activity?.progress, 'minute').asHours().toString()) || 0)} ساعت</Typography>
             <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body1">مطالعه</Typography>
+              <Typography variant="body1">فعالیت عملی</Typography>
             </Stack>
           </Box>
         </Box>

@@ -12,17 +12,14 @@ import { useTexts } from "../../../core-team/hooks/use-texts";
 
 const steps = [
   "موضوع",
-  "نشانه ها",
-  "ریشه ها",
-  "راهکار"
+  "نشانه یابی",
+  "ریشه یابی",
+  "ارائه راهکار"
 ];
 
 const Approach = () => {
-  const [modal, setModal] = useState(false);
   const [step, setStep] = useState(0);
   const router = useRouter();
-  const rahcheModal = localStorage.getItem('rahcheModal');
-  const { getText } = useTexts();
 
   useEffect(() => {
     if (router.query.step === 'result') {
@@ -33,8 +30,6 @@ const Approach = () => {
       setStep(1);
     } else {
       setStep(0);
-      rahcheModal === null && setModal(true);
-      localStorage.setItem("rahcheModal", "true");
     }
   }, [router.query]);
 
@@ -52,45 +47,6 @@ const Approach = () => {
         {step === 2 && <RootStep />}
         {step === 3 && <ResultStep />}
       </div>
-
-      <Modal
-        footer={false}
-        closable={false}
-        centered
-        visible={modal}
-        onOk={() => setModal(false)}
-        onCancel={() => setModal(false)}
-        className={styles.preShowModal + " tw-rounded-3xl tw-overflow-hidden"}
-      >
-        <div className={styles.allContent}>
-          <div className={styles.header}>
-            راه چه
-          </div>
-          <div className={styles.content}>
-            <div className={styles.plan}>
-              <div className={styles.text}>
-                {getText('rahcheIntroduce')}
-              </div>
-              <div className={styles.buttons}>
-                <div>
-                  <button className={styles.continueBtn} onClick={() => setModal(false)} type="button">ادامه</button>
-                </div>
-                <div>
-                  <button className={styles.backBtn} onClick={() => setModal(false)} type="button">بازگشت</button>
-                </div>
-              </div>
-            </div>
-            <div className={styles.movie}>
-              <div className={styles.iframeDiv}><span style={{ display: "block", paddingTop: "57%" }}></span>
-                <iframe
-                  src={`https://www.aparat.com/video/video/embed/videohash/${getText('rahcheIntroduceVideo')}/vt/frame`}
-                  allowFullScreen={true}
-                ></iframe>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Modal>
     </ParentDashboardLayout>
   );
 };
