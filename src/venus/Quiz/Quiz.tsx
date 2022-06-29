@@ -11,12 +11,12 @@ import _ from "lodash";
 import Link from "next/link";
 import { FiArrowDown } from "react-icons/fi";
 
-export const Quiz: React.FC<{ way?: string, childId?: number, type?: string }> = (props) => {
+export const Quiz: React.FC<{ way?: string, childId?: number, type?: string, setWay: any }> = (props) => {
   const router = useRouter();
   const [scroll, setScroll] = useState(false);
   const { mutateAsync: submitQuiz } = useSubmitQuiz();
   const { mutateAsync: submitSystemQuiz } = useSubmitSystemQuiz();
-  const { data: quiz } = useQuiz(props.way, props.childId, props.type);
+  const { data: quiz, isLoading } = useQuiz(props.way, props.childId, props.type);
   const { data: questions } = useQuestions(props.way, props.childId);
   const { redirectUrl } = router.query;
 
@@ -32,8 +32,11 @@ export const Quiz: React.FC<{ way?: string, childId?: number, type?: string }> =
           question: parseInt(key),
           value: val
         }))
-      }).then(() => {
-        router.push(redirectUrl as string || "/parent/dashboard");
+      }).then((resp: any) => {
+        if(!props.way)
+          props.setWay(resp?.data?.growthField?.name)
+        else
+          router.push(redirectUrl as string || "/parent/dashboard")
       }).catch(() => {
         notification.error({
           message: "شما قبلا به این آزمون پاسخ داده اید."
@@ -44,14 +47,19 @@ export const Quiz: React.FC<{ way?: string, childId?: number, type?: string }> =
 
   return (
     <ContentWrapper
-      title="پرسشنامه"
+      title={`پرسشنامه ${props.way ? `حوزه رشدی ${props.way}` : "تعیین حوزه رشدی"}`}
       contentStyle={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "20px" }}
     >
-      <Text style={{ fontSize: "16px" }}>لطفا موارد زیر را در مورد فرزندتان مشخص نمایید</Text>
+      {!props.way && <Text style={{ fontSize: "16px" }}>لطفا موارد زیر را در مورد فرزندتان مشخص نمایید</Text>}
+      {props.way && <Text style={{ fontSize: "16px" }}>
+        <span>حوزه رشدی انتخاب شده برای فرزند شما حوزه </span>
+        <span>{props.way} </span>
+        <span>می باشد. لطفا به سوال های این حوزه پاسخ دهید.</span>
+      </Text>}
       <Form layout="vertical" onFinish={handleSubmit}>
         <div className="tw-relative">
           <div className={styles.questionsWrapper} onScroll={() => !scroll && setScroll(true)}>
-            {data?.data?.map((item: any) => {
+            {!isLoading && data?.data?.map((item: any) => {
               return (
                 <Form.Item
                   className="tw-mt-4"

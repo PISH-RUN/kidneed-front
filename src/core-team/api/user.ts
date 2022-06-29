@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { strapi } from "@kidneed/services";
 
 export const useUpdateMe = () =>
@@ -19,4 +19,13 @@ export const useUpdateChild = (childId?: number) =>
 export const useDeleteChild = () =>
   useMutation(["delete-child"], (childId: number) =>
     strapi.request("delete", `/children/${childId}`)
+  );
+
+export const useChildGrowthField = (childId?: number) =>
+  useQuery(["yekodo", "child-growth-field", childId], () =>
+      strapi
+        .request<any>("get", `/my-children/${childId}/growth-field`),
+    {
+      enabled: !!childId
+    }
   );

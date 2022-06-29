@@ -3,7 +3,7 @@ import _ from "lodash";
 import Image from "next/image";
 import { Guard } from "@kidneed/types";
 import { ActivityStats, BarChart, MonthPicker, PieChart, PolarAreaChart } from "core-team/components";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import jMoment from "moment-jalaali";
 import { Box, Typography } from "@mui/material";
 import { Button, Divider } from "antd";
@@ -12,6 +12,7 @@ import { useApp } from "@kidneed/hooks";
 import { useGrowthFields, useGrowthSubFields, useQuizProgression, useQuizResult } from "../../core-team/api/question";
 import pattern from "public/images/pattern.png";
 import Link from "next/link";
+import { useChildGrowthField } from "../../core-team/api/user";
 
 const today = jMoment();
 
@@ -29,13 +30,14 @@ const WorkView = () => {
   const { data: fields } = useGrowthFields();
   const { data: subFields } = useGrowthSubFields();
   const { data: result } = useQuizResult(ctx?.child?.id);
+  const { data: childGrowthField } = useChildGrowthField(ctx?.child?.id);
   const { data: progression } = useQuizProgression(ctx?.child?.id);
   const {
     data: stats,
     isLoading
   } = useStats([jMoment(month).startOf("jMonth"), jMoment(month).endOf("jMonth")], ctx.child?.id);
 
-  const getPolarData = () => {
+  const polarData = useMemo(() => {
     if (!result || !subFields) return {
       data: [],
       labels: []
@@ -51,14 +53,15 @@ const WorkView = () => {
       result?.data?.endOfMonth && polarData.push(result?.data?.endOfMonth?.result[field.id]);
 
       polarLabels.push(field.attributes?.name);
-      polarLabels.push(field.attributes?.name);
+      if (result?.data?.endOfMonth)
+        polarLabels.push(field.attributes?.name);
     });
 
     return {
       data: polarData,
       labels: polarLabels
     };
-  };
+  }, [result, subFields]);
 
   const getPieData = () => {
     if (!stats) return {
@@ -128,7 +131,7 @@ const WorkView = () => {
       <Box sx={{ boxShadow: "0px 14px 17px rgba(0, 0, 0, 0.08)" }} className="tw-rounded-t-3xl tw-w-full">
         <div className="tw-py-10 tw-px-8 tw-rounded-t-3xl">
           <div className="tw-px-4">
-            <Typography variant="h5" className="!tw-font-bold">حوزه انتخابی این ماه شما &rdquo;حوزه حرکتی&rdquo; می
+            <Typography variant="h5" className="!tw-font-bold">حوزه انتخابی این ماه شما &rdquo;{childGrowthField?.data?.name || ""}&rdquo; می
               باشد</Typography>
             <Typography variant="body1" className="!tw-mt-4">فرزند شما تا کنون 85٪ پایبندی به برنامه داشته و توانسته
               100٪ جوایز مشخص شده را بدست آورد. شما میتوانید خلاصه فعالیت های کودک خود را در زیر مشاهده
@@ -139,8 +142,8 @@ const WorkView = () => {
           <div className="tw-flex tw-w-full">
             <Box sx={{ width: 400 }} className="tw-mx-14">
               <PolarAreaChart
-                data={getPolarData().data}
-                labels={getPolarData().labels}
+                data={polarData.data}
+                labels={polarData.labels}
               />
             </Box>
             <div className="tw-px-14 tw-py-5 tw-flex-1">

@@ -103,7 +103,6 @@ const menu = [
     icon: <ChatBubbleIcon />
   }, {
     title: "اشتراک",
-    type: "notification",
     link: "/parent/subscription",
     icon: <Basket />
   }, {

@@ -1,5 +1,5 @@
 import styles from "../../../earth/styles/earth.module.css";
-import { Modal } from "antd";
+import { Modal, Typography as AntTypography } from "antd";
 import { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 // @ts-ignore
@@ -25,10 +25,10 @@ const Player = ({ item, isPlaying, onPlay }: any) => {
   };
 
   useEffect(() => {
-    if(!isPlaying && playing) {
-       setPlaying(false);
+    if (!isPlaying && playing) {
+      setPlaying(false);
     }
-  }, [isPlaying, playing])
+  }, [isPlaying, playing]);
 
   return (
     <>
@@ -48,21 +48,36 @@ const Player = ({ item, isPlaying, onPlay }: any) => {
         loaded={playerState.loaded}
         playing={playing}
         onSeek={onSeek}
-        icon={playing ? <IoPause className="tw-text-white tw-text-3xl tw-m-3" /> : <IoPlay className="tw-text-white tw-text-3xl tw-m-3" />}
+        icon={playing ? <IoPause className="tw-text-white tw-text-3xl tw-m-3" /> :
+          <IoPlay className="tw-text-white tw-text-3xl tw-m-3" />}
         iconColor="#fff"
         color="#C4C4C4"
         onTogglePlaying={() => {
-          setPlaying(!playing)
-          !playing && onPlay()
+          setPlaying(!playing);
+          !playing && onPlay();
         }}
       />
     </>
   );
 };
 
+const Expandable = ({ text }: any) => {
+  const [expand, setExpand] = useState(false);
+
+  console.log(text);
+
+  return (
+    <>
+      {text && expand ? text : text.substring(0, 250) + ' ...'}
+      <div onClick={() => setExpand(!expand)} className="tw-text-blue-500 tw-text-sm tw-cursor-pointer">
+        {expand ? "مشاهده کمتر" : "مشاهده بیشتر"}
+      </div>
+    </>
+  )
+};
+
 export const ApproachModal = ({ data, ...rest }: any) => {
   const [playing, setPlay] = useState<boolean | number>(false);
-  const { getText } = useTexts();
 
   return (
     <Modal
@@ -102,7 +117,7 @@ export const ApproachModal = ({ data, ...rest }: any) => {
                     {item.title}
                   </Typography>
                   <Typography variant="caption">
-                    {item.body}
+                    <Expandable text={item.body} />
                   </Typography>
                 </div>
               </div>

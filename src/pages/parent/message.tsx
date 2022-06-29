@@ -11,7 +11,6 @@ import { useApproaches } from "../../core-team/api/approach";
 import { useApp } from "@kidneed/hooks";
 import { useRouter } from "next/router";
 import { useContent } from "../../core-team/api/activity";
-import { POSTER_ORIGIN } from "../../core-team/constants";
 import { Collapse } from "@mui/material";
 
 const types: any = {
@@ -41,16 +40,25 @@ const NotificationItem = ({ notif, setContent, setRahche }: any) => {
   });
 
   const getPoster = (content: any) => {
-    let poster = content?.attributes?.meta?.verticalPoster && `${POSTER_ORIGIN}${content?.attributes?.meta?.verticalPoster[0].url}`;
-    poster = poster || content?.attributes?.meta?.img || content?.attributes?.meta?.poster;
-    poster = poster || (content?.attributes?.images?.data && content?.attributes?.images?.data[0]?.attributes?.url);
+    let poster = content?.attributes?.poster?.data?.attributes?.url;
 
     return poster;
   };
 
+  const getDescription = (notif: any) => {
+    if (notif?.attributes?.type === "endOfMonthQuiz") {
+      return "لطفا آزمون آخر ماه راه پاسخ دهید";
+    }
+    if (notif?.attributes?.type === "rahche") {
+      return `برای شما ${notif?.attributes?.body} راهکار معرفی شده است.`;
+    }
+
+    return notif?.attributes?.body;
+  };
+
   return (
     <Col span={24} key={notif.id}>
-      <div className={`tw-bg-white tw-flex tw-rounded-xl tw-overflow-hidden tw-transition-all tw-duration-200 ${visible && 'tw-rounded-b-none'}`}>
+      <div className={`tw-bg-white tw-flex tw-rounded-xl tw-overflow-hidden tw-transition-all tw-duration-200 ${visible && "tw-rounded-b-none"}`}>
         {notif?.attributes?.type === "goalAssist" &&
           <div className="tw-m-5 tw-self-center tw-relative">
             <Avatar shape="square" src={getPoster(content?.data)} className="tw-w-24 tw-h-24 tw-rounded-xl" />
@@ -63,10 +71,10 @@ const NotificationItem = ({ notif, setContent, setRahche }: any) => {
           </div>}
         <div className={`tw-p-3 tw-pr-0 tw-flex-1 ${notif?.attributes?.type !== "goalAssist" && "tw-mr-5"}`}>
           <Typography.Title level={5} className="description">
-            {notif?.attributes?.title} {content?.data?.attributes?.title && ` - ${content?.data?.attributes?.title}`}
+            {notif?.attributes?.type === "endOfMonthQuiz" ? "لطفا آزمون آخر ماه راه پاسخ دهید" : notif?.attributes?.title} {content?.data?.attributes?.title && ` - ${content?.data?.attributes?.title}`}
           </Typography.Title>
           <Typography.Paragraph ellipsis={{ rows: 3 }} className="description">
-            {notif?.attributes?.type === 'rahche' ? `برای شما ${notif?.attributes?.body} راهکار معرفی شده است.` : notif?.attributes?.body}
+            {getDescription(notif)}
           </Typography.Paragraph>
           <div className="date tw-text-gray-400 tw-text-xs tw-mt-3 tw-flex tw-items-center">
             <FiClock className="tw-ml-2" />
@@ -83,7 +91,7 @@ const NotificationItem = ({ notif, setContent, setRahche }: any) => {
               router.push("/parent/quiz?redirectUrl=/parent/message");
             }
             if (notif?.attributes?.type === "goalAssist") {
-              setVisible(!visible)
+              setVisible(!visible);
             }
           }}
         >

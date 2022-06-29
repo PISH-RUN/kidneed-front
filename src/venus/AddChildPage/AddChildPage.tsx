@@ -19,7 +19,7 @@ export const AddChildPage: React.FC = () => {
     "intro": <Intro setPage={() => setStep("add")} />,
     "addChild": <AddChild childId={parseInt(childId as string)} setPage={(id) => setStep("way", id)} />,
     "selectWay": <SelectWay setPage={() => setStep("quiz")} childId={parseInt(childId as string)} setWay={setWay} />,
-    "quiz": <Quiz way={way} childId={parseInt(childId as string)} />
+    "quiz": <Quiz way={way} setWay={setWay} childId={parseInt(childId as string)} />
   };
 
   useEffect(() => {

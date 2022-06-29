@@ -16,14 +16,14 @@ export const SelectWay: React.FC<{
   const { mutateAsync: setGrowthField } = useSetGrowthField();
   const { data: fields } = useGrowthFields();
 
-  const selectWay = (type?: "A" | "B" | "C" | "D") => {
+  const selectWay = (type?: string, name?: string) => {
     if (type)
       setGrowthField({
         childId: props.childId,
         field: type
       })
         .then(() => {
-          props.setWay(type);
+          props.setWay(name);
           props.setPage("quiz");
         })
         .catch((error) => {
@@ -32,14 +32,14 @@ export const SelectWay: React.FC<{
             notification.info({
               message: "شما قبلا حوزه رشدی فرزندتان را انتخاب کردید، لطفا آزمون را شروع کنید",
             });
-            props.setWay(type);
+            props.setWay(name);
             props.setPage("quiz");
           } else {
             message.error("خطایی رخ داده است");
           }
         });
     else {
-      props.setWay(type);
+      props.setWay(name);
       props.setPage("quiz");
     }
   };
@@ -56,7 +56,7 @@ export const SelectWay: React.FC<{
         </Text>
         <div className={styles.waysWrapper}>
           {fields?.data?.map((field: any) => (
-            <Way key={field?.id} onClick={() => selectWay(field?.id)} title={field?.attributes.name} />
+            <Way key={field?.id} onClick={() => selectWay(field?.id, field?.attributes.name)} title={field?.attributes.name} />
           ))}
         </div>
         <Way
