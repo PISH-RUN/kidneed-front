@@ -62,7 +62,7 @@ export const AddChild: React.FC<{
   };
 
   return (
-    <ContentWrapper title="اطلاعات ضروری">
+    <ContentWrapper title="ثبت نام">
       <Form
         className={styles.addChildForm}
         style={{ padding: "0 200px" }}
@@ -77,7 +77,7 @@ export const AddChild: React.FC<{
         }}
       >
         <Text style={{ fontSize: "16px" }}>
-          اطلاعات فرزند خود را وارد نمایید
+          لطفا اطلاعات فرزند خود را وارد نمایید
         </Text>
         <Form.Item
           rules={[{ required: true, message: "این فیلد الزامی است" }]}

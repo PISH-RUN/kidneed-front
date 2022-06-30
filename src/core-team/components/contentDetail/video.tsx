@@ -5,6 +5,12 @@ import jMoment from "moment-jalaali";
 const VideoDetails = ({ data }: any) => (
   <div className="">
     <div className="tw-flex tw-mb-2">
+      <Typography variant="body1" className="!tw-w-40">نام انگلیسی:</Typography>
+      <Typography
+        variant="body1"
+      >{data?.enTitle}</Typography>
+    </div>
+    <div className="tw-flex tw-mb-2">
       <Typography variant="body1" className="!tw-w-40">سال ساخت:</Typography>
       <Typography
         variant="body1"

@@ -5,6 +5,7 @@ import jMoment from "moment-jalaali";
 import { ContentSearch } from "../contentSearch/contentSearch";
 import { useAddActivity, useDeleteActivity, useEditActivity } from "../../api/activity";
 import { useApp } from "@kidneed/hooks";
+import { ContentsList } from "../contentsList/contentsList";
 
 const ContentForm = ({ time, activity, onClose }: any) => {
   const [tab, setTab] = useState("video");
@@ -94,7 +95,7 @@ const ContentForm = ({ time, activity, onClose }: any) => {
             name="content1"
             initialValue={isEdit && activity[0].attributes?.content || null}
           >
-            <ContentSearch type={!isEdit ? tab : activity[0].attributes?.type} />
+            <ContentsList type={!isEdit ? tab : activity[0].attributes?.type} />
           </Form.Item>
           <Form.Item
             label="محتوا دوم"
@@ -102,7 +103,7 @@ const ContentForm = ({ time, activity, onClose }: any) => {
             name="content2"
             initialValue={isEdit && activity[1] && activity[1].attributes?.content || null}
           >
-            <ContentSearch type={!isEdit ? tab : activity[0].attributes?.type} />
+            <ContentsList type={!isEdit ? tab : activity[0].attributes?.type} />
           </Form.Item>
         </div>
         <div className="tw-mt-10 tw-text-center">

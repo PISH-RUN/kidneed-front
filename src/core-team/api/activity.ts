@@ -137,6 +137,23 @@ export const useSearchContents = () => useMutation(["contents-search"], ({ searc
   }
 );
 
+export const useSearchContent = (search?: string, type?: string) => useQuery(["contents-search", search, type], () => {
+    const query = qs.stringify({
+      populate: "*",
+      sort: ["title:asc"],
+      filters: {
+        title: {
+          $containsi: search
+        },
+        type
+      }
+    }, {
+      encodeValuesOnly: true
+    });
+    return axios.get(`${DAPI_URL}/api/contents?${query}`).then(resp => Promise.resolve(resp.data));
+  }
+);
+
 export const useActivity = (date: [Date | Moment | null, Date | Moment | null], child?: number) => {
   const start = jMoment(date[0]).startOf("day").format("YYYY-MM-DD");
   const end = jMoment(date[1]).endOf("day").format("YYYY-MM-DD");

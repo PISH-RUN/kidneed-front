@@ -50,7 +50,7 @@ export const Quiz: React.FC<{ way?: string, childId?: number, type?: string, set
       title={`پرسشنامه ${props.way ? `حوزه رشدی ${props.way}` : "تعیین حوزه رشدی"}`}
       contentStyle={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "20px" }}
     >
-      {!props.way && <Text style={{ fontSize: "16px" }}>لطفا موارد زیر را در مورد فرزندتان مشخص نمایید</Text>}
+      {!props.way && <Text style={{ fontSize: "16px" }}>لطفا به سوالات زیر با دقت پاسخ دهید.</Text>}
       {props.way && <Text style={{ fontSize: "16px" }}>
         <span>حوزه رشدی انتخاب شده برای فرزند شما حوزه </span>
         <span>{props.way} </span>

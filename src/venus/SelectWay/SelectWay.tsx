@@ -52,7 +52,7 @@ export const SelectWay: React.FC<{
       <div className={styles.selectWayWrapper}>
         <SecondVideo />
         <Text style={{ fontSize: "16px", alignSelf: "flex-start" }}>
-          لطفا نوع حوزه رشدی را انتخاب نمایید
+          پس از مشاهده فیلم معرفی حوزه های رشدی، یکی از گزینه های زیر را انتخاب نمایید
         </Text>
         <div className={styles.waysWrapper}>
           {fields?.data?.map((field: any) => (
@@ -61,7 +61,7 @@ export const SelectWay: React.FC<{
         </div>
         <Way
           onClick={() => selectWay(undefined)}
-          title="به انتخاب سیستم سایت"
+          title="به انتخاب یکودو"
         />
       </div>
     </ContentWrapper>
