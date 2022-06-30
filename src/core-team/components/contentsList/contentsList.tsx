@@ -107,7 +107,7 @@ export const ContentsList = ({ type, value, onChange, ...rest }: any) => {
 
   return (
     <>
-      <div className="tw-flex tw-items-center">
+      <div className="tw-flex tw-items-center tw-justify-between">
         {value &&
           <>
             {isValueLoading && <LinearProgress className="tw-w-32 tw-ml-4" />}
@@ -115,9 +115,14 @@ export const ContentsList = ({ type, value, onChange, ...rest }: any) => {
               {contentValue?.data?.attributes?.title}
             </Typography>
           </>}
-        <Button variant="contained" onClick={() => setModal(true)}>
-          {value ? "تغییر محتوا" : "جستجو محتوا"}
-        </Button>
+        <div>
+          {value && <Button size="small" variant="outlined" className="!tw-ml-3" onClick={() => setContent(value)}>
+            جزئیات محتوا
+          </Button>}
+          <Button variant="contained" size="small" onClick={() => setModal(true)}>
+            {value ? "تغییر محتوا" : "جستجو محتوا"}
+          </Button>
+        </div>
       </div>
       <Modal
         footer={false}
