@@ -77,18 +77,7 @@ export const appMachine = createMachine<PartialAppContext, AppEvent, AppState>({
             },
           },
         },
-        parent: {
-          on: {
-            FETCH_USER: {
-              target: "parent",
-              actions: fetchUser,
-            },
-            EDIT_USER: {
-              target: "parent",
-              actions: editUser,
-            },
-          },
-        },
+        parent: {},
         child: {
           on: {
             SELECT_CHILD: {
@@ -108,6 +97,8 @@ export const appMachine = createMachine<PartialAppContext, AppEvent, AppState>({
         LOGGED_OUT: { target: "guest", actions: logout },
         ADD_CHILD: { target: ".child", actions: childAdded },
         EDIT_CHILD: { target: ".child", actions: childEdited },
+        FETCH_USER: { target: ".child", actions: fetchUser },
+        EDIT_USER: { target: ".child", actions: editUser },
         DELETE_CHILD: { target: ".child", actions: childDeleted },
         PARENT_PASS: { target: ".parent" },
       },

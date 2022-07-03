@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { Guard } from "@kidneed/types";
 import BaseLayout from "../../layouts/baseLayout";
 import { PLAYERS_URL } from "../../core-team/constants";
-import { useContent, useSeenContent, useUpdateProgress } from "../../core-team/api/activity";
+import { useActivityDetail, useContent, useSeenContent, useUpdateProgress } from "../../core-team/api/activity";
 import { Result } from "antd";
 import { useApp } from "@kidneed/hooks";
 import { parseInt } from "lodash";
@@ -24,7 +24,7 @@ const Video = () => {
       updateProgressRequest({ id, duration: 1 }).then((resp: any) => {
         setRemained(resp?.data?.duration - resp?.data?.progress);
       });
-      updateProgressRequest({ id: secondId, duration: 1 })
+      updateProgressRequest({ id: secondId, duration: 1 });
     }, 60000);
   };
 
@@ -47,6 +47,12 @@ const Video = () => {
   }, []);
 
   useEffect(() => {
+    if (remained < 0) {
+      clearInterval(interval.current);
+    }
+  }, [remained]);
+
+  useEffect(() => {
     if (id && parseInt(id as string)) {
       seenContent(parseInt(id as string));
     }
@@ -65,7 +71,11 @@ const Video = () => {
   }
 
   return (
-    <iframe allowFullScreen={true} src={`${PLAYERS_URL}/video?url=${url as string}`} className="tw-w-full tw-h-screen" />
+    <iframe
+      allowFullScreen={true}
+      src={`${PLAYERS_URL}/video?url=${url as string}`}
+      className="tw-w-full tw-h-screen"
+    />
   );
 };
 

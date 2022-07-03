@@ -122,6 +122,8 @@ const Message = () => {
   const { data } = useNotification(search, sort, pagination, ctx?.child?.id);
   const { mutateAsync: readAll } = useNotificationRead();
 
+  console.log(ctx);
+
   useEffect(() => {
     readAll().then(() => {
       fetchUser();

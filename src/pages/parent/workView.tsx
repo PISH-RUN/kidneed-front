@@ -196,7 +196,7 @@ const WorkView = () => {
           </div>
         </div>
         <div className="tw-py-10 tw-px-8 tw-bg-white">
-          <ActivityStats stats={stats} loading={isLoading} />
+          <ActivityStats stats={stats?.data} loading={isLoading} />
         </div>
         <div className="tw-py-10 tw-px-8">
           <div className="tw-flex tw-w-full">

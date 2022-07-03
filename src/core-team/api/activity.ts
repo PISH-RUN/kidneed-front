@@ -186,6 +186,15 @@ export const useActivity = (date: [Date | Moment | null, Date | Moment | null], 
   );
 };
 
+export const useActivityDetail = (id?: number) => {
+  return useQuery(["yekodo", "activity-detail", id], () =>
+      strapi.request<any>("get", `/activities/${id}`),
+    {
+      enabled: !!id
+    }
+  );
+};
+
 export const useAddActivity = (childId?: number) => {
   const queryClient = useQueryClient();
   return useMutation(["create-activity", childId], (data: any) =>

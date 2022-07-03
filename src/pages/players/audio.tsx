@@ -51,6 +51,12 @@ const Audio = () => {
     }
   }, [id]);
 
+  useEffect(() => {
+    if (remained < 0) {
+      clearInterval(interval.current);
+    }
+  }, [remained]);
+
   if (remained < 0) {
     return (
       <div className="tw-flex tw-items-center tw-justify-center tw-h-screen">
