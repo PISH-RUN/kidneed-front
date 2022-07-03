@@ -11,7 +11,7 @@ import _ from "lodash";
 import Link from "next/link";
 import { FiArrowDown } from "react-icons/fi";
 
-export const Quiz: React.FC<{ way?: string, childId?: number, type?: string, setWay: any }> = (props) => {
+export const Quiz: React.FC<{ way?: string, childId?: number, type?: string, setWay?: any }> = (props) => {
   const router = useRouter();
   const [scroll, setScroll] = useState(false);
   const { mutateAsync: submitQuiz } = useSubmitQuiz();
@@ -34,7 +34,7 @@ export const Quiz: React.FC<{ way?: string, childId?: number, type?: string, set
         }))
       }).then((resp: any) => {
         if(!props.way)
-          props.setWay(resp?.data?.growthField?.name)
+          props.setWay && props.setWay(resp?.data?.growthField?.name)
         else
           router.push(redirectUrl as string || "/parent/dashboard")
       }).catch(() => {
