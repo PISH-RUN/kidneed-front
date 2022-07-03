@@ -33,7 +33,7 @@ export const Quiz: React.FC<{ way?: string, childId?: number, type?: string, set
           value: val
         }))
       }).then((resp: any) => {
-        if(!props.way)
+        if(props.way === undefined)
           props.setWay && props.setWay(resp?.data?.growthField?.name)
         else
           router.push(redirectUrl as string || "/parent/dashboard")
