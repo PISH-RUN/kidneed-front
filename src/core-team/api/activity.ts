@@ -186,11 +186,11 @@ export const useActivity = (date: [Date | Moment | null, Date | Moment | null], 
   );
 };
 
-export const useActivityDetail = (id?: number) => {
-  return useQuery(["yekodo", "activity-detail", id], () =>
-      strapi.request<any>("get", `/activities/${id}`),
+export const useActivityDetail = (child?: number, id?: number) => {
+  return useQuery(["yekodo", "activity-detail", child, id], () =>
+      strapi.request<any>("get", `/children/${child}/activities/${id}`),
     {
-      enabled: !!id
+      enabled: !!child && !!id
     }
   );
 };

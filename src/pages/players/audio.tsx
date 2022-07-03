@@ -4,9 +4,10 @@ import { useRouter } from "next/router";
 import { Guard } from "@kidneed/types";
 import BaseLayout from "../../layouts/baseLayout";
 import { PLAYERS_URL } from "../../core-team/constants";
-import { useContent, useSeenContent, useUpdateProgress } from "../../core-team/api/activity";
+import { useActivityDetail, useContent, useSeenContent, useUpdateProgress } from "../../core-team/api/activity";
 import { Result } from "antd";
 import { useApp } from "@kidneed/hooks";
+import { parseInt } from "lodash";
 
 const Audio = () => {
   const { query } = useRouter();
@@ -14,7 +15,7 @@ const Audio = () => {
   const { url, child, id, secondId, contentId } = query;
   const { ctx } = useApp();
   const [remained, setRemained] = useState(0);
-  const { data: content } = useContent(parseInt(contentId as string));
+  const { data: activity } = useActivityDetail(ctx?.child?.id, parseInt(id as string));
   const { mutateAsync: updateProgressRequest } = useUpdateProgress();
   const { mutate: seenContent } = useSeenContent();
 
@@ -34,10 +35,10 @@ const Audio = () => {
   }, [child]);
 
   useEffect(() => {
-    if (content?.data) {
-      setRemained(content?.data?.attributes?.duration - content?.data?.attributes?.progress);
+    if (activity?.data) {
+      setRemained(activity?.data?.duration - activity?.data?.progress);
     }
-  }, [content]);
+  }, [activity]);
 
   useEffect(() => {
     return () => {
