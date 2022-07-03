@@ -1,5 +1,5 @@
 import { Guard } from "@kidneed/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Quiz } from "../../venus/Quiz/Quiz";
 import { useApp } from "@kidneed/hooks";
 import { useRouter } from "next/router";
@@ -16,6 +16,12 @@ const QuizPage = () => {
   if(typeof query.type === 'string') {
     type = query.type;
   }
+
+  useEffect(() => {
+    if(query.type !== 'startOfMonth') {
+      setPage('quiz')
+    }
+  }, [query.type])
 
   return (
     <div className="tw-w-screen tw-h-screen tw-flex tw-items-center tw-justify-center">
