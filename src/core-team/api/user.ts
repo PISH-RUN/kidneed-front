@@ -21,7 +21,7 @@ export const useDeleteChild = () =>
     strapi.request("delete", `/children/${childId}`)
   );
 
-export const useChildGrowthField = (childId?: number) =>
+export const useChildGrowthField = (childId?: number, month?: number, year?: number) =>
   useQuery(["yekodo", "child-growth-field", childId], () =>
       strapi
         .request<any>("get", `/my-children/${childId}/growth-field`),

@@ -52,10 +52,14 @@ export const useGrowthSubFields = () =>
       .request<any>("get", `/growth-subfields`)
   );
 
-export const useQuizResult = (childId?: number) =>
-  useQuery(["yekodo", "quiz-result", childId], () =>
+export const useQuizResult = (childId?: number, month?: number, year?: number) =>
+  useQuery(["yekodo", "quiz-result", childId, month, year], () =>
       strapi
-        .request<any>("get", `/children/${childId}/growth-field-result`),
+        .request<any>("get", `/children/${childId}/growth-field-result`, {
+          params: {
+            month, year
+          }
+        }),
     {
       enabled: !!childId
     }

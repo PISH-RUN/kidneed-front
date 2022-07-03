@@ -31,6 +31,6 @@ WORKDIR /usr/src/app
 # Include only the release build and production packages.
 COPY --from=build-target /usr/src/app .
 
-RUN npm i -g next
+RUN npm i -g next@12.0.9
 
 CMD ["next", "start"]

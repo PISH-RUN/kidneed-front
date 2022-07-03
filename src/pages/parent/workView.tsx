@@ -29,7 +29,7 @@ const WorkView = () => {
   const { ctx } = useApp();
   const { data: fields } = useGrowthFields();
   const { data: subFields } = useGrowthSubFields();
-  const { data: result } = useQuizResult(ctx?.child?.id);
+  const { data: result } = useQuizResult(ctx?.child?.id, month.jMonth(), month.jYear());
   const { data: childGrowthField } = useChildGrowthField(ctx?.child?.id);
   const { data: progression } = useQuizProgression(ctx?.child?.id);
   const {
@@ -126,7 +126,7 @@ const WorkView = () => {
       bp={0}
       bd="flex"
       showChild="header"
-      Header={<MonthPicker value={month} onChange={setMonth} />}
+      Header={<MonthPicker disableFuture value={month} onChange={setMonth} />}
     >
       <Box sx={{ boxShadow: "0px 14px 17px rgba(0, 0, 0, 0.08)" }} className="tw-rounded-t-3xl tw-w-full">
         <div className="tw-py-10 tw-px-8 tw-rounded-t-3xl">
