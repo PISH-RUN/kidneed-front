@@ -50,7 +50,7 @@ export const ActivityStats = ({ stats, loading }: any) => {
           </Box>
 
           <Box sx={styles.cardBottom}>
-            <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.activity?.progress, 'minute').asHours().toString()) || 0)} ساعت</Typography>
+            <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.activity?.progress / 2, 'minute').asHours().toString()) || 0)} ساعت</Typography>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body1">فعالیت عملی</Typography>
             </Stack>
@@ -64,7 +64,7 @@ export const ActivityStats = ({ stats, loading }: any) => {
             <Image src={ImageCard2} />
           </Box>
           <Box sx={styles.cardBottom}>
-            <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.game?.progress, 'minute').asHours().toString()) || 0)} ساعت</Typography>
+            <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.game?.progress / 2, 'minute').asHours().toString()) || 0)} ساعت</Typography>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body1">بازی</Typography>
             </Stack>
@@ -78,7 +78,7 @@ export const ActivityStats = ({ stats, loading }: any) => {
             <Image src={ImageCard3} />
           </Box>
           <Box sx={styles.cardBottom}>
-            <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.video?.progress, 'minute').asHours().toString()) || 0)} ساعت</Typography>
+            <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.video?.progress / 2, 'minute').asHours().toString()) || 0)} ساعت</Typography>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body1">فیلم</Typography>
             </Stack>

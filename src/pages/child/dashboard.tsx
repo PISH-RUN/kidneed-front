@@ -162,7 +162,7 @@ const DataBox = ({ data }: any) => {
     source = source ? source : content?.attributes?.srcFile;
 
     if (playerType === "video")
-      window.open(`${location.origin}/players/video?url=${encodeURIComponent(content?.attributes.sourceUrl)}`, "_blank");
+      window.open(`${location.origin}/players/video?child=true&contentId=${content?.id}&id=${content?.activity?.id}&secondId=${content2?.activity?.id}&url=${encodeURIComponent(content?.attributes.sourceUrl)}`, "_blank");
     else if (playerType === "video" && content?.attributes?.attachments?.data)
       window.open(`${location.origin}/players/video?child=true&contentId=${content?.id}&id=${content?.activity?.id}&secondId=${content2?.activity?.id}&url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, "_blank");
     else if (playerType === "activity")
