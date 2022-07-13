@@ -32,6 +32,19 @@ const styles = {
 };
 
 export const ActivityStats = ({ stats, loading }: any) => {
+
+  const getProgress = (minutes: number) => {
+    const progress = moment.duration(minutes / 2, 'minute');
+    const hour = progress.hours();
+    const minute = progress.minutes();
+
+    if((hour === 0 && minute === 0) || (!hour && !minute)) {
+      return '0 دقیقه'
+    }
+
+    return `${hour} ساعت و ${minute} دقیقه`
+  }
+
   return (
     <Grid
       style={{
@@ -50,7 +63,7 @@ export const ActivityStats = ({ stats, loading }: any) => {
           </Box>
 
           <Box sx={styles.cardBottom}>
-            <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.activity?.progress / 2, 'minute').asHours().toString()) || 0)} ساعت</Typography>
+            <Typography variant="h5">{loading ? "-" : (getProgress(stats?.activity?.progress / 2) || 0)}</Typography>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body1">فعالیت عملی</Typography>
             </Stack>
@@ -64,7 +77,7 @@ export const ActivityStats = ({ stats, loading }: any) => {
             <Image src={ImageCard2} />
           </Box>
           <Box sx={styles.cardBottom}>
-            <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.game?.progress / 2, 'minute').asHours().toString()) || 0)} ساعت</Typography>
+            <Typography variant="h5">{loading ? "-" : (getProgress(stats?.game?.progress / 2) || 0)}</Typography>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body1">بازی</Typography>
             </Stack>
@@ -78,7 +91,7 @@ export const ActivityStats = ({ stats, loading }: any) => {
             <Image src={ImageCard3} />
           </Box>
           <Box sx={styles.cardBottom}>
-            <Typography variant="h4">{loading ? "-" : (parseInt(moment.duration(stats?.video?.progress / 2, 'minute').asHours().toString()) || 0)} ساعت</Typography>
+            <Typography variant="h5">{loading ? "-" : (getProgress(stats?.video?.progress / 2) || 0)}</Typography>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body1">فیلم</Typography>
             </Stack>

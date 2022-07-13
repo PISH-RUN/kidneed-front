@@ -435,7 +435,7 @@ const Clock = () => {
 };
 
 const LoginDialog = ({ open, onClose }: any) => {
-  const { ctx } = useApp();
+  const { ctx, logout } = useApp();
   const [inputValue, setInputValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [numbers] = useState([Math.floor(Math.random() * 10) + 1, Math.floor(Math.random() * 10) + 1]);
@@ -536,6 +536,17 @@ const LoginDialog = ({ open, onClose }: any) => {
         <div className="tw-mt-4 tw-text-right">
           برای انتخاب رمز ورود دلخواه، به قسمت تنظیمات مراجعه نمایید.
         </div>
+        <div className="tw-mt-4 tw-text-right">
+          <span>رمز ورود خود را فراموش کردید؟</span>
+          <Link href="/login">
+            <Button
+              onClick={() => {
+                logout();
+                localStorage.removeItem("isChild");
+              }}
+            >ورود با پیامک</Button>
+          </Link>
+        </div>
       </Box>
     </Box>
   </Box>;
@@ -597,22 +608,26 @@ const UserSelect = ({ open, onSelect }: any) => {
       background: "rgba(226, 241, 253, 0.9)"
     }}
   >
-    <Box sx={{ width: 460, textAlign: "center" }}>
-      <Box component="img" src="/images/logo.png" alt="logo" sx={{ width: 260, maxWidth: 260, mx: "auto", mb: 1 }} />
-      <Typography variant="h6">لطفا کودک خود را انتخاب کنید.</Typography>
+    <Stack justifyContent="center" alignItems="center">
+      <Box sx={{ width: 460, textAlign: "center" }}>
+        <Box component="img" src="/images/logo.png" alt="logo" sx={{ width: 260, maxWidth: 260, mx: "auto", mb: 1 }} />
+        <Typography variant="h6">لطفا کودک خود را انتخاب کنید.</Typography>
+      </Box>
 
-      <Stack direction="row" spacing={4} sx={{ mt: 4, "& > *": { flexGrow: 1 } }}>
-        {ctx.children && ctx.children.map(child => (
-          <AvatarBox
-            key={child.id}
-            type={child.gender}
-            name={child.gender === "boy" ? `آقا ${child.name}` : `${child.name} خانم`}
-            onSelect={() => onSelect(child)}
-          />
-        ))
-        }
-      </Stack>
-    </Box>
+      <Box sx={{ textAlign: "center" }}>
+        <Stack direction="row" spacing={4} sx={{ mt: 4, "& > *": { flexGrow: 1 } }}>
+          {ctx.children && ctx.children.map(child => (
+            <AvatarBox
+              key={child.id}
+              type={child.gender}
+              name={child.gender === "boy" ? `آقا ${child.name}` : `${child.name} خانم`}
+              onSelect={() => onSelect(child)}
+            />
+          ))
+          }
+        </Stack>
+      </Box>
+    </Stack>
   </Box>;
 };
 

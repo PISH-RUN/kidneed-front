@@ -53,7 +53,7 @@ const NotificationItem = ({ notif, setContent, setRahche }: any) => {
       return `برای شما ${notif?.attributes?.body} راهکار معرفی شده است.`;
     }
 
-    return notif?.attributes?.body;
+    return notif?.attributes?.body.substring(0, 250) + (notif?.attributes?.body.length > 250 ? ' ...' : '');
   };
 
   return (
@@ -121,8 +121,6 @@ const Message = () => {
   const { fetchUser, ctx } = useApp();
   const { data } = useNotification(search, sort, pagination, ctx?.child?.id);
   const { mutateAsync: readAll } = useNotificationRead();
-
-  console.log(ctx);
 
   useEffect(() => {
     readAll().then(() => {
