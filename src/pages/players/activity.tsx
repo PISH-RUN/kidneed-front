@@ -3,23 +3,27 @@ import { Guard } from "@kidneed/types";
 import { Box, Button, Typography } from "@mui/material";
 import BaseLayout from "layouts/baseLayout";
 import { useRouter } from "next/router";
-import { useContent, useSeenContent, useUpdateProgress } from "core-team/api/activity";
+import { useActivityDetail, useContent, useSeenContent, useUpdateProgress } from "core-team/api/activity";
+import { parseInt } from "lodash";
+import { useApp } from "@kidneed/hooks";
 
 const Activity = () => {
   const { query, push } = useRouter();
+  const { ctx } = useApp();
   const { id, secondId, activity, child } = query;
   const { data: content, isLoading } = useContent(parseInt(id as string));
+  const { data: activityDetail } = useActivityDetail(ctx?.child?.id, parseInt(activity as string));
   const { mutateAsync: updateProgressRequest } = useUpdateProgress();
   const { mutate: seenContent } = useSeenContent();
 
   const poster = content?.data?.attributes?.meta?.poster;
 
   const handleFinish = () => {
-    if (content?.data?.attributes?.duration && content?.data?.attributes?.duration > 0) {
-      updateProgressRequest({ id, duration: content?.data?.attributes?.duration }).then(() => {
+    if (activityDetail?.data?.duration && activityDetail?.data?.duration > 0) {
+      updateProgressRequest({ id: activity, duration: activityDetail?.data?.duration }).then(() => {
         push("/child/dashboard");
       });
-      updateProgressRequest({ id: secondId, duration: content?.data?.attributes?.duration })
+      updateProgressRequest({ id: secondId, duration: activityDetail?.data?.duration })
     } else {
       push("/child/dashboard");
     }

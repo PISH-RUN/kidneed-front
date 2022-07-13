@@ -34,12 +34,16 @@ const styles = {
 export const ActivityStats = ({ stats, loading }: any) => {
 
   const getProgress = (minutes: number) => {
-    const progress = moment.duration(minutes / 2, 'minute');
+    const progress = moment.duration(minutes, 'minute');
     const hour = progress.hours();
     const minute = progress.minutes();
 
     if((hour === 0 && minute === 0) || (!hour && !minute)) {
       return '0 دقیقه'
+    }
+
+    if(hour === 0) {
+      return `${minute} دقیقه`
     }
 
     return `${hour} ساعت و ${minute} دقیقه`

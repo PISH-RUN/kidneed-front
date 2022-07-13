@@ -8,6 +8,7 @@ import AudioDetails from "./audio";
 import BookDetails from "./book";
 import { POSTER_ORIGIN } from "../../constants";
 import { CloseOutlined } from "@ant-design/icons";
+import _ from "lodash";
 
 const tags: any = {
   A: "رشدی حرکتی",
@@ -24,7 +25,7 @@ const ageCategory: any = {
 export const ContentDetail = (props: any) => {
   const { content, ...rest } = props;
 
-  let poster = content?.attributes?.poster?.data?.attributes?.url
+  let poster = content?.attributes?.poster?.data?.attributes?.url;
 
   const openPlayer = () => {
     const playerType = content?.attributes?.type;
@@ -32,17 +33,17 @@ export const ContentDetail = (props: any) => {
     source = source ? source : content?.attributes?.srcFile;
 
     if (playerType === "video")
-      window.open(`${location.origin}/players/video?url=${encodeURIComponent(content?.attributes.sourceUrl)}`, '_blank');
+      window.open(`${location.origin}/players/video?url=${encodeURIComponent(content?.attributes.sourceUrl)}`, "_blank");
     else if (playerType === "video" && content?.attributes?.attachments?.data)
-      window.open(`${location.origin}/players/video?url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, '_blank');
+      window.open(`${location.origin}/players/video?url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, "_blank");
     else if (playerType === "activity")
-      window.open(`${location.origin}/players/activity?id=${content.id}`, '_blank');
+      window.open(`${location.origin}/players/activity?id=${content.id}`, "_blank");
     else if (playerType === "game")
-      window.open(`${location.origin}/players/${playerType}?url=${encodeURIComponent(content?.attributes?.sourceUrl)}`, '_blank');
+      window.open(`${location.origin}/players/${playerType}?url=${encodeURIComponent(content?.attributes?.sourceUrl)}`, "_blank");
     else if (playerType === "book")
-      window.open(`${location.origin}/players/${playerType}?url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, '_blank');
+      window.open(`${location.origin}/players/${playerType}?url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, "_blank");
     else if (source)
-      window.open(`${location.origin}/players/${playerType}?url=${encodeURIComponent(source)}`, '_blank');
+      window.open(`${location.origin}/players/${playerType}?url=${encodeURIComponent(source)}`, "_blank");
   };
 
   return (
@@ -54,7 +55,10 @@ export const ContentDetail = (props: any) => {
       className={styles.resultModal + " tw-rounded-3xl tw-overflow-hidden"}
     >
       <div className={styles.allContent}>
-        <CloseOutlined className="tw-absolute tw-left-5 tw-text-2xl tw-top-8 tw-text-gray-500 tw-cursor-pointer" onClick={props.onCancel} />
+        <CloseOutlined
+          className="tw-absolute tw-left-5 tw-text-2xl tw-top-8 tw-text-gray-500 tw-cursor-pointer"
+          onClick={props.onCancel}
+        />
         <div className={styles.header}>
           {content?.attributes?.title}
         </div>
@@ -76,18 +80,18 @@ export const ContentDetail = (props: any) => {
               </Typography>
               {content?.attributes?.editions?.data.length > 0 && <>
                 <Typography variant="body1" className="!tw-mb-4 !tw-mt-4 !tw-font-bold">برچسب ها</Typography>
-                <div className="tw-flex tw-mb-2">
-                  {content?.attributes?.editions && content?.attributes?.editions?.data?.map((edition: any) => (
+                <div className="tw-flex tw-flex-wrap tw-mb-2">
+                  {content?.attributes?.editions && _.uniqBy(content?.attributes?.editions?.data, (i: any) => i?.attributes?.tag).map((edition: any) => (
                     <Typography
                       key={edition.id}
                       variant="body1"
-                      className="tw-whitespace-nowrap !tw-ml-4 tw-mb-4 !tw-font-bold tw-text-blue-900 tw-p-3 tw-rounded-lg tw-border tw-border-gray-300"
+                      className="tw-whitespace-nowrap !tw-ml-4 !tw-mb-4 !tw-font-bold tw-text-blue-900 tw-p-3 tw-rounded-lg tw-border tw-border-gray-300"
                     >{tags[edition?.attributes?.tag]}</Typography>
                   ))}
                 </div>
               </>}
               <Typography variant="body1" className="!tw-mb-4 !tw-mt-4 !tw-font-bold">مناسب برای</Typography>
-              <Typography variant="body1">{ageCategory[content?.attributes?.ageCategory]}</Typography>
+              <Typography variant="body1">کودکان {content?.attributes?.ageCategory} تا {content?.attributes?.maxAge} سال</Typography>
             </div>
           </div>
           <div className="tw-mt-10">
