@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useActivityDetail, useContent, useSeenContent, useUpdateProgress } from "core-team/api/activity";
 import { parseInt } from "lodash";
 import { useApp } from "@kidneed/hooks";
+import { LoadingButton } from "@mui/lab";
 
 const Activity = () => {
   const { query, push } = useRouter();
@@ -13,7 +14,8 @@ const Activity = () => {
   const { id, secondId, activity, child } = query;
   const { data: content, isLoading } = useContent(parseInt(id as string));
   const { data: activityDetail } = useActivityDetail(ctx?.child?.id, parseInt(activity as string));
-  const { mutateAsync: updateProgressRequest } = useUpdateProgress();
+  const { data: activity2 } = useActivityDetail(ctx?.child?.id, parseInt(secondId as string));
+  const { mutateAsync: updateProgressRequest, isLoading: updateLoading } = useUpdateProgress();
   const { mutate: seenContent } = useSeenContent();
 
   const poster = content?.data?.attributes?.meta?.poster;
@@ -23,7 +25,6 @@ const Activity = () => {
       updateProgressRequest({ id: activity, duration: activityDetail?.data?.duration }).then(() => {
         push("/child/dashboard");
       });
-      updateProgressRequest({ id: secondId, duration: activityDetail?.data?.duration })
     } else {
       push("/child/dashboard");
     }
@@ -76,8 +77,8 @@ const Activity = () => {
                   className="!tw-rounded-full tw-w-40 !tw-ml-5"
                   onClick={() => push("/child/dashboard")}
                 >علاقه ندارم</Button>
-                <Button variant="contained" className="!tw-rounded-full tw-w-40" onClick={handleFinish}>بازی
-                  کردم</Button>
+                <LoadingButton loading={updateLoading} variant="contained" className="!tw-rounded-full tw-w-40" onClick={handleFinish}>بازی
+                  کردم</LoadingButton>
               </div>}
           </Box>
         </Box>

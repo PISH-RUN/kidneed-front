@@ -184,7 +184,7 @@ export default function Home() {
               <Image src={pieChart} />
             </div>
             <div className={styles.detail}>
-              <div className={styles.title}>کارنما</div>
+              <div className={styles.title}>رصدخونه</div>
               <div className={styles.desc}>(گزارش اختصاصی از وضعیت کودک))</div>
             </div>
           </div>

@@ -13,6 +13,7 @@ import { useGrowthFields, useGrowthSubFields, useQuizProgression, useQuizResult 
 import pattern from "public/images/pattern.png";
 import Link from "next/link";
 import { useChildGrowthField } from "../../core-team/api/user";
+import { useTexts } from "../../core-team/hooks/use-texts";
 
 const today = jMoment();
 
@@ -32,6 +33,7 @@ const WorkView = () => {
   const { data: result } = useQuizResult(ctx?.child?.id, month.jMonth(), month.jYear());
   const { data: childGrowthField } = useChildGrowthField(ctx?.child?.id);
   const { data: progression } = useQuizProgression(ctx?.child?.id);
+  const { getText } = useTexts();
   const {
     data: stats,
     isLoading
@@ -97,10 +99,10 @@ const WorkView = () => {
     });
 
     const labels = [
-      "نوع اول",
-      "نوع دوم",
-      "نوع سوم",
-      "نوع چهارم"
+      "مهارت اول",
+      "مهارت دوم",
+      "مهارت سوم",
+      "مهارت چهارم"
     ];
     let index = 0;
     _.map(progression?.data, (p, fieldId) => {
@@ -131,11 +133,13 @@ const WorkView = () => {
       <Box sx={{ boxShadow: "0px 14px 17px rgba(0, 0, 0, 0.08)" }} className="tw-rounded-t-3xl tw-w-full">
         <div className="tw-py-10 tw-px-8 tw-rounded-t-3xl">
           <div className="tw-px-4">
-            <Typography variant="h5" className="!tw-font-bold">حوزه انتخابی این ماه شما &rdquo;{childGrowthField?.data?.name || ""}&rdquo; می
+            <Typography variant="h5" className="!tw-font-bold">حوزه انتخابی این ماه
+              شما &rdquo;{childGrowthField?.data?.name || ""}&rdquo; می
               باشد</Typography>
-            <Typography variant="body1" className="!tw-mt-4">فرزند شما تا کنون 85٪ پایبندی به برنامه داشته و توانسته
-              100٪ جوایز مشخص شده را بدست آورد. شما میتوانید خلاصه فعالیت های کودک خود را در زیر مشاهده
-              نمایید.</Typography>
+            <Typography variant="body1" className="!tw-mt-4">
+              در این ماه محتوای پیشنهادی یکودو برای فرزند شما متناسب با حوزه {childGrowthField?.data?.name || ""} می
+              ‌باشد.
+            </Typography>
           </div>
         </div>
         <div className="tw-py-10 tw-px-8 tw-bg-white tw-rounded-t-3xl">
@@ -147,14 +151,9 @@ const WorkView = () => {
               />
             </Box>
             <div className="tw-px-14 tw-py-5 tw-flex-1">
-              <Typography variant="h5" className="!tw-font-bold">حوزه های رشدی</Typography>
+              <Typography variant="h5" className="!tw-font-bold">نمودار ارزیابی مهارت‌های رشدی</Typography>
               <Typography variant="body1" className="!tw-mt-4">
-                فرزند شما تا کنون 85٪ پایبندی به برنامه داشته و توانسته
-                100٪ جوایز مشخص شده را بدست آورد. شما میتوانید خلاصه فعالیت های کودک خود را در زیر مشاهده
-                نمایید.
-                فرزند شما تا کنون 85٪ پایبندی به برنامه داشته و توانسته
-                100٪ جوایز مشخص شده را بدست آورد. شما میتوانید خلاصه فعالیت های کودک خود را در زیر مشاهده
-                نمایید.
+                {getText("karnamaGrowingWayDescription")}
               </Typography>
               <div className="tw-mt-10">
                 <div className="tw-flex tw-mt-5">
@@ -180,7 +179,7 @@ const WorkView = () => {
         <div className="tw-py-10 tw-px-8">
           <div className="tw-flex tw-w-full">
             <div className="tw-px-14 tw-py-5 tw-flex-1">
-              <Typography variant="h5" className="!tw-font-bold">قالب فعالیت ها</Typography>
+              <Typography variant="h5" className="!tw-font-bold">فعالیت‌های انجام شده در این ماه</Typography>
               <Typography variant="body1" className="!tw-mt-4">
                 فرزند شما تا کنون 85٪ پایبندی به برنامه داشته و توانسته
                 100٪ جوایز مشخص شده را بدست آورد. شما میتوانید خلاصه فعالیت های کودک خود را در زیر مشاهده
@@ -204,14 +203,9 @@ const WorkView = () => {
               <BarChart data={getBarData().data} labels={getBarData().labels} />
             </Box>
             <div className="tw-px-14 tw-py-5 tw-flex-1">
-              <Typography variant="h5" className="!tw-font-bold">قالب فعالیت ها</Typography>
+              <Typography variant="h5" className="!tw-font-bold">نمودار حوزه های رشدی</Typography>
               <Typography variant="body1" className="!tw-mt-4">
-                فرزند شما تا کنون 85٪ پایبندی به برنامه داشته و توانسته
-                100٪ جوایز مشخص شده را بدست آورد. شما میتوانید خلاصه فعالیت های کودک خود را در زیر مشاهده
-                نمایید.
-                فرزند شما تا کنون 85٪ پایبندی به برنامه داشته و توانسته
-                100٪ جوایز مشخص شده را بدست آورد. شما میتوانید خلاصه فعالیت های کودک خود را در زیر مشاهده
-                نمایید.
+                {getText("karnamaStackedChartDescription")}
               </Typography>
             </div>
           </div>

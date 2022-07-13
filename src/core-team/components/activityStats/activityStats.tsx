@@ -67,7 +67,7 @@ export const ActivityStats = ({ stats, loading }: any) => {
           </Box>
 
           <Box sx={styles.cardBottom}>
-            <Typography variant="h5">{loading ? "-" : (getProgress(stats?.activity?.progress / 2) || 0)}</Typography>
+            <Typography variant="h5">{loading ? "-" : (getProgress(stats?.activity?.progress) || 0)}</Typography>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body1">فعالیت عملی</Typography>
             </Stack>
@@ -81,7 +81,7 @@ export const ActivityStats = ({ stats, loading }: any) => {
             <Image src={ImageCard2} />
           </Box>
           <Box sx={styles.cardBottom}>
-            <Typography variant="h5">{loading ? "-" : (getProgress(stats?.game?.progress / 2) || 0)}</Typography>
+            <Typography variant="h5">{loading ? "-" : (getProgress(stats?.game?.progress) || 0)}</Typography>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body1">بازی</Typography>
             </Stack>
@@ -95,7 +95,7 @@ export const ActivityStats = ({ stats, loading }: any) => {
             <Image src={ImageCard3} />
           </Box>
           <Box sx={styles.cardBottom}>
-            <Typography variant="h5">{loading ? "-" : (getProgress(stats?.video?.progress / 2) || 0)}</Typography>
+            <Typography variant="h5">{loading ? "-" : (getProgress(stats?.video?.progress) || 0)}</Typography>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body1">فیلم</Typography>
             </Stack>

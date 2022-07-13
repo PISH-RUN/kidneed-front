@@ -217,8 +217,14 @@ const DataBox = ({ data }: any) => {
             <Button
               variant="contained" color="primary" sx={{ width: 220, height: 70, borderRadius: 6, marginTop: -5 }}
               size="large"
-              onClick={() => openPlayer(content1, content2)}
-            ><PlayIcon /></Button>
+              onClick={() => {
+                if(progress < duration){
+                  openPlayer(content1, content2)
+                }
+              }}
+            >
+              {progress >= duration ? "زمان شما به پایان رسیده" : <PlayIcon />}
+            </Button>
           </Box>
         </Link>
       </Grid>
@@ -228,8 +234,14 @@ const DataBox = ({ data }: any) => {
           <Button
             variant="contained" color="primary" sx={{ width: 220, height: 70, borderRadius: 6, marginTop: -5 }}
             size="large"
-            onClick={() => openPlayer(content2, content1)}
-          ><PlayIcon /></Button>
+            onClick={() => {
+              if(progress < duration){
+                openPlayer(content2, content1)
+              }
+            }}
+          >
+              {progress >= duration ? "زمان شما به پایان رسیده" : <PlayIcon />}
+          </Button>
         </Box>
       </Grid>
     </Grid>

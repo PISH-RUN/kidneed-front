@@ -89,7 +89,7 @@ const menu = [
     link: "/parent/dayPlan",
     icon: <CalendarIcon />
   }, {
-    title: "کارنما",
+    title: "رصدخونه",
     link: "/parent/workView",
     icon: <TelescopeIcon />
   }, {

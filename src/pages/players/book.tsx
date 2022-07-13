@@ -17,14 +17,16 @@ const Book = () => {
   const [remained, setRemained] = useState(0);
   const { mutateAsync: updateProgressRequest } = useUpdateProgress();
   const { data: activity } = useActivityDetail(ctx?.child?.id, parseInt(id as string));
+  const { data: activity2 } = useActivityDetail(ctx?.child?.id, parseInt(secondId as string));
   const { mutate: seenContent } = useSeenContent();
 
   const updateProgress = () => {
     interval.current = setInterval(() => {
-      updateProgressRequest({ id, duration: 1 }).then((resp: any) => {
-        setRemained(resp?.data?.duration - resp?.data?.progress);
-      });
-      updateProgressRequest({ id: secondId, duration: 1 })
+      if (remained > 0) {
+        updateProgressRequest({ id, duration: 1 }).then((resp: any) => {
+          setRemained(resp?.data?.duration - (resp?.data?.progress + activity2?.data?.progress));
+        });
+      }
     }, 60000);
   };
 
@@ -35,10 +37,10 @@ const Book = () => {
   }, [child]);
 
   useEffect(() => {
-    if (activity?.data) {
-      setRemained(activity?.data?.duration - activity?.data?.progress);
+    if (activity?.data && activity2?.data) {
+      setRemained(activity?.data?.duration - (activity?.data?.progress + activity2?.data?.progress));
     }
-  }, [activity]);
+  }, [activity, activity2]);
 
   useEffect(() => {
     return () => {
@@ -58,7 +60,7 @@ const Book = () => {
     }
   }, [remained]);
 
-  if (remained < 0) {
+  if (remained <= 0) {
     return (
       <div className="tw-flex tw-items-center tw-justify-center tw-h-screen">
         <Result
@@ -71,7 +73,7 @@ const Book = () => {
   }
 
   return (
-    <iframe src={`${PLAYERS_URL}/pdf?url=${url as string}`} className='tw-w-full tw-h-screen' />
+    <iframe src={`${PLAYERS_URL}/pdf?url=${url as string}`} className="tw-w-full tw-h-screen" />
   );
 };
 
