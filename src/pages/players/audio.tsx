@@ -14,7 +14,7 @@ const Audio = () => {
   const interval = useRef<any>();
   const { url, child, id, secondId, contentId } = query;
   const { ctx } = useApp();
-  const [remained, setRemained] = useState(0);
+  const [remained, setRemained] = useState(1);
   const { data: activity } = useActivityDetail(ctx?.child?.id, parseInt(id as string));
   const { data: activity2 } = useActivityDetail(ctx?.child?.id, parseInt(secondId as string));
   const { mutateAsync: updateProgressRequest } = useUpdateProgress();
