@@ -181,12 +181,7 @@ const WorkView = () => {
             <div className="tw-px-14 tw-py-5 tw-flex-1">
               <Typography variant="h5" className="!tw-font-bold">فعالیت‌های انجام شده در این ماه</Typography>
               <Typography variant="body1" className="!tw-mt-4">
-                فرزند شما تا کنون 85٪ پایبندی به برنامه داشته و توانسته
-                100٪ جوایز مشخص شده را بدست آورد. شما میتوانید خلاصه فعالیت های کودک خود را در زیر مشاهده
-                نمایید.
-                فرزند شما تا کنون 85٪ پایبندی به برنامه داشته و توانسته
-                100٪ جوایز مشخص شده را بدست آورد. شما میتوانید خلاصه فعالیت های کودک خود را در زیر مشاهده
-                نمایید.
+                {getText("karnamaActivityReportDescription")}
               </Typography>
             </div>
             <Box sx={{ width: 400 }} className="tw-mx-14">
