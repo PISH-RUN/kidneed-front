@@ -260,6 +260,18 @@ const Dashboard = () => {
     localStorage.setItem("isChild", "true");
   }, []);
 
+  useEffect(() => {
+    const selectedChild = localStorage.getItem("selectedChild");
+    if(selectedChild) {
+      const child = ctx.children?.find(c => c.id === parseInt(selectedChild))
+      child && selectChild(child)
+    }
+  }, []);
+
+  useEffect(() => {
+    ctx?.child && localStorage.setItem("selectedChild", ctx?.child.id.toString());
+  }, [ctx.child]);
+
   return <BaseLayout>
     <>
       <Box sx={styles.root}>

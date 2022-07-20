@@ -41,7 +41,10 @@ export default function useApp() {
   }, [send]);
 
   const selectChild = useCallback(
-    (child: Models.Child) => send("SELECT_CHILD", { child }),
+    (child: Models.Child) => {
+      localStorage.setItem("selectedChild", child.id.toString());
+      send("SELECT_CHILD", { child });
+    },
     [send]
   );
 
@@ -70,7 +73,13 @@ export default function useApp() {
 
   useEffect(() => {
     if (!ctx.child && ctx.children) {
-      selectChild(ctx.children[0]);
+      const selectedChild = localStorage.getItem("selectedChild");
+      if (selectedChild) {
+        const child = ctx.children?.find(c => c.id === parseInt(selectedChild));
+        child && selectChild(child);
+      } else {
+        selectChild(ctx.children[0]);
+      }
     }
     if (ctx.user?.subscribedUntil === null) {
       router.push("/subscription");

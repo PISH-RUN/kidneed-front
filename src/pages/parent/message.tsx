@@ -12,6 +12,7 @@ import { useApp } from "@kidneed/hooks";
 import { useRouter } from "next/router";
 import { useContent } from "../../core-team/api/activity";
 import { Collapse } from "@mui/material";
+import { useTexts } from "../../core-team/hooks/use-texts";
 
 const types: any = {
   rahche: {
@@ -34,6 +35,7 @@ const types: any = {
 const NotificationItem = ({ notif, setContent, setRahche }: any) => {
   const [visible, setVisible] = useState(false);
   const router = useRouter();
+  const { getText } = useTexts();
   const type = types[notif?.attributes?.type];
   const { data: content } = useContent(notif?.attributes?.payload?.content, {
     enabled: !!notif?.attributes?.payload?.content && notif?.attributes?.type === "goalAssist"
@@ -52,8 +54,11 @@ const NotificationItem = ({ notif, setContent, setRahche }: any) => {
     if (notif?.attributes?.type === "rahche") {
       return `برای شما ${notif?.attributes?.body} راهکار معرفی شده است.`;
     }
+    if (notif?.attributes?.type === "goalAssist") {
+      return getText("goalAssistShortDescription");
+    }
 
-    return notif?.attributes?.body.substring(0, 250) + (notif?.attributes?.body.length > 250 ? ' ...' : '');
+    return notif?.attributes?.body.substring(0, 250) + (notif?.attributes?.body.length > 250 ? " ..." : "");
   };
 
   return (
@@ -73,6 +78,9 @@ const NotificationItem = ({ notif, setContent, setRahche }: any) => {
           <Typography.Title level={5} className="description">
             {notif?.attributes?.type === "endOfMonthQuiz" ? "لطفا آزمون آخر ماه راه پاسخ دهید" : notif?.attributes?.title} {content?.data?.attributes?.title && ` - ${content?.data?.attributes?.title}`}
           </Typography.Title>
+          {notif?.attributes?.type === "goalAssist" && <div className="tw-font-bold tw-mb-1">
+            حوزه {notif?.attributes?.payload?.growthField?.name}
+          </div>}
           <Typography.Paragraph ellipsis={{ rows: 3 }} className="description">
             {getDescription(notif)}
           </Typography.Paragraph>
@@ -102,9 +110,12 @@ const NotificationItem = ({ notif, setContent, setRahche }: any) => {
       <Collapse in={visible}>
         <div className="tw-p-5 tw-pt-0 tw-bg-white tw-rounded-b-xl">
           <Divider className="tw-mt-0" />
-          <Typography.Paragraph className="description tw-whitespace-pre-line">
-            {notif?.attributes?.body}
-          </Typography.Paragraph>
+          {[...notif?.attributes?.payload?.text]?.splice(0, 2)?.map((pass: string, index: number) => (
+            <Typography.Paragraph key={index} className="description tw-whitespace-pre-line">
+              <span className="tw-font-bold tw-ml-2">{index + 1}-</span>
+              {pass}
+            </Typography.Paragraph>
+          ))}
         </div>
       </Collapse>
     </Col>
