@@ -78,7 +78,7 @@ const NotificationItem = ({ notif, setContent, setRahche }: any) => {
           <Typography.Title level={5} className="description">
             {notif?.attributes?.type === "endOfMonthQuiz" ? "لطفا آزمون آخر ماه راه پاسخ دهید" : notif?.attributes?.title} {content?.data?.attributes?.title && ` - ${content?.data?.attributes?.title}`}
           </Typography.Title>
-          {notif?.attributes?.type === "goalAssist" && <div className="tw-font-bold tw-mb-1">
+          {notif?.attributes?.payload?.growthField?.name && <div className="tw-font-bold tw-mb-1">
             حوزه {notif?.attributes?.payload?.growthField?.name}
           </div>}
           <Typography.Paragraph ellipsis={{ rows: 3 }} className="description">
@@ -110,7 +110,7 @@ const NotificationItem = ({ notif, setContent, setRahche }: any) => {
       <Collapse in={visible}>
         <div className="tw-p-5 tw-pt-0 tw-bg-white tw-rounded-b-xl">
           <Divider className="tw-mt-0" />
-          {[...notif?.attributes?.payload?.text]?.splice(0, 2)?.map((pass: string, index: number) => (
+          {[...(notif?.attributes?.payload?.text || [])]?.splice(0, 2)?.map((pass: string, index: number) => (
             <Typography.Paragraph key={index} className="description tw-whitespace-pre-line">
               <span className="tw-font-bold tw-ml-2">{index + 1}-</span>
               {pass}
