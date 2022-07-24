@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Guard } from "@kidneed/types";
 import ParentDashboardLayout from "layouts/parent-dashboard-layout";
-import { Avatar, Col, Divider, Input, Pagination, Row, Select, Typography } from "antd";
+import { Avatar, Col, Divider, Input, Pagination, Row, Select, Tag, Typography } from "antd";
 import { FiClock, FiCompass, FiInfo } from "react-icons/fi";
 import { AiFillInfoCircle } from "react-icons/ai";
 import jMoment from "moment-jalaali";
@@ -30,6 +30,14 @@ const types: any = {
     icon: FiInfo,
     label: "آزمون آخر ماه"
   }
+};
+
+const typeNames: any = {
+  video: "ویدئو",
+  activity: "فعالیت عملی",
+  book: "کتاب",
+  game: "بازی",
+  audio: "صوت"
 };
 
 const NotificationItem = ({ notif, setContent, setRahche }: any) => {
@@ -69,18 +77,26 @@ const NotificationItem = ({ notif, setContent, setRahche }: any) => {
             <Avatar shape="square" src={getPoster(content?.data)} className="tw-w-24 tw-h-24 tw-rounded-xl" />
             <div
               onClick={() => setContent(content?.data)}
-              className="tw-text-3xl tw-text-gray-300 tw-cursor-pointer tw-rounded-xl tw-absolute tw-top-0 tw-w-full tw-h-full tw-left-0 tw-bg-gray-500 tw-bg-opacity-30 tw-flex tw-items-center tw-justify-center"
+              className="tw-pb-5 tw-text-3xl tw-text-gray-300 tw-cursor-pointer tw-rounded-xl tw-absolute tw-top-0 tw-w-full tw-h-full tw-left-0 tw-bg-gray-500 tw-bg-opacity-30 tw-flex tw-items-center tw-justify-center"
             >
               <AiFillInfoCircle className="tw-text-4xl tw-text-white" />
+            </div>
+            <div
+              onClick={() => setContent(content?.data)}
+              className="tw-text-sm tw-cursor-pointer tw-rounded-b-xl tw-absolute tw-bottom-0 tw-w-full tw-h-7 tw-left-0 tw-bg-gray-900 tw-bg-opacity-70 tw-flex tw-items-center tw-justify-center"
+            >
+              <div className="tw-text-white">
+                {typeNames[content?.data?.attributes?.type]}
+              </div>
             </div>
           </div>}
         <div className={`tw-p-3 tw-pr-0 tw-flex-1 ${notif?.attributes?.type !== "goalAssist" && "tw-mr-5"}`}>
           <Typography.Title level={5} className="description">
             {notif?.attributes?.type === "endOfMonthQuiz" ? "لطفا آزمون آخر ماه راه پاسخ دهید" : notif?.attributes?.title} {content?.data?.attributes?.title && ` - ${content?.data?.attributes?.title}`}
           </Typography.Title>
-          {notif?.attributes?.payload?.growthField?.name && <div className="tw-font-bold tw-mb-1">
+          {notif?.attributes?.payload?.growthField?.name && <Tag color="blue" className="tw-font-bold tw-mb-1">
             حوزه {notif?.attributes?.payload?.growthField?.name}
-          </div>}
+          </Tag>}
           <Typography.Paragraph ellipsis={{ rows: 3 }} className="description">
             {getDescription(notif)}
           </Typography.Paragraph>
