@@ -42,6 +42,8 @@ export const ContentDetail = (props: any) => {
       window.open(`${location.origin}/players/${playerType}?url=${encodeURIComponent(content?.attributes?.sourceUrl)}`, "_blank");
     else if (playerType === "book")
       window.open(`${location.origin}/players/${playerType}?url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, "_blank");
+    else if (playerType === "audio")
+      window.open(`${location.origin}/players/${playerType}?url=${encodeURIComponent(content?.attributes?.attachments?.data[0].url)}`, "_blank");
     else if (source)
       window.open(`${location.origin}/players/${playerType}?url=${encodeURIComponent(source)}`, "_blank");
   };
