@@ -420,11 +420,11 @@ export default function Home() {
                 <a href={BLOG_URL}>بلاگ</a>
               </li>
               <li>
-                <a href="https://api.yekodo.ir/uploads/yekodo_8286579552.apk?updated_at=2022-04-21T05:59:21.697Z">دانلود
+                <a href="https://api.yekodo.pish.run/uploads/yekodo_8286579552.apk?updated_at=2022-04-21T05:59:21.697Z">دانلود
                   برنامه موبایل</a>
               </li>
             </ul>
-            <div className={styles.connectImageInfo}> برای ارتباط با ما از طریق ایمیل info@yekodo.ir اقدام نمایید و یا
+            <div className={styles.connectImageInfo}> برای ارتباط با ما از طریق ایمیل info@yekodo.pish.run اقدام نمایید و یا
               از طریق فرم زیر با در تماس باشید.
             </div>
           </div>

@@ -116,7 +116,7 @@ const menu = [
   },
   {
     title: "صفحه اصلی",
-    link: "https://yekodo.ir",
+    link: "https://yekodo.pish.run",
     external: true,
     icon: <IoHome />
   }, {

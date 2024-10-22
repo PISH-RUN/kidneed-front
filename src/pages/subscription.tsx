@@ -43,7 +43,7 @@ const Subscription = () => {
       coupon
     }).then(resp => {
       requestPayment(resp.data.uuid).then(resp => {
-        if (resp?.data?.url.includes("yekodo.ir")) {
+        if (resp?.data?.url.includes("yekodo.pish.run")) {
           notification.success({
             message: "خرید اشتراک با موفقیت انجام شد."
           });

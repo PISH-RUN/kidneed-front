@@ -49,7 +49,7 @@ const Subscription = () => {
                 بازگشت به داشبورد
               </Button>
             </Link>}
-            {isMobile && <a href="https://pwa.yekodo.ir">
+            {isMobile && <a href="https://pwa.yekodo.pish.run">
               <Button variant="contained">
                 بازگشت به برنامه
               </Button>
